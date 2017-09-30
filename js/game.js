@@ -1113,9 +1113,8 @@ const gameClass = () => {
 			if (DATA.player.currentMonster.getTimeleft()) {
 				elebyID("timeleft").innerHTML = DATA.player.currentMonster.getTimeleft()/1000 + "s"
 			}
-			if (DATA.player.currentMonster.getTimeleft()) {
-				elebyID("timeleft").innerHTML = DATA.player.currentMonster.getTimeleft()/1000 + "s"
-			}
+			elebyID("route").innerHTML = DATA.player.currentStage
+
 
 			updateProgressBar("#monstertimer", DATA.player.currentMonster.getTimeleft()/1000, DATA.player.currentMonster.timer())
 			updateProgressBar("#monsterhp", DATA.player.currentMonster.hp(), DATA.player.currentMonster.maxhp())
