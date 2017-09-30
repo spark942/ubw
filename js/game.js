@@ -1176,7 +1176,6 @@ const gameClass = () => {
 			&& DATA.player.battle.combo_ts_end !== null) {
 			let combomax = (DATA.player.battle.combo_ts_end - DATA.player.battle.combo_ts_start) * 10
 			let curprog = Date.now() - DATA.player.battle.combo_ts_start
-			console.log(curprog,combomax)
 			let percentprog = percent((curprog*10/combomax), 4)
 			elebyID("cur-skill-percent").style.width = Math.min(percentprog, 100) + "%"
 			
