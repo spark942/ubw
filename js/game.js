@@ -1064,7 +1064,7 @@ const gameClass = () => {
 				/* LOOT */
 				let mobloots = DATA.player.currentMonster.loot()
 				for (var i = 0; i < mobloots.length; i++) {
-					if (mobloots[i] !== null && rngmm(1, TABLES.ITEM_DROPRATE[i]) === 1) {
+					if (mobloots[i] !== null && Math.floor(rngmm(1, TABLES.ITEM_DROPRATE[i])) === 1) {
 						/*GIMMELOOTBITCH*/
 						addItemInventory({
 							type: mobloots[i] === 1 ? "c" : mobloots[i] < 10000 ? "f" : "w",
