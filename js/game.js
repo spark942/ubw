@@ -90,7 +90,10 @@ const gameClass = () => {
 				combo : null,
 				current_combo: 0,
 				current_hit: 0,
-				timestamp_next_hit: null
+				timestamp_next_hit: null,
+				combo_ts_start : null,
+				combo_ts_end   : null,
+				combo_ts_now   : null,
 			}
 		}
 	}
@@ -763,10 +766,10 @@ const gameClass = () => {
 
 	const getItemCost = (item) => {
 		item = item || 0
-		if (thisItem.hasOwnProperty("type")
-			&& thisItem.type == "c" 
-			&& thisItem.hasOwnProperty("stage")) {
-			return ITEMS[thisItem.id][4] * Math.sqrt(parseFloat(thisItem.stage))
+		if (item.hasOwnProperty("type")
+			&& item.type == "c" 
+			&& item.hasOwnProperty("stage")) {
+			return Math.floor(ITEMS[item.item_id][4] * Math.sqrt(parseFloat(item.stage)))
 		}
 	}
 
@@ -776,6 +779,12 @@ const gameClass = () => {
 
 	const addItemInventory = (object) => {
 		object = object || null
+
+		if (object.type === "c" 
+			&& object.hasOwnProperty("stage")) {
+			DATA.player.ekk += getItemCost(object)
+			return true
+		}
 		if (object === null || object.hasOwnProperty("item_id") === false) {return false}
 		/* create id if new item */
 		var thisItem = JSON.parse(JSON.stringify(object))
@@ -788,11 +797,7 @@ const gameClass = () => {
 			thisItem.hasOwnProperty("quality")? thisItem.quality : null,
 			tiModel.aspd)
 
-		if (updatedItem.type === "c" 
-			&& updatedItem.hasOwnProperty("stage")) {
-			DATA.player.ekk += getItemCost(updatedItem)
-			return true
-		}
+		
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
 	}
@@ -1006,6 +1011,11 @@ const gameClass = () => {
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
 					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+(DATA.player.battle.current_hit+1)] === undefined) {
 						DATA.player.battle.current_hit = -1
+						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
+							DATA.player.battle.combo_ts_start = now
+							DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay * 1000
+						}
+						
 					} else {
 						DATA.player.battle.current_hit++
 					}
@@ -1046,7 +1056,10 @@ const gameClass = () => {
 			DATA.player.battle.combo = thisCombo
 			DATA.player.battle.current_combo = 1
 			DATA.player.battle.current_hit   = 1
-			DATA.player.battle.timestamp_next_hit = Date.now() + thisCombo[0].skill.delay0 * 1000
+			let now = Date.now()
+			DATA.player.battle.timestamp_next_hit = now + thisCombo[0].skill.delay0 * 1000
+			DATA.player.battle.combo_ts_start = now
+			DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay * 100
 		} else {
 			// can't create combo
 
@@ -1066,11 +1079,13 @@ const gameClass = () => {
 				for (var i = 0; i < mobloots.length; i++) {
 					if (mobloots[i] !== null && Math.floor(rngmm(1, TABLES.ITEM_DROPRATE[i])) === 1) {
 						/*GIMMELOOTBITCH*/
-						addItemInventory({
+						let laaat = {
 							type: mobloots[i] === 1 ? "c" : mobloots[i] < 10000 ? "f" : "w",
 							item_id:mobloots[i],
 							stage: DATA.player.currentStage
-						})
+						}
+						console.log(laaat)
+						addItemInventory(laaat)
 					}
 				};
 
@@ -1154,6 +1169,31 @@ const gameClass = () => {
 			}
 		} else {
 
+		}
+
+		/* display skillbar */
+		if (DATA.player.battle.combo_ts_start !== null
+			&& DATA.player.battle.combo_ts_end !== null) {
+			let combomax = (DATA.player.battle.combo_ts_end - DATA.player.battle.combo_ts_start) * 10
+			let curprog = Date.now() - DATA.player.battle.combo_ts_start
+			console.log(curprog,combomax)
+			let percentprog = percent((curprog/combomax), 4)
+			elebyID("cur-skill-percent").style.width = Math.min(percentprog, 100) + "%"
+			
+
+			let timeforcurhit = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0
+			let totalhits = getActiveHitCount(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id)
+
+			for (var i = 0; i < totalhits; i++) {
+				elebyID("cur-skill-hit-"+(i+1)).classList.remove("hidden")
+				elebyID("cur-skill-hit-"+(i+1)).style.left = Math.min(timeforcurhit * 100000 / combomax, 100) + "%"
+				if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.hasOwnProperty("delay"+(i+1)) === true) {
+					timeforcurhit += DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+(i+1)]
+				}
+			}
+			for (var i = totalhits; i < 30; i++) {
+				elebyID("cur-skill-hit-"+(i+1)).classList.add("hidden")
+			};
 		}
 
 		/*display player level*/
@@ -1923,6 +1963,8 @@ const gameClass = () => {
 			updateTextByID("item-img-stage-"+tiID, iText("item_lv",numberPrint(toDecimal(DATA.player.inventory[i].stage))))
 		}
 
+		updateTextByID("playerekk", numberPrint(DATA.player.ekk))
+		
 	}
 
 	const inventoryRender = () => {

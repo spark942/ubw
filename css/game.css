@@ -120,6 +120,38 @@ div.progressbar div.progress::-webkit-progress-value {
 	margin-right: 16px;
 	font-family: 'Cutive Mono', monospace;
 }
+#cur-skill-bar {
+	text-align: center;
+	width: 310px;
+}
+#cur-skill-bar #cur-skill-progress {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+	margin: 0px;
+	border-radius: 2px;
+	border: 1px solid #BBBBBB;
+	width: 270px;
+	height: 6px;
+	display: inline-block;
+}
+#cur-skill-bar #cur-skill-progress #cur-skill-percent {
+	height: 6px;
+}
+#cur-skill-bar #cur-skill-progress .cur-skill-hit {
+	top: -100%;
+	width: 2px;
+	height: 300%;
+	padding: 0px;
+	margin: 0px 0px 0px -1px;
+	opacity: 0.5;
+	float: left;
+	position: absolute;
+	background-color: rgba(52, 152, 219,1.0)
+}
+
+
 #bsettings-player {
 	text-align: right;
 }
