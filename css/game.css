@@ -43,8 +43,6 @@
 	position: absolute;
 	left: 300px;
 	top: 0;
-	font-size: 10px;
-	text-align: center;
 	/*background-color: rgba(255,0,0,0.12);*/
 }
 .g-inventories {
@@ -184,8 +182,13 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: center;
 	width: 100%;
 }
-.adventure-settings
-
+#adventure-settings {
+	font-size: 11px;
+	line-height: 19px;
+}
+#adventure-settings input {
+	vertical-align: bottom;
+}
 
 img {
 	background-color: #1E1E1E;
