@@ -1995,7 +1995,7 @@ const gameClass = () => {
 		let _inventoryIntervalId = setInterval(inventoryLoop, 1000 / 1)
 		let _passiveIntervalId = setInterval(updatePassives, 1000 / 1)
 		let _activeIntervalId = setInterval(updateActives, 1000 / 1)
-		let _uiIntervalId = setInterval(battleRender, 1000 / 30)
+		let _uiIntervalId = setInterval(battleRender, 1000 / 20)
 		let _uiComboInventoryIntervalId = setInterval(comboInventoryRender, 1000 / 1)
 		let _uiInventoryIntervalId = setInterval(inventoryRender, 1000 / 3)
 
