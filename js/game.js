@@ -56,6 +56,8 @@ const gameClass = () => {
 		player: {
 			settings    : {
 				autoadvance: true,
+				reverseadvance: false,
+				droponfail: true,
 				townstop   : false,
 			},
 			lastonline: null,
@@ -1070,6 +1072,9 @@ const gameClass = () => {
 		if (DATA.player.currentMonster) {
 			DATA.player.currentMonster.start()
 			if (DATA.player.currentMonster.getTimeleft() <= 0) {
+				if (DATA.player.settings.droponfail === true) {
+					DATA.player.currentStage--
+				}
 				updateStage(DATA.player.currentStage)
 				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
@@ -1088,9 +1093,18 @@ const gameClass = () => {
 						addItemInventory(laaat)
 					}
 				};
-
-				DATA.player.currentStage++
+				if (DATA.player.settings.autoadvance === true) {
+					if (DATA.player.settings.reverseadvance === true) {
+						DATA.player.currentStage--
+					} else {
+						DATA.player.currentStage++
+					}
+				}
+				
 				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.MAXSTAGE)
+				if (DATA.player.currentStage < 1) {
+					DATA.player.currentStage = 1
+				}
 				updateStage(DATA.player.currentStage)
 				saveData()
 			} else {
@@ -1610,6 +1624,23 @@ const gameClass = () => {
 		initCombolistRender()
 		initItemsInventoryRender()
 		GAMEVAR.initialized = true
+
+
+		function autoadvanceCheck () {
+			DATA.player.settings.autoadvance = this.checked
+		}
+		function reverseadvanceCheck () {
+			DATA.player.settings.reverseadvance = this.checked
+		}
+		function droponfailCheck () {
+			DATA.player.settings.droponfail = this.checked
+		}
+		elebyID("auto-advance").checked = DATA.player.settings.autoadvance
+		elebyID("reverse-advance").checked = DATA.player.settings.reverseadvance
+		elebyID("drop-on-fail").checked = DATA.player.settings.droponfail
+		elebyID("auto-advance").onchange = autoadvanceCheck
+		elebyID("reverse-advance").onchange = reverseadvanceCheck
+		elebyID("drop-on-fail").onchange = droponfailCheck
 	}
 
 	const wieldingSetupRender = () => {
