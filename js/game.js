@@ -29,7 +29,7 @@ const gameClass = () => {
 			europe: null,
 			special: null
 		},
-		MAXSTAGE: 1001,
+		MAXSTAGE: 50000,
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
@@ -875,7 +875,7 @@ const gameClass = () => {
 
 	const updateStage = (stage) => {
 
-		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE) || 1
+		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE-1) || 1
 		let sdata = getStageModelByStage(stage)
 
 		DATA.player.currentStage = stage
