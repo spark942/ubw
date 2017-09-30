@@ -969,8 +969,8 @@ const gameClass = () => {
 					// last delay, now switch to next combo
 					DATA.player.battle.current_combo++
 					DATA.player.battle.current_hit = 1
-					if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
-						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay0 * 1000
+					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined) {
+						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0 * 1000
 					} else {
 						DATA.player.battle.combo = null
 						DATA.player.battle.current_combo = null
