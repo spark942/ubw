@@ -1059,7 +1059,7 @@ const gameClass = () => {
 			let now = Date.now()
 			DATA.player.battle.timestamp_next_hit = now + thisCombo[0].skill.delay0 * 1000
 			DATA.player.battle.combo_ts_start = now
-			DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay * 100
+			DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay * 1000
 		} else {
 			// can't create combo
 
@@ -1177,23 +1177,23 @@ const gameClass = () => {
 			let combomax = (DATA.player.battle.combo_ts_end - DATA.player.battle.combo_ts_start) * 10
 			let curprog = Date.now() - DATA.player.battle.combo_ts_start
 			console.log(curprog,combomax)
-			let percentprog = percent((curprog/combomax), 4)
+			let percentprog = percent((curprog*10/combomax), 4)
 			elebyID("cur-skill-percent").style.width = Math.min(percentprog, 100) + "%"
 			
 
 			let timeforcurhit = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0
 			let totalhits = getActiveHitCount(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id)
-
+			for (var i = totalhits; i < 30; i++) {
+				elebyID("cur-skill-hit-"+(i+1)).classList.add("hidden")
+			};
 			for (var i = 0; i < totalhits; i++) {
 				elebyID("cur-skill-hit-"+(i+1)).classList.remove("hidden")
-				elebyID("cur-skill-hit-"+(i+1)).style.left = Math.min(timeforcurhit * 100000 / combomax, 100) + "%"
+				elebyID("cur-skill-hit-"+(i+1)).style.left = Math.min(timeforcurhit * 1000000 / combomax, 100) + "%"
 				if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.hasOwnProperty("delay"+(i+1)) === true) {
 					timeforcurhit += DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+(i+1)]
 				}
 			}
-			for (var i = totalhits; i < 30; i++) {
-				elebyID("cur-skill-hit-"+(i+1)).classList.add("hidden")
-			};
+			
 		}
 
 		/*display player level*/
