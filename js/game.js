@@ -195,11 +195,22 @@ const gameClass = () => {
 	}
 
 	const setPlayer = () => {
+		if (DATA.player.inventory.length !== 0) { return false}
 		DATA.player.activescombo["combosetup1"] = TABLES.defaultWeapon.class
 		DATA.player.activescombo["combosetup2"] = TABLES.defaultWeapon.class
 		DATA.player.activescombo["combosetup3"] = TABLES.defaultWeapon.class
 		DATA.player.activescombo["combosetup4"] = TABLES.defaultWeapon.class
 		addItemInventory(TABLES.weaponstarter)
+		addItemInventory({
+			type: "w",
+			item_id:11023,
+			stage: 80
+		})
+		addItemInventory({
+			type: "w",
+			item_id:13023,
+			stage: 80
+		})
 	}
 
 	const getCharacterLevelByExp = () => {
@@ -349,11 +360,12 @@ const gameClass = () => {
 				if (PASSIVES[i][5] == "1") {
 					DATA.player.passives[PASSIVES[i][0]].exp = 0
 				}
-				if (TABLES.passivesPerClass.hasOwnProperty(PASSIVES[i][3]) === false) {
-					TABLES.passivesPerClass[PASSIVES[i][3]] = []
-				}
+			}
+			if (TABLES.passivesPerClass.hasOwnProperty(PASSIVES[i][3]) === false) {
+				TABLES.passivesPerClass[PASSIVES[i][3]] = []
 				TABLES.passivesPerClass[PASSIVES[i][3]].push(PASSIVES[i][0])
 			}
+			
 			/*update passive*/
 			let curCharLevel = getCharacterLevelByExp()
 			/* check if unlocked */
@@ -660,15 +672,19 @@ const gameClass = () => {
 					DATA.player.actives[ACTIVES[i][0]].type = ACTIVES[i][3]
 				}
 
+				
+			}
+			if (TABLES.activesPerClass.hasOwnProperty(ACTIVES[i][4]) === false) {
 				TABLES.activesPerClass[ACTIVES[i][4]] = ACTIVES[i][0]
 			}
+			
 			/*update active*/
 			let curCharLevel = getCharacterLevelByExp()
 			/* check if unlocked */
 			if (ACTIVES[i][1].length > 0
 				&& ACTIVES[i][2] !== null
 				&& ACTIVES[i][4].length > 0) {
-
+				console.log(TABLES.activesPerClass)
 				if (ACTIVES[i][1] === "charlevel" 
 					&& ACTIVES[i][2] <= curCharLevel 
 					&& DATA.player.actives[ACTIVES[i][0]].unlocked === false) {
@@ -861,10 +877,9 @@ const gameClass = () => {
 			console.log("TOWN")
 			/* skip town for now */
 
+			/*DATA.player.currentStageIsTown = true
+			DATA.player.currentMonster = null*/
 			return true
-			DATA.player.currentStageIsTown = true
-			DATA.player.currentMonster = null
-
 		}
 		console.log(DATA)
 	}
@@ -880,8 +895,9 @@ const gameClass = () => {
 			DATA.player.currentRegion		= JSON.parse(localStorage.getItem('currentRegion'))
 		if (JSON.parse(localStorage.getItem('currentStage')))
 			DATA.player.currentStage		= JSON.parse(localStorage.getItem('currentStage'))
-		if (JSON.parse(localStorage.getItem('exp_char')))
-			DATA.player.exp_char 				= JSON.parse(localStorage.getItem('exp_char'))
+		if (localStorage.getItem('exp_char'))
+			DATA.player.exp_char 				= toDecimal(localStorage.getItem('exp_char'))
+		console.log(localStorage.getItem('exp_char'))
 		if (JSON.parse(localStorage.getItem('ekk')))
 			DATA.player.ekk 						= JSON.parse(localStorage.getItem('ekk'))
 		if (JSON.parse(localStorage.getItem('equipments')))
@@ -896,15 +912,21 @@ const gameClass = () => {
 			DATA.player.activescombo 		= JSON.parse(localStorage.getItem('activescombo'))
 		if (JSON.parse(localStorage.getItem('inventory')))
 			DATA.player.inventory 			= JSON.parse(localStorage.getItem('inventory'))
+		if (JSON.parse(localStorage.getItem('lastitemid')))
+			DATA.player.lastitemid 			= JSON.parse(localStorage.getItem('lastitemid'))
+		if (JSON.parse(localStorage.getItem('lastonline')))
+			DATA.player.lastonline 			= JSON.parse(localStorage.getItem('lastonline'))
+		console.log(DATA)
 	}
 
 	const saveData = () => {
+		DATA.player.lastonline = Date.now()
 		localStorage.setItem('settings',	JSON.stringify(DATA.player.settings))
 		localStorage.setItem('lastonline',	JSON.stringify(DATA.player.lastonline))
 		localStorage.setItem('focus',	JSON.stringify(DATA.player.focus))
 		localStorage.setItem('currentRegion',	JSON.stringify(DATA.player.currentRegion))
 		localStorage.setItem('currentStage',	JSON.stringify(DATA.player.currentStage))
-		localStorage.setItem('exp_char', 			JSON.stringify(DATA.player.exp_char))
+		localStorage.setItem('exp_char', 			DATA.player.exp_char)
 		localStorage.setItem('ekk', 					JSON.stringify(DATA.player.ekk))
 		localStorage.setItem('equipments', 		JSON.stringify(DATA.player.equipments))
 		localStorage.setItem('wieldingsetups',JSON.stringify(DATA.player.wieldingsetups))
@@ -912,6 +934,8 @@ const gameClass = () => {
 		localStorage.setItem('actives', 			JSON.stringify(DATA.player.actives))
 		localStorage.setItem('activescombo', 	JSON.stringify(DATA.player.activescombo))
 		localStorage.setItem('inventory', 		JSON.stringify(DATA.player.inventory))
+		localStorage.setItem('lastitemid', 		JSON.stringify(DATA.player.lastitemid))
+		localStorage.setItem('lastonline', 		JSON.stringify(DATA.player.lastonline))
 	}
 
 	const battling = () => {
@@ -998,11 +1022,12 @@ const gameClass = () => {
 			DATA.player.currentMonster.start()
 			if (DATA.player.currentMonster.getTimeleft() <= 0) {
 				updateStage(DATA.player.currentStage)
-				
+				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
 				DATA.player.exp_char += toDecimal(DATA.player.currentMonster.exp())
 				DATA.player.currentStage++
 				updateStage(DATA.player.currentStage)
+				saveData()
 			} else {
 				if (DATA.player.battle.combo === null) {
 					createBattleCombo()
@@ -1062,6 +1087,9 @@ const gameClass = () => {
 				domMonstername.innerHTML = DATA.player.currentMonster.name()
 			}
 
+			if (DATA.player.currentMonster.getTimeleft()) {
+				elebyID("timeleft").innerHTML = DATA.player.currentMonster.getTimeleft()/1000 + "s"
+			}
 			if (DATA.player.currentMonster.getTimeleft()) {
 				elebyID("timeleft").innerHTML = DATA.player.currentMonster.getTimeleft()/1000 + "s"
 			}
@@ -1695,6 +1723,8 @@ const gameClass = () => {
 		function setSetup() {
 			if (DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo] !== this.value) {
 				DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo] = this.value
+				DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo] = []
+				elebyID("comboskills").innerHTML = ""
 			}
 		}
 		elebyID("combo-setupselection").onchange = setSetup
@@ -1911,51 +1941,5 @@ const game = gameClass()
 game.init()
 game.run()
 game.setPlayer()
-game.setAwaken(0)
-game.addItem({
-	type: "f",
-	item_id:1003,
-	stage: 80
-})
-game.addItem({
-	type: "w",
-	item_id:11022,
-	stage: 80
-})
-game.addItem({
-	type: "w",
-	item_id:11023,
-	stage: 80
-})
-game.addItem({
-	type: "w",
-	item_id:11024,
-	stage: 80
-})
-game.addItem({
-	type: "w",
-	item_id:11025,
-	stage: 30
-})
-game.addItem({
-	type: "w",
-	item_id:11026,
-	stage: 30
-})
 
-game.addItem({
-	type: "w",
-	item_id:12026,
-	stage: 10
-})
-game.addItem({
-	type: "w",
-	item_id:13023,
-	stage: 80
-})
 
-game.addItem({
-	type: "w",
-	item_id:14145,
-	stage: 40
-})
