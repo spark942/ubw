@@ -1990,7 +1990,7 @@ const gameClass = () => {
 	}
 
 	const runGame = () => {
-		let _battleIntervalId = setInterval(battleLoop, 1000 / 60)
+		let _battleIntervalId = setInterval(battleLoop, 1000 / 40)
 		let _inventoryIntervalId = setInterval(inventoryLoop, 1000 / 1)
 		let _passiveIntervalId = setInterval(updatePassives, 1000 / 1)
 		let _activeIntervalId = setInterval(updateActives, 1000 / 1)
