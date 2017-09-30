@@ -350,6 +350,17 @@ const gameClass = () => {
 		}
 	}
 
+	const getWeaponPassiveIDByClass = (weaponClass) => {
+		let weaponType = getWeaponTypeByWeaponClass(weaponClass)
+		for (var i = 0; i < PASSIVES.length; i++) {
+			if (PASSIVES[i][6] === "weapontype" && PASSIVES[i][7] === weaponType) { return PASSIVES[i][0] }
+			else if (PASSIVES[i][8] === "weapontype" && PASSIVES[i][9] === weaponType) { return PASSIVES[i][0] }
+			else if (PASSIVES[i][10] === "weapontype" && PASSIVES[i][11] === weaponType) { return PASSIVES[i][0] }
+			else if (PASSIVES[i][12] === "weapontype" && PASSIVES[i][13] === weaponType) { return PASSIVES[i][0] }
+			else if (PASSIVES[i][14] === "weapontype" && PASSIVES[i][15] === weaponType) { return PASSIVES[i][0] }
+		};
+	}
+
 	const updatePassives = () => {
 		if (DATA.player.awaken_stage > 0
 			&& DATA.player.passives.hasOwnProperty(0) == false) {
@@ -623,6 +634,8 @@ const gameClass = () => {
 			item_id: weaponkind_id,
 			item_class: weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : null,
 			item_name: weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).name : TABLES.defaultWeapon.class,
+			weapon_type: getWeaponTypeByWeaponClass(weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : TABLES.defaultWeapon.class),
+			weapon_passive: getWeaponPassiveIDByClass(weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : TABLES.defaultWeapon.class),
 			item_dmg: weapon_dmg,
 			item_aspd: weapon_aspd,
 			skill_id: skill_id,
@@ -970,6 +983,10 @@ const gameClass = () => {
 					DATA.player.currentMonster.takeDamage(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit])
 					game.setActiveExp(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
+						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1))
+						)
+					game.setPassiveExp(
+						DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1))
 						)
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
