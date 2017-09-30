@@ -101,6 +101,16 @@ const WIELDINGTYPES = {
 		requirement: 5,
 		weapontype1: ["Daggers"],
 	},
+	TwohandedSword: {
+		requirement: 40,
+		weapontype1: ["Twohandedgreatswords"],
+		weaponcomborotation: [1],
+	},
+	TwhohandedCurvedSword: {
+		requirement: 40,
+		weapontype1: ["Curvedtwohandedswords"],
+		weaponcomborotation: [1],
+	},
 	DualDagger: {
 		awaken     : 1,
 		weapontype1: ["Daggers"],
