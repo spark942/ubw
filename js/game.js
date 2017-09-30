@@ -1048,6 +1048,7 @@ const gameClass = () => {
 			} else if (DATA.player.currentMonster.hp() <= 0) {
 				DATA.player.exp_char += toDecimal(DATA.player.currentMonster.exp())
 				DATA.player.currentStage++
+				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.MAXSTAGE)
 				updateStage(DATA.player.currentStage)
 				saveData()
 			} else {
