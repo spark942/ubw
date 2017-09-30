@@ -702,7 +702,6 @@ const gameClass = () => {
 			if (ACTIVES[i][1].length > 0
 				&& ACTIVES[i][2] !== null
 				&& ACTIVES[i][4].length > 0) {
-				console.log(TABLES.activesPerClass)
 				if (ACTIVES[i][1] === "charlevel" 
 					&& ACTIVES[i][2] <= curCharLevel 
 					&& DATA.player.actives[ACTIVES[i][0]].unlocked === false) {
@@ -840,11 +839,25 @@ const gameClass = () => {
 			name 		: monsterModel[2],
 			id 			: monsterModel[0],
 			level  	: stage,
-			rank  	: getStageModelByStage(stage)[2],
+			rank  	: monsterModel[6] || 0,
 			exp  		: monsterModel[3] * (1 + stage / 15),
 			maxhp  	: monsterModel[4] * (1 + stage / 10),
 			hp  		: monsterModel[4] * (1 + stage / 10),
 			timer  	: monsterModel[5],
+			loot    : [
+				monsterModel[7],
+				monsterModel[8],
+				monsterModel[9],
+				monsterModel[10],
+				monsterModel[11],
+				monsterModel[12],
+				monsterModel[13],
+				monsterModel[14],
+				monsterModel[15],
+				monsterModel[16],
+				monsterModel[17],
+				monsterModel[18]
+			],
 			timestamp: 	null,
 		}
 
@@ -862,6 +875,7 @@ const gameClass = () => {
 			level: 		() => { return mData.level},
 			rank: 		() => { return mData.rank},
 			timer: 	() => { return mData.timer},
+			loot: 	() => { return mData.loot},
 			start: 	() => {
 				if(mData.timestamp === null) {
 					mData.timestamp = Date.now() + (mData.timer * 1000) || null
@@ -899,7 +913,7 @@ const gameClass = () => {
 			DATA.player.currentMonster = null*/
 			return true
 		}
-		console.log(DATA)
+		//console.log(DATA)
 	}
 
 	const loadData = () => {
@@ -1047,6 +1061,19 @@ const gameClass = () => {
 				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
 				DATA.player.exp_char += toDecimal(DATA.player.currentMonster.exp())
+				/* LOOT */
+				let mobloots = DATA.player.currentMonster.loot()
+				for (var i = 0; i < mobloots.length; i++) {
+					if (mobloots[i] !== null && rngmm(1, TABLES.ITEM_DROPRATE[i]) === 1) {
+						/*GIMMELOOTBITCH*/
+						addItemInventory({
+							type: mobloots[i] === 1 ? "c" : mobloots[i] < 10000 ? "f" : "w",
+							item_id:mobloots[i],
+							stage: DATA.player.currentStage
+						})
+					}
+				};
+
 				DATA.player.currentStage++
 				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.MAXSTAGE)
 				updateStage(DATA.player.currentStage)
@@ -1507,13 +1534,11 @@ const gameClass = () => {
 		let domInventoryItemContainer 	 = elebyID("inventory-items")
 		for (var i = 0; i < DATA.player.inventory.length; i++) {
 			let domii = elebyID("item-"+DATA.player.inventory[i].id)
-			console.log(DATA.player.inventory[i].id)
 			if (domii === null) {
 				let ti 		= ELEMENTMODELS.item.cloneNode(true)
 
 				let tiID 	= DATA.player.inventory[i].id
 				ti.id = "item-"+tiID
-				console.log(ti)
 				domInventoryItemContainer.appendChild(ti)
 
 				elebySelector("#item-"+tiID+" .item-img").id = "item-img-"+tiID
