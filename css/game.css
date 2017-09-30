@@ -1,0 +1,950 @@
+#game {
+	position: relative;
+	background-color: rgba(255,255,255,0.12);
+	padding: 20px;
+}
+
+#game-container {
+	width: 700px;
+	height: 550px;
+	margin: 0 auto;
+	position: relative;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+#game-title {
+	color: #fff;
+}
+
+/* Zones */
+
+.g-battlescreen {
+	width: 353px;
+	height: 400px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: rgba(46, 204, 113,0.5)
+}
+
+.g-battlesettings {
+	width: 353px;
+	height: 150px;
+	position: absolute;
+	left: 0;
+	top: 400px;
+	background-color: rgba(52, 152, 219,0.3)
+}
+
+.g-inventorynav {
+	width: 50px;
+	height: 250px;
+	position: absolute;
+	left: 300px;
+	top: 0;
+	/*background-color: rgba(255,0,0,0.12);*/
+}
+.g-inventories {
+	width: 350px;
+	height: calc(100% - 2px);
+	position: absolute;
+	left: 350px;
+	top: 0;
+	background-color: #ecf0f1;
+	border: 1px solid #AAA;
+	border-right: none;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+/* Defaults */
+
+/* Battle Screen */
+
+h3#monsterid {
+	display: none;
+}
+h3#monstername {
+	display: block;
+	width: 270px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #AAA;
+	border-left: none;
+	border-right: none;
+	top: -1px;
+	position: absolute;
+	border-radius: 3px;
+	color: #fff;
+	text-shadow: 0 0 2px #000000;
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.1), 1px -1px 1px rgba(0,0,0,0.1);
+}
+
+div.progressbar {
+	width: 100%;
+	background-color: rgba(0,0,0,0.2);
+	position: relative;
+}
+div.progressbar div.progress {
+	width: 100%;
+	height: 30px;
+	background-color: rgba(76,175,80,0.9);
+}
+div.progressbar div.progress::-webkit-progress-value {
+  transition: width 0.2s ease;
+}
+
+#monsterhp {
+	width: 270px;
+	margin-left:20px;
+	position: relative;
+	margin-top: 10px;
+}
+#monsterhp .progressbar,
+#monsterhp .progressbar .progress {
+	border-radius: 3px;
+}
+#monstertimer {
+	width: 270px;
+	margin-left:20px;
+	position: relative;
+	margin-top: 10px;
+}
+#monstertimer .progressbar .progress {
+	height: 10px;
+}
+.hpnumber {
+	text-align: right;
+	margin-right: 16px;
+	font-family: 'Cutive Mono', monospace;
+}
+#bsettings-player {
+	text-align: right;
+}
+#playerlevel {
+	width: 70px;
+	display: inline-block;
+	font-family: 'Cutive Mono', monospace;
+	position: absolute;
+	top: 0px;
+	left: 6px;
+	text-align: center;
+}
+#playerexp {
+	width: 250px;
+	display: inline-block;
+	margin-right: 20px;
+}
+#playerexp .progressbar,
+#playerexp .progressbar .progress {
+	height: 16px;
+}
+.expnumber {
+	text-align: right;
+	position: absolute;
+	margin-right: 16px;
+	font-family: 'Cutive Mono', monospace;
+	top: 0;
+	text-align: center;
+	width: 100%;
+}
+
+
+img {
+	background-color: #1E1E1E;
+	line-height: 40px;
+    text-align: center;
+    font-size: 10px;
+    word-break: break-all;
+}
+
+/* Inventory Bar */
+
+label.navbutton {
+	width: 45px;
+	height: 48px;
+	margin: 4px 0 0 4px;
+	display: inline-block;
+	background-color: #34495e;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	position: relative;
+	z-index: 100;
+	border: 1px solid #AAA;
+	border-right: none;
+}
+img.navbutton {
+	width: 45px;
+	height: 48px;
+	display: inline-block;
+	color: #fff;
+	background-color: initial;
+	line-height: 48px;
+
+}
+
+input[type="radio"]:checked + label {
+	width: 46px;
+	color: red;
+	background-color: #ecf0f1;
+}
+input[type="radio"]:checked + label img.navbutton {
+	color: #34495e;
+}
+
+input[type="radio"]:checked + label:before,
+input[type="radio"]:checked + label:after {
+  position: absolute;
+  right: 0px;
+  width: 3px;
+  height: 3px;
+  content: " ";
+
+  border: 1px solid #AAA;
+}
+
+input[type="radio"]:checked + label:before {
+  top: -4px;
+  border-bottom-right-radius: 3px;
+  border-width: 0 1px 1px 0;
+  box-shadow: 2px 2px 0 #ecf0f1;
+}
+input[type="radio"]:checked + label:after {
+  bottom: -4px;
+  border-top-right-radius: 3px;
+  border-width: 1px 1px 0 0;
+  box-shadow: 2px -2px 0 #ecf0f1;
+}
+
+/* Inventories */
+.g-inventory {
+	height: 100%;
+}
+.g-inventory h2 {
+	display: block;
+	width: 300px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #AAA;
+	border-left: none;
+	border-right: none;
+	margin: 10px auto 5px auto;
+	position: relative;
+}
+
+
+#wieldingsetups-list,
+#passiveskills-viewoption,
+#passiveskills-list,
+#activeskills-viewoption,
+#activeskills-list,
+#combolist,
+#comboedit,
+#inventory-items,
+#inventory-stats {
+	width: calc(100% - 10px);
+	padding: 10px 13px 0 10px;
+}
+
+#wieldingsetups-list {
+
+	height: calc(100% - 57px);
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+.ws-setup {
+	background-color: white;
+	width: calc(100% - 5px);
+	padding: 0 5px 3px 5px;
+	margin-bottom: 5px;
+}
+.ws-setup[data-unlocked=false] {
+	display: none;
+}
+.ws-setup-name {
+	font-size: 12px;
+}
+.ws-setup-main > div {
+	display: inline-block;
+	font-size: 10px;
+	vertical-align: top;
+}
+.ws-setup-img {
+	width: 40px;
+	height: 55px;
+	background-color: rgba(241, 196, 15,0.2);
+	padding: 5px;
+	display: none !important;
+}
+.ws-setup-weapons {
+	width: 134px;
+	height: 57px;
+	background-color: rgba(52, 152, 219,0.2);
+	padding: 5px;
+	border-radius: 5px;
+}
+.ws-wp-slot {
+	display: inline-block;
+	width: 42px;
+	height: 57px;
+	background-color: white;
+	border-radius: 3px;
+}
+.slot-equipment {
+	font-size: 8px;
+}
+.ws-wp-2,
+.ws-wp-3,
+.ws-wa-2,
+.ws-wa-3 {
+	display: none;
+
+}
+.ws-setup[data-weaponamount="2"] .ws-wp-2,
+.ws-setup[data-weaponamount="3"] .ws-wp-2 {
+	display: inline-block;
+}
+.ws-setup[data-weaponamount="3"] .ws-wp-3 {
+	display: inline-block;
+}
+.ws-setup[data-weaponamount="2"] .ws-wa-2,
+.ws-setup[data-weaponamount="3"] .ws-wa-2 {
+	display: block;
+}
+.ws-setup[data-weaponamount="3"] .ws-wa-3 {
+	display: block;
+}
+.ws-wp-container {
+	width: 40px;
+	height: 40px;
+	background-color: rgba(230, 126, 34,0.3);
+	border-radius: 3px;
+	text-align: center;
+	cursor: pointer;
+	border: 1px dashed #000;
+}
+.ws-wp-container::active {
+	border: 1px solid rgba(44, 62, 80,1.0);
+}
+.ws-wp-container.selectingslot {
+	border-color: red;
+}
+.ws-wp-container .ws-wp-weapon {
+	background-color: transparent;
+	font-size: 25px;
+	font-weight: bold;
+	width: 100%;
+	height: 100%;
+}
+.ws-wp-container .ws-wp-weapon[src=""] {
+	width: 30px;
+}
+
+.slotspec {
+	line-height: 15px;
+	text-align: center;
+}
+.ws-setup-weapons-allowed {
+	font-size: 11px;
+}
+.ws-wa-1,
+.ws-wa-2,
+.ws-wa-3 {
+	line-height: 14px;
+	font-size: 9px;
+}
+.weapontypename {
+	background-color: rgba(230, 126, 34,0.25);
+	border-radius: 2px;
+	padding: 0 2px;
+}
+.ws-setup-weapon-stats-selection {
+	background-color: #CFD8DC;
+	position: relative;/*
+	width: 102px;*/
+	width: 158px;
+	height: 57px;
+	padding: 5px;
+	border-radius: 5px;
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+.ws-setup-weapon-stats-selection .ws-ws-selection {
+	width: calc(100% + 10px);
+	position: absolute;
+	top: 5px;/*
+	height: 57px;*//*
+	overflow-y: scroll;*/
+	background-color: #CFD8DC;
+	display: none;
+}
+.ws-setup-weapon-stats-selection .ws-ws-selection.selecting {
+	display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+}
+.ws-ws-selection .ws-item {/*
+	width: 102px;*/
+	overflow-x: hidden;
+	overflow-y: hidden;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+.ws-ws-selection .ws-item:hover {
+	background-color: rgba(255,255,255,0.1);
+}
+.ws-ws-selection .ws-item[data-grade="1"] {
+	color: #555;
+}
+.ws-ws-selection .ws-item[data-grade="2"] {
+	color: #222;
+}
+.ws-ws-selection .ws-item .ws-item-name {
+	white-space: pre;
+}
+.ws-ws-dps,
+.ws-ws-aspd {
+	color: #999;
+}
+#passiveskills-viewoption,
+#activeskills-viewoption {
+	height: 33px;
+}
+#passiveskills-list,
+#activeskills-list,
+#inventory-items {
+	height: calc(100% - 92px);
+	overflow-y: scroll;
+	overflow-x: visible;
+}
+#passiveskills-list .ps-skill,
+#activeskills-list .as-skill,
+#inventory-items .inv-item {
+	float: left;
+	width: 40px;
+	height: 40px;
+	background-color: rgba(243, 156, 18,0.4);
+	margin-right: 6px;
+	margin-bottom: 5px;
+	border-width: 2px 0 0 0;
+	border-color: rgba(52, 73, 94,1.0);
+	border-style: solid;
+	border-radius: 3px;
+}
+#passiveskills-list .ps-skill[data-canexp=true] {
+	border-color: rgba(26, 188, 156,1.0);
+}
+#activeskills-list .as-skill[data-canexp=true] {
+	border-color: rgba(231, 76, 60,1.0);
+}
+
+/*#passiveskills-list .ps-skill[data-canexp=true][data-unlocked=true]:after,
+#activeskills-list .as-skill[data-unlocked=true]:after {
+	content: "Lv." attr(data-level);
+	font-size: 8px;
+	position: absolute;
+	margin-top: -12px;
+	text-align: right;
+	width: 40px;
+	margin-left: -3px;
+}*/
+.torelative {
+	display: none;
+}
+#passiveskills-list .ps-skill[data-canexp=true][data-unlocked=true] .torelative,
+#activeskills-list .as-skill[data-unlocked=true] .torelative,
+#inventory-items .inv-item .item-img-desc.torelative {
+	position: relative;
+	width: 0;
+	height: 0;
+	display: block;
+}
+#passiveskills-list .ps-skill[data-canexp=true][data-unlocked=true] .torelative .img-skill-level,
+#activeskills-list .as-skill[data-unlocked=true] .torelative .img-skill-level,
+#inventory-items .inv-item .torelative .item-img-stage {
+	font-size: 8px;
+	position: absolute;
+	text-align: right;
+	width: 40px;
+	top: -10px;
+	right: -38px;
+	text-shadow: 0 0 2px #fff;
+}
+#inventory-items .inv-item .torelative .item-img-equipped {
+	font-size: 8px;
+	position: absolute;
+	text-align: left;
+	width: 7px;
+	top: -39px;
+	left: 30px;
+	text-shadow: 0 0 2px #fff;
+	font-weight: bold;
+	background-color: rgba(255,0,0,0.7);
+	padding: 1px 1px;
+	border-bottom-left-radius: 3px;
+	display: none;
+}
+#inventory-items .inv-item[data-equipped=true] .torelative .item-img-equipped {
+	display: block;
+}
+
+
+#passiveskills-list .ps-skill[data-unlocked=false],
+#activeskills-list .as-skill[data-unlocked=false] {
+	background-color: rgba(243, 156, 18,0.2);
+	border-color: rgba(52, 73, 94,0.4);
+}
+#passiveskills-list .ps-skill[data-unlocked=false][data-canexp=true] {
+	border-color: rgba(26, 188, 156,0.4);
+}
+#activeskills-list .as-skill[data-unlocked=false][data-canexp=true] {
+	border-color: rgba(231, 76, 60,0.4);
+}
+#passiveskills-list .ps-skill img,
+#activeskills-list .as-skill img {
+	width: 100%;
+	height: 100%;
+	background: none;
+}
+
+#passiveskills-list .ps-skill:nth-last-child():after,
+#activeskills-list .as-skill:nth-last-child():after {
+	clear: both;
+}
+
+#passiveskills-list .ps-skill.tooltip .tooltiptext,
+#activeskills-list .as-skill.tooltip .tooltiptext,
+#inventory-items .inv-item.tooltip .tooltiptext {
+	z-index: 200;
+	width: 300px;
+    top: 112px;
+	right: 360px;
+	text-align: left;
+	padding: 5px 8px;
+	font-size: 11px;
+}
+.ps-name,
+.as-name,
+.item-name {
+	font-weight: bold;
+}
+#passiveskills-list .ps-skill[data-unlocked=false] .ps-name:before,
+#activeskills-list .as-skill[data-unlocked=false] .as-name:before {
+	content: "[LOCKED] ";
+	color: rgba(231, 76, 60,1.0);
+}
+.ps-requirement,
+.as-requirement {
+	display: none;
+	margin-bottom: 10px;
+}
+#passiveskills-list .ps-skill[data-unlocked=false] .ps-requirement,
+#activeskills-list .as-skill[data-unlocked=false] .as-requirement {
+	display: inherit;
+}
+.ps-exp-level,
+.as-exp-level {
+	width: 46px;
+	vertical-align: top;
+}
+.ps-exp-level,
+.as-exp-level,
+.progressbar {
+	display: inline-block;
+}
+.passiveskill-exp,
+.activeskill-exp {
+	padding-top: 10px;
+	line-height: 16px;
+}
+.passiveskill-exp .progressbar,
+.activeskill-exp .progressbar {
+	width: 200px;
+	background-color: rgba(241, 196, 15,0.3)
+}
+.passiveskill-exp .progressbar .progress,
+.activeskill-exp .progressbar .progress {
+	height: 16px;
+}
+#passiveskills-list .ps-skill[data-canexp=false] .passiveskill-exp,
+#activeskills-list .as-skill[data-canexp=false] .activeskill-exp,
+#activeskills-list .as-skill[data-unlocked=false] .activeskill-exp {
+	display: none;
+}
+
+.bonusflat,
+.bonuspercent,
+.effecttext {
+	font-weight: bold;
+}
+.bonusflat {
+	color: rgba(230, 126, 34,1.0);
+}
+.bonuspercent {
+	color: rgba(26, 188, 156,1.0);
+}
+.effecttext {
+	color: rgba(155, 89, 182,1.0)
+}
+
+#passiveskills-list .ps-skill[data-unlocked=false] .ps-bonusdmg-text,
+#passiveskills-list .ps-skill[data-unlocked=false] .ps-effect,
+#activeskills-list .as-skill[data-unlocked=false] .as-bonus-text,
+#activeskills-list .as-skill[data-unlocked=false] .as-effect {
+	/*text-decoration: line-through !important;
+	text-decoration-color: rgba(231, 76, 60, 0.9) !important;
+	-moz-text-decoration-color: rgba(231, 76, 60, 0.9) !important;
+	-webkit-text-decoration-color: rgba(231, 76, 60, 0.9) !important;*/
+	opacity: 0.4
+}
+.power {
+	color: rgba(230, 126, 34,1.0);
+	font-weight: bold;
+}
+.as-effect {
+	position: relative;
+	width: 100%;
+	margin-bottom: 10px;
+}
+.skillhits {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 150px;
+	text-align: right;
+}
+.totaldmg {
+	color:rgba(192, 57, 43,1.0);
+	font-weight: bold;
+}
+.activerawpercent {
+	color: rgba(231, 76, 60,1.0);
+	font-weight: bold;
+}
+.activedmgtruepercent {
+	color: rgba(241, 196, 15,1.0);
+	font-weight: bold;
+}
+.as-bonus {
+	line-height: 11px;
+}
+
+.weapontypename,
+.passiveskillname,
+.activeskillname,
+.skilllevel {
+	white-space: pre;
+}
+
+
+
+/* Combo Inventory */
+
+#combolist > div {
+	font-size: 12px;
+	display: inline-block;
+	width: 78px;
+	background-color: #fff;
+	height: 25px;
+	line-height: 25px;
+	border-radius: 10px;
+	position: relative;
+	text-align: center;
+	cursor: pointer;
+}
+.comboreq {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(149, 165, 166,1.0);
+	cursor: not-allowed;
+	border-radius: 10px;
+}
+#comboedit {
+	position: relative;
+}
+#comboedit #combosetup,
+#comboedit #comboskills,
+#comboedit #comboskill-lists {
+	width: calc(100% - 10px);
+}
+#comboedit #combosetup #combo-choosesetup #combo-setupselection {
+	width: 150px;
+}
+#comboedit #combosetup #combo-choosesetup,
+#comboedit #combosetup .setup-note {
+	font-size: 10px;
+	color: gray;
+}
+
+#comboedit #comboskills-description {
+	top: 50px;
+	width: calc(100% - 10px);
+	height: 315px;
+	line-height: 315px;
+	text-align: center;
+	color: gray;
+}
+#comboedit #comboskills {
+	height: 295px;
+	overflow-y: auto;
+	padding: 10px 0;
+	position: absolute;
+	top: 41px;
+	width: calc(100% - 35px);
+}
+
+#comboedit #comboskills .comboskill {
+	padding: 5px;
+	background-color: rgba(255,255,255,0.95);
+	position: relative;
+	margin-bottom: 5px;
+}
+#comboedit #comboskills .comboskill .comboskill-header {
+	width: 100%;
+	position: relative;
+}
+#comboedit #comboskills .comboskill .comboskill-header .comboskill-name {
+	font-size: 11px;
+}
+#comboedit #comboskills .comboskill .comboskill-header .comboskill-weapon {
+	font-size: 10px;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#comboedit #comboskills .comboskill .comboskill-desc > div {
+	display: inline-block;
+	font-size: 10px;
+}
+#comboedit #comboskills .comboskill .unit {
+	color: rgba(127, 140, 141,1.0)
+}
+
+#comboedit #comboskill-lists {
+	border-top: 1px solid #333;
+	height: 100px;
+}
+#comboedit #comboskill-lists #comboskill-lists-title {
+	font-size: 12px;
+}
+#comboedit #comboskill-lists #comboskill-lists-skills {
+	overflow-y: auto;
+	height: 84px;
+	overflow-x: hidden;
+	width: 355px;
+}
+#comboedit #comboskill-lists .combolist-skill {
+	font-size: 10px;
+}
+#comboedit #comboskill-lists .combolist-skill[data-canuse="false"] {
+	display: none;
+}
+#comboedit #comboskill-lists .combolist-skill[data-canuse="true"] {
+	display: block;
+}
+#comboedit #comboskill-lists .combolist-skill > div {
+	display: inline-block;
+	height: 40px;
+}
+#comboedit #comboskill-lists .combolist-skill .combolist-skill-img {
+	width: 40px;
+}
+#comboedit #comboskill-lists .combolist-skill .combolist-skill-info {
+	width: 280px;
+	padding: 3px;
+	position: relative;
+}
+#comboedit #comboskill-lists .combolist-skill .combolist-skill-info .cbl-name-value {
+	font-size: bold !important;
+}
+#comboedit #comboskill-lists .combolist-skill .combolist-skill-info .combolist-skill-power {
+	position: absolute;
+	top: 0;
+	right: 20px;
+}
+
+/* Item Inventory */
+#inventory-items .inv-item {
+	background-color: #fff;
+}
+#inventory-items .inv-item .torelative {
+	display: inherit;
+	position: relative;
+}
+#inventory-items .inv-item .torelative.item-img-container {
+	height: 100%;
+}
+#inventory-items .inv-item .item-img-bg {
+	width: 100%;
+	height: 100%;
+	box-shadow: inset 0px 0px 1px #000;
+}
+
+#inventory-items .inv-item .item-img {
+	width: 100%;
+	height: 100%;
+	font-size: 8px;
+	background-color: transparent;
+}
+
+
+#inventory-items .inv-item.tooltip .tooltiptext {
+	height: 200px;
+}
+.ws-wp-container[data-grade="1"],
+#inventory-items .inv-item[data-grade="1"] {
+	background-color: rgba(189, 195, 199,0.6);
+}
+.ws-wp-container[data-grade="2"],
+#inventory-items .inv-item[data-grade="2"] {
+	background-color: rgba(236, 240, 241,0.6)
+}
+.ws-wp-container[data-grade="3"],
+#inventory-items .inv-item[data-grade="3"] {
+	background-color: rgba(39, 174, 96,0.6)
+}
+.ws-wp-container[data-grade="4"],
+#inventory-items .inv-item[data-grade="4"] {
+	background-color: rgba(41, 128, 185,0.6)
+}
+.ws-wp-container[data-grade="5"],
+#inventory-items .inv-item[data-grade="5"] {
+	background-color: rgba(142, 68, 173,0.6);
+}
+.ws-wp-container[data-grade="6"],
+#inventory-items .inv-item[data-grade="6"] {
+	background-color: rgba(192, 57, 43,0.6)
+}
+.ws-wp-container[data-grade="7"],
+#inventory-items .inv-item[data-grade="7"] {
+	background-color: rgba(243, 156, 18,0.6)
+}
+.ws-item[data-grade="1"],
+#inventory-items .inv-item[data-grade="1"] .item-name,
+#inventory-items .inv-item[data-grade="1"] .item-quality,
+#inventory-items .inv-item[data-grade="1"] .item-grade {
+	color: rgba(189, 195, 199,1.0)
+}
+.ws-item[data-grade="2"],
+#inventory-items .inv-item[data-grade="2"] .item-name,
+#inventory-items .inv-item[data-grade="2"] .item-quality,
+#inventory-items .inv-item[data-grade="2"] .item-grade {
+	color: rgba(236, 240, 241,1.0)
+}
+.ws-item[data-grade="3"],
+#inventory-items .inv-item[data-grade="3"] .item-name,
+#inventory-items .inv-item[data-grade="3"] .item-quality,
+#inventory-items .inv-item[data-grade="3"] .item-grade {
+	color: rgba(39, 174, 96,1.0)
+}
+.ws-item[data-grade="4"],
+#inventory-items .inv-item[data-grade="4"] .item-name,
+#inventory-items .inv-item[data-grade="4"] .item-quality,
+#inventory-items .inv-item[data-grade="4"] .item-grade {
+	color: rgba(41, 128, 185,1.0)
+}
+.ws-item[data-grade="5"],
+#inventory-items .inv-item[data-grade="5"] .item-name,
+#inventory-items .inv-item[data-grade="5"] .item-quality,
+#inventory-items .inv-item[data-grade="5"] .item-grade {
+	color: rgba(142, 68, 173,1.0);
+}
+.ws-item[data-grade="6"],
+#inventory-items .inv-item[data-grade="6"] .item-name,
+#inventory-items .inv-item[data-grade="6"] .item-quality,
+#inventory-items .inv-item[data-grade="6"] .item-grade {
+	color: rgba(192, 57, 43,1.0)
+}
+.ws-item[data-grade="7"],
+#inventory-items .inv-item[data-grade="7"] .item-name,
+#inventory-items .inv-item[data-grade="7"] .item-quality,
+#inventory-items .inv-item[data-grade="7"] .item-grade {
+	color: rgba(243, 156, 18,1.0)
+}
+#inventory-items .item-name {
+	line-height: 24px;
+	font-size: 16px;
+}
+#inventory-items .item-category {
+	width: 100%;
+	text-align: right;
+	position: relative;
+}
+#inventory-items .item-category .item-type {
+	position: absolute;
+	left: 0
+}
+#inventory-items .inv-item[data-type="f"] {
+	border-color: rgba(189, 195, 199,1.0);
+}
+#inventory-items .inv-item[data-type="w"] {
+	border-color: rgba(52, 152, 219,1.0);
+}
+#inventory-items .inv-item[data-type="f"] .item-type:after {
+	content: "Consummable";
+	color: rgba(189, 195, 199,1.0);
+}
+#inventory-items .inv-item[data-type="w"] .item-type {
+	color: rgba(52, 152, 219,1.0);
+}
+#inventory-items .inv-item[data-type="f"] .item-weapontype {
+	display: none;
+}
+#inventory-items .inv-item .item-dps,
+#inventory-items .inv-item .item-dmg-aspd {
+	display: none;
+}
+#inventory-items .inv-item[data-type="w"] .item-dps,
+#inventory-items .inv-item[data-type="w"] .item-dmg-aspd {
+	display: block;
+}
+#inventory-items .inv-item .item-dps {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+}
+#inventory-items .inv-item[data-type="w"] .item-dmg-aspd {
+	color: rgba(189, 195, 199,1.0);
+	margin-bottom: 10px;
+}
+#inventory-items .inv-item[data-type="w"] .dmg-value,
+#inventory-items .inv-item[data-type="w"] .aspd-value {
+	color: #fff;
+}
+#inventory-items .inv-item .item-effect {
+	width: 100%;
+}
+#inventory-items .inv-item[data-type="f"] .item-effect {
+	height: 139px;
+}
+#inventory-items .inv-item[data-type="w"] .item-effect {
+	height: 94px;
+}
+#inventory-items .inv-item .item-sell-price {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#inventory-stats {
+	height: 20px;
+	position: relative;
+	font-size: 12px;
+}
+#inventory-stats > div {
+	display: inline-block;
+}
+#inventory-stats #inventory-ekk {
+	position: absolute;
+	right: 26px;
+	width: 250px;
+	text-align: right;
+}

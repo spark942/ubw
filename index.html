@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Unlimited Blade Works - Idle Game</title>
+	<meta charset="utf-8">
+	<meta name="description" content="Idle Game, Weekend Project">
+	<meta name="keywords" content="Unlimited Blade Works,Idle,Game">
+	<meta name="author" content="Hayenn">
+	<link rel="stylesheet" type="text/css" href="css/default.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/game.css">
+</head>
+<body>
+	<div id="wrapper">
+		<section id="game">
+			<div id="game-container">
+				<div class="g-battlescreen">
+					<section id="bscreen-title">
+						<div id="bscreen-t-monster">
+							<h3 id="monsterid"></h3>
+							<div id="monstertimer">
+								<div class="progressbar"><div class="progress white"></div></div>
+							</div>
+							<div id="monsterhp">
+								<div class="progressbar"><div class="progress red"></div></div>
+								<h3 id="monstername"></h3>
+								<div class="hpnumber"><span class="currenthp">0</span> / <span class="maxhp">0</span></div>
+							</div>
+						</div>
+						<div id="bscreen-t-town" class="hidden">
+							<h3 id="townname">Town</h3>
+						</div>
+					</section>
+					<p class="">Time left: <span id="timeleft"></span></p>
+				</div>
+				<div class="g-battlesettings">
+					<section id="bsettings-player">
+						<h3 id="playerlevel">Lv. <span class="playerlevel">999</span></h3>
+						<div id="playerexp">
+
+							<div class="progressbar">
+								<div class="progress lime"></div>
+								<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+							</div>
+							
+							
+						</div>
+					</section>
+
+				</div>
+
+				<div class="g-inventorynav">
+					<div class="g-in-button">
+
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-equipments" checked>
+						<label class="navbutton" for="g-in-b-equipments"><img class="navbutton" src="" alt="Stats"></label>
+					</div>
+					<div class="g-in-button">
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-wieldingsetups">
+						<label class="navbutton" for="g-in-b-wieldingsetups"><img class="navbutton" src="" alt="W.S"></label>
+					</div>
+					<div class="g-in-button">
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-passives">
+						<label class="navbutton" for="g-in-b-passives"><img class="navbutton" src="" alt="P.S"></label>
+					</div>
+					<div class="g-in-button">
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-actives">
+						<label class="navbutton" for="g-in-b-actives"><img class="navbutton" src="" alt="A.S"></label>
+					</div>
+					<div class="g-in-button">
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-activescombo">
+						<label class="navbutton" for="g-in-b-activescombo"><img class="navbutton" src="" alt="Combo"></label>
+					</div>
+					<div class="g-in-button">
+						<input type="radio" class="hidden" name="g-in-buttons" id="g-in-b-inventory">
+						<label class="navbutton" for="g-in-b-inventory"><img class="navbutton" src="" alt="Inv."></label>
+					</div>
+				</div>
+				<div class="g-inventories">
+					<div id="g-in-equipments" class="g-inventory hidden">
+						<h2>Stats</h2>
+						<p>Nothing here yet</p>
+					</div>
+					<div id="g-in-wieldingsetups" class="g-inventory hidden">
+						<h2>Wielding Setups</h2>
+						<section id="wieldingsetups-list">
+							<div id="ws-id" class="ws-setup" data-unlocked="true" data-weaponamount="1">
+								<span class="ws-setup-name">Setup Name</span>
+								<div class="ws-setup-main">
+									<div class="ws-setup-img">IMG</div>
+									<div class="ws-setup-weapons">
+										<div class="ws-wp-1 ws-wp-slot">
+											<div id="ws-slot1-id" class="ws-wp-container ws-slot1">
+												<!-- <img class="ws-wp-weapon" src="" alt="+"> -->
+												<div class="slot-equipment"></div>
+											</div>
+											<div class="slotspec">Slot 1</div>
+										</div>
+										<div class="ws-wp-2 ws-wp-slot">
+											<div id="ws-slot2-id" class="ws-wp-container ws-slot2">
+												<!-- <img class="ws-wp-weapon" src="" alt="+"> -->
+												<div class="slot-equipment"></div>
+											</div>
+											<div class="slotspec">Slot 2</div>
+										</div>
+										<div class="ws-wp-3 ws-wp-slot">
+											<div id="ws-slot3-id" class="ws-wp-container ws-slot3">
+												<!-- <img class="ws-wp-weapon" src="" alt="+"> -->
+												<div class="slot-equipment"></div>
+											</div>
+											<div class="slotspec">Slot 3</div>
+										</div>
+									</div>
+									<div class="ws-setup-weapon-stats-selection">
+										<div id="ws-ws-stats-id" class="ws-ws-stats">Stats</div>
+										<div id="ws-ws-selection-id" class="ws-ws-selection">
+											<div id="ws-item-id" class="ws-item" data-slot="0" data-grade="1">
+												<span id="ws-item-name-id" class="ws-item-name">Balmung</span>
+												<div class="ws-item-dps"><span id="ws-item-dps-id" class="ws-dps-value">38,461.5</span></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="ws-setup-second">
+									<div class="ws-setup-weapons-allowed">
+										<div class="ws-wa-1">Slot 1: <span class="weaponlist">Hand</span></div>
+										<div class="ws-wa-2">Slot 2: <span class="weaponlist">Hand</span></div>
+										<div class="ws-wa-3">Slot 3: <span class="weaponlist">Hand</span></div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+					<div id="g-in-passives" class="g-inventory hidden">
+						<h2>Passive Skills</h2>
+						<section id="passiveskills-viewoption">
+							View Options
+						</section>
+						<section id="passiveskills-list">
+							<div id="ps-skill-id" class="ps-skill tooltip" data-unlocked="false" data-canexp="false" data-level="0">
+								<img class="ps-skill-img" src="" alt="P#1">
+								<div class="tooltiptext">
+									<span class="ps-name">Skill name</span><hr>
+									<div id="ps-req-id" class="ps-requirement">{unlock requirements}</div>
+									<div id="ps-exp-id" class="passiveskill-exp">
+										<h3 class="ps-exp-level">Lv. <span class="level">1</span></h3>
+										<div class="progressbar">
+											<div class="progress orange"></div>
+											<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+										</div>
+										<div class="ps-bonusdmg-text"><span class="bonuspercent">+<span class="ps-bonusdmg">1</span>%</span> damage when using the following equipments</div>
+									</div>
+									<br>
+									<span class="ps-effect">Effect 1</span>
+								</div>
+								<div class="torelative"><span class="img-skill-level">Lv.<span class="slevel">0</span></span></div>
+							</div>
+						</section>
+					</div>
+					<div id="g-in-actives" class="g-inventory hidden">
+						<h2>Active Skills</h2>
+						<section id="activeskills-viewoption">
+							View Options
+						</section>
+						<section id="activeskills-list">
+							<div id="as-skill-id" class="as-skill tooltip" data-unlocked="false" data-canexp="false" data-level="0">
+								<img class="as-skill-img" src="" alt="P#1">
+								<div class="tooltiptext">
+									<span class="as-name">Skill name</span><hr>
+									<div id="as-req-id" class="as-requirement">{unlock requirements}</div>
+									<div class="as-effect">Effect 1<br>Effect 2<br>Effect 3</div>
+									<div id="as-exp-id" class="activeskill-exp">
+										<h3 class="as-exp-level">Lv. <span class="level">1</span></h3>
+										<div class="progressbar">
+											<div class="progress orange"></div>
+											<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+										</div>
+										<div class="as-bonus"></div>
+									</div>
+									<br>
+								</div>
+								<div class="torelative"><span class="img-skill-level">Lv.<span class="slevel">0</span></span></div>
+							</div>
+						</section>
+					</div>
+					<div id="g-in-activescombo" class="g-inventory hidden">
+						<h2>Combos</h2>
+						<section id="combolist">
+							<div>Combo 1</div>
+							<div>Combo 2</div>
+							<div>Combo 3<span class="comboreq">Awaken 1</span></div>
+							<div>Combo 4<span class="comboreq">Awaken 10</span></div>
+						</section>
+						<section id="comboedit">
+							<div id="combosetup">
+								<div id="combo-choosesetup">
+									<select id="combo-setupselection"></select><br>
+									<span>Max Power <span id="combo-setup-powerused">0</span>/<span id="combo-setup-maxpower">19</span></span>&nbsp;
+									<span>Duration <span id="combo-setup-comboduration">0</span>s</span>
+								</div>
+								<div class="setup-note">* changing setup will clear the skill list</div>
+							</div>
+							<div id="comboskills-description">
+								Add a new skill using the list below
+							</div>
+							<div id="comboskills">
+								<div id="comboskill-id" class="comboskill">
+									<div class="comboskill-header">
+										<div id="comboskill-name-id" class="comboskill-name">Skill name</div>
+										<div id="comboskill-weapon-id" class="comboskill-weapon">W#1 23,456 Dmg | 1.24 AS</div>
+									</div>
+									<div class="comboskill-desc">
+										<div id="comboskill-img-container">
+											<img src="" alt="CS">
+										</div>
+										<div class="comboskill-power">Power<br><span id="comboskill-power-id">1</span></div>
+										<div class="comboskill-duration">Duration<br><span id="comboskill-duration-id">1</span></div>
+										<div class="comboskill-damage">Damage<br><span id="comboskill-damage-id">1</span></div>
+									</div>
+									
+								</div>
+							</div>
+							<div id="comboskill-lists">
+								<div id="comboskill-lists-title">Skills available</div>
+								<div id="comboskill-lists-skills">
+									<div id="combolist-skill-id" class="combolist-skill" data-canuse="">
+										<div class="combolist-skill-img">
+											<button class="combolist-skill-add" data-skillid="">ADD</button>
+										</div>
+										<div class="combolist-skill-info">
+											<div class="combolist-skill-name"><span class="cbl-name-value">Skill name</span>&nbsp;Lv.<span class="cbl-level-value">999</span></div>
+											<div class="combolist-skill-power power"><span class="cbl-power-value">999</span>&nbsp;Power required</div>
+											<div class="combolist-skill-desc">
+												<div class="combolist-skill-type"></div>
+												<div class="combolist-skill-dmg"></div>
+												<div class="combolist-skill-duration"></div>
+												<div class="combolist-skill-type"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+					<div id="g-in-inventory" class="g-inventory hidden">
+						<h2>Inventory</h2>
+						<section id="inventory-items">
+							<div id="item-id" class="inv-item tooltip" data-type="w" data-id="0" data-itemid="0" data-grade="7">
+								<div class="torelative item-img-container">
+									<div class="item-img-bg">
+										<img id="item-img-id" class="item-img" src="" alt="I#1">
+									</div>
+								</div>
+								<div class="tooltiptext">
+									<span id="item-name-id" class="item-name">Balmung</span><br>
+									<div class="item-category">
+										<span id="item-quality-id" class="item-quality">Mythical</span>
+										<span id="item-weapontype-id" class="item-weapontype">Two-handed Sword</span>&nbsp;
+										<span id="item-type-id" class="item-type"></span>
+									</div>
+									<hr>
+									<div class="item-dps"><span id="item-dps-id" class="dps-value">38,461.5</span>&nbsp;DPS</div>
+									<div class="item-dmg-aspd">
+										<span id="item-dmg-id" class="dmg-value">90,000</span> Damage every 
+										<span id="item-aspd-id" class="aspd-value">2.34</span> seconds
+									</div>
+									<div id="item-effect-id" class="item-effect">Effect 1<br>Effect 2<br>Effect 3</div>
+									<div class="item-bottom torelative">
+										<div class="item-stage-grade">
+											Lv.&nbsp;<span id="item-stage-id" class="item-stage">23,456</span>&nbsp;|&nbsp;Quality&nbsp;<span id="item-grade-id" class="item-grade">1,800</span>
+										</div>
+										<div class="item-sell-price"><span id="item-sell-id" class="item-sell-value">12,345,678,901,234</span>&nbsp;Ekk</div>
+									</div>
+								</div>
+								<div class="item-img-desc torelative">
+									<span id="item-img-stage-id" class="item-img-stage">i</span>
+									<span id="item-img-equipped-id" class="item-img-equipped">E</span>
+								</div>
+							</div>
+						</section>
+						<section id="inventory-stats">
+							<div id="inventory-slots"><span id="invitemcount">0</span>&nbsp;/&nbsp;<span id="invslots">999</span></div>
+							<div id="inventory-ekk"><span id="playerekk">999,999,999,999,999</span>&nbsp;Ekk</div>
+						</section>
+					</div>
+				</div>
+			</div>
+			<h1 id="game-title">Unlimited Blade Works version 0.1</h1>
+		</section>
+	</div>
+	<script type="text/javascript" src="js/data_actives.js"></script>
+	<script type="text/javascript" src="js/data_items.js"></script>
+	<script type="text/javascript" src="js/data_monsters.js"></script>
+	<script type="text/javascript" src="js/data_passives.js"></script>
+	<script type="text/javascript" src="js/data_stages.js"></script>
+	<script type="text/javascript" src="js/data_wieldingtypes.js"></script>
+	<script type="text/javascript" src="js/texts.js"></script>
+	<script type="text/javascript" src="js/tools.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+</body>
+</html>
