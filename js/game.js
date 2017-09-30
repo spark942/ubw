@@ -208,6 +208,11 @@ const gameClass = () => {
 		})
 		addItemInventory({
 			type: "w",
+			item_id:11024,
+			stage: 80
+		})
+		addItemInventory({
+			type: "w",
 			item_id:13023,
 			stage: 80
 		})
