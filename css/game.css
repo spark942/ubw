@@ -73,7 +73,9 @@
 /* Defaults */
 
 /* Battle Screen */
-
+#bscreen-t-monster {
+	position: relative;
+}
 h3#monsterid {
 	display: none;
 }
@@ -162,8 +164,78 @@ div.progressbar div.progress::-webkit-progress-value {
 	position: absolute;
 	background-color: rgba(52, 152, 219,1.0)
 }
+/* energy counts */
+#energies {
+	font-size: 14px;
+	font-weight: bold;
+	background-color: rgba(52, 73, 94,0.8);
+	border-radius: 5px;
+	width: 200px;
+	margin: 10px;
+	color: #fff;
+}
+#energies #power-count-text,
+#energies #power-count,
+#energies #focus-count > div {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 5px;
+}
+#energies #power-regen-count {
+	font-size: 10px;
+	font-weight: normal;
+}
+#energies #power-regen-count #powerregen-count-focus {
+	color: rgba(46, 204, 113,1.0)
+}
 
-
+/* aura */
+#bscreen-auras {
+	position: absolute;
+	padding: 10px;
+	bottom: 0;
+}
+#bscreen-auras .aura-container {
+	width: 280px;
+	height: 46px;
+	background-color: rgba(236, 240, 241,0.8);
+	margin-top: 5px;
+	border-radius: 2px;
+}
+#bscreen-auras .aura {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-color: rgba(236, 240, 241,1.0);
+	border-radius: 2px;
+	border-width: 3px;
+	border-color: rgba(0,0,0,0.2);
+	border-style: solid;
+}
+#bscreen-auras .aura-description {
+	display: inline-block;
+    vertical-align: top;
+    height: 30px;
+    padding: 5px;
+    font-size: 12px;
+    position: relative;
+    width: calc(100% - 65px);
+}
+#bscreen-auras .aura-description .auracost {
+	position: absolute;
+	right: 0;
+	font-size: 9px;
+}
+#bscreen-auras .aura-text {
+	font-size: 10px;
+}
+#bscreen-auras .aura-checkbox {
+	display: none;
+}
+#bscreen-auras .aura-checkbox:checked + label {
+	background-color: rgba(241, 196, 15,1.0)
+}
+/* battle settings */
 #bsettings-player {
 	text-align: right;
 }
@@ -218,6 +290,10 @@ div.progressbar div.progress::-webkit-progress-value {
 	background-color: transparent;
 	border: none;
 	border-bottom: 1px solid #000;
+}
+#inventory-settings #autosell-level:active,
+#inventory-settings #autosell-level:focus {
+	background-color: rgba(231, 76, 60,0.8);
 }
 #inventory-settings .autosell {
 	display: none;
@@ -1015,6 +1091,9 @@ input[type="radio"]:checked + label:after {
 }
 #inventory-items .inv-item[data-type="w"] .item-effect {
 	height: 94px;
+}
+#inventory-items .inv-item .item-note {
+	color: rgba(189, 195, 199,1.0)
 }
 #inventory-items .inv-item .item-sell-price {
 	position: absolute;

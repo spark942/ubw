@@ -69,6 +69,51 @@
 							<div id="cur-skill-hit-30" class="cur-skill-hit"></div>
 						</div>
 					</div>
+					<section id="energies">
+						<div id="power-count-text">Power</div>
+						<div id="power-count">
+							<span id="curpower-count">1</span>/<span id="maxpower-count">999</span><br>
+							<span id="power-regen-count"><span id="powerregen-count">1</span><span id="powerregen-count-focus"></span> per sec</span>
+						</div>
+						<div id="focus-count">
+							<div>
+								<span>Focus</span>
+							</div>
+							<div>
+								<span id="curfocus"></span>
+							</div>
+						</div>
+						<div id="floatingtexttest" class="floatingtext"></div>
+					</section>
+					<section id="bscreen-auras">
+						<div class="aura-container">
+							<input id="aura-focus-dmg" class="aura-checkbox" type="checkbox" name="aura-focus-dmg">
+							<label id="aura-focus-dmg-icon" for="aura-focus-dmg" class="aura toggleable">
+							</label>
+							<div class="aura-description">
+								<span>Strengthen</span><span class="auracost"><span id="aura-focus-dmg-cost">0</span> focus per second</span><br>
+								<span class="aura-text">Increase damage by <span id="aura-focus-dmg-value">0</span>%</span>
+							</div>
+						</div>
+						<div class="aura-container">
+							<input id="aura-focus-power-regen" class="aura-checkbox" type="checkbox" name="aura-focus-power-regen">
+							<label id="aura-focus-power-regen-icon" for="aura-focus-power-regen" class="aura toggleable">
+							</label>
+							<div class="aura-description">
+								<span>Concentration</span><span class="auracost"><span id="aura-focus-power-regen-cost">0</span> focus per second</span><br>
+								<span class="aura-text">Increase power regeneration by <span id="aura-focus-power-regen-value">0</span> per second</span>
+							</div>
+						</div>
+						<div class="aura-container">
+							<input id="aura-focus-combostreak" class="aura-checkbox" type="checkbox" name="aaura-focus-combostreak">
+							<label id="aura-focus-combostreak-icon" for="aura-focus-combostreak" class="aura toggleable">
+							</label>
+							<div class="aura-description">
+								<span>Battle Trance</span><span class="auracost"><span id="aura-focus-combostreak-cost">0</span> focus per second</span><br>
+								<span class="aura-text">Increase damage by <span>0</span>% every hit until the combo ends</span>
+							</div>
+						</div>
+					</section>
 				</div>
 				<div class="g-battlesettings">
 					<section id="bsettings-player">
@@ -314,7 +359,7 @@
 										<span id="item-dmg-id" class="dmg-value">90,000</span> Damage every 
 										<span id="item-aspd-id" class="aspd-value">2.34</span> seconds
 									</div>
-									<div id="item-effect-id" class="item-effect">Effect 1<br>Effect 2<br>Effect 3</div>
+									<div id="item-effect-id" class="item-effect">This item has no special effect</div>
 									<div class="item-bottom torelative">
 										<div class="item-stage-grade">
 											Lv.&nbsp;<span id="item-stage-id" class="item-stage">23,456</span>&nbsp;|&nbsp;Quality&nbsp;<span id="item-grade-id" class="item-grade">1,800</span>

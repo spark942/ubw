@@ -89,6 +89,9 @@ const gameClass = () => {
 				autosell_3 : false,
 				autosell_4 : false,
 				autosell_5 : false,
+				aura_focus_dmg 				 : false,
+				aura_focus_power_regen : false,
+				aura_focus_combostreak : false,
 			},
 			lastonline: null,
 			focus: 100,
@@ -96,6 +99,7 @@ const gameClass = () => {
 			currentStage: 1,
 			currentStageIsTown: false,
 			currentMonster: null,
+			currentPower: 0,
 			exp_char    : 1,
 			awaken_stage: 0,
 			max_stage    : 1,
@@ -647,6 +651,7 @@ const gameClass = () => {
 		if (rawActive.hit1 !== null && rawActive.delay1 !== null) {
 			ca.hit1 = weapon_dmg * rawActive.hit1 * (1 + dmg_p + skill_dmg_p) + dmg_f
 			ca.delay1 = weapon_aspd * rawActive.delay1
+			ca.power = ACTIVES[skill_id-1][6]
 		}
 		if (rawActive.hit2 !== null && rawActive.delay2 !== null) {ca.hit2 = weapon_dmg * rawActive.hit2 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay2 = weapon_aspd * rawActive.delay2}
 		if (rawActive.hit3 !== null && rawActive.delay3 !== null) {ca.hit3 = weapon_dmg * rawActive.hit3 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay3 = weapon_aspd * rawActive.delay3}
@@ -916,6 +921,7 @@ const gameClass = () => {
 
 		const takeDamage = (dmg) => {
 			mData.hp -= dmg
+			mData.hp = Math.min(0, mData.hp)
 		}
 
 		return {
@@ -1030,17 +1036,30 @@ const gameClass = () => {
 		if (DATA.player.battle.combo !== null) {
 			//console.log("battling")
 			let now = Date.now()
-
+			
 			if (now > DATA.player.battle.timestamp_next_hit && DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined) {
 				//console.log("battling1", DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill, DATA.player.battle.current_hit)
 
 				if (DATA.player.battle.current_hit === -1) {
 					//console.log("battling11")
-					// last delay, now switch to next combo
-					DATA.player.battle.current_combo++
-					DATA.player.battle.current_hit = 1
 					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined) {
+
+						if (DATA.player.currentPower <= DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.power) {
+							return
+						}
 						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0 * 1000
+						// last delay, now switch to next combo
+						DATA.player.battle.current_combo++
+						DATA.player.battle.current_hit = 1
+
+						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
+							DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
+						} else {
+							DATA.player.battle.combo = null
+							DATA.player.battle.current_combo = null
+							DATA.player.battle.current_hit = null
+							DATA.player.battle.timestamp_next_hit = null
+						}
 					} else {
 						DATA.player.battle.combo = null
 						DATA.player.battle.current_combo = null
@@ -1050,7 +1069,14 @@ const gameClass = () => {
 				} else if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] !== undefined) {
 					//console.log("battling12")
 					// we can atk
-					DATA.player.currentMonster.takeDamage(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit])
+					/* DAMAGE THE MONSTER*/
+					/* if buff, base 2 because 100% from base damage and 100% from basic focus buff */
+					let finaldmg = DATA.player.settings.aura_focus_dmg === true ? 
+						(2 + getPassiveBonusValue("focus_dmg_p")) * DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] : DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit]
+					DATA.player.currentMonster.takeDamage(finaldmg)
+					/* SHOW FLOATING NUMBER */
+					damageMonster(finaldmg)
+					/* EXP SKILLS */
 					game.setActiveExp(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
@@ -1104,9 +1130,13 @@ const gameClass = () => {
 					weaponObj.aspd || TABLES.defaultWeapon.aspd, 
 					ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][0])))
 			}
+			if (DATA.player.currentPower <= thisCombo[0].skill.power) {
+				return
+			}
 			DATA.player.battle.combo = thisCombo
 			DATA.player.battle.current_combo = 1
 			DATA.player.battle.current_hit   = 1
+			DATA.player.currentPower -= thisCombo[0].skill.power
 			let now = Date.now()
 			DATA.player.battle.timestamp_next_hit = now + thisCombo[0].skill.delay0 * 1000
 			DATA.player.battle.combo_ts_start = now
@@ -1162,6 +1192,36 @@ const gameClass = () => {
 				battling()
 			}
 		}
+	}
+
+	const auraLoop = () => {
+		/* auras */
+		if (DATA.player.currentMonster !== null) {
+			if (DATA.player.settings.aura_focus_dmg === true) {
+				DATA.player.focus -= TABLES.AURA.FOCUS_DMG.cost_per_sec
+			}
+			if (DATA.player.settings.aura_focus_power_regen === true
+				&& DATA.player.currentPower < getPassiveBonusValue("combo_power")) {
+				DATA.player.focus -= TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec
+				/* Regen power */
+				DATA.player.currentPower += TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") 
+			}
+			if (DATA.player.settings.aura_focus_combostreak === true) {
+				DATA.player.focus -= TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec
+			}
+		} else if (DATA.player.currentStageIsTown === true) {
+			/* regen focus if in town */
+			DATA.player.focus += 1 + parseInt(getPassiveBonusValue("focus_idle_regen"))
+		}
+
+		DATA.player.currentPower = toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
+		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
+
+		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec))
+		updateTextByID("aura-focus-dmg-value", numberPrint(percent(1 + getPassiveBonusValue("focus_dmg_p"))))
+		updateTextByID("aura-focus-power-regen-cost", numberPrint(TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec))
+		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
+		updateTextByID("aura-focus-combostreak-cost", numberPrint(TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec))
 	}
 
 	const inventoryLoop = () => {
@@ -1271,20 +1331,34 @@ const gameClass = () => {
 			elebyID("cur-skill-percent").style.width = Math.min(percentprog, 100) + "%"
 			
 
-			let timeforcurhit = DATA.player.battle.combo !== null ? DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0 : 0
-			let totalhits = getActiveHitCount(DATA.player.battle.combo !== null ? DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id : 1)
+			let timeforcurhit = DATA.player.battle.combo !== null ? 
+				DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined ? 
+					DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0 : 0 : 0
+			let totalhits = getActiveHitCount(DATA.player.battle.combo !== null ? 
+				DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined ? 
+					DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id : 0 : 1)
 			for (var i = totalhits; i < 30; i++) {
 				elebyID("cur-skill-hit-"+(i+1)).classList.add("hidden")
 			};
 			for (var i = 0; i < totalhits; i++) {
 				elebyID("cur-skill-hit-"+(i+1)).classList.remove("hidden")
 				elebyID("cur-skill-hit-"+(i+1)).style.left = Math.min(timeforcurhit * 1000000 / combomax, 100) + "%"
-				if (DATA.player.battle.combo !== null && DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.hasOwnProperty("delay"+(i+1)) === true) {
+				if (DATA.player.battle.combo !== null 
+					&& DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined 
+					&& DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.hasOwnProperty("delay"+(i+1)) === true) {
 					timeforcurhit += DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+(i+1)]
 				}
 			}
 			
 		}
+
+		elebyID("curpower-count").innerHTML = numberPrint(toDecimal(DATA.player.currentPower,2))
+		elebyID("maxpower-count").innerHTML = numberPrint(getPassiveBonusValue("combo_power"))
+		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec"), 1))
+		elebyID("powerregen-count-focus").innerHTML = DATA.player.settings.aura_focus_power_regen === true ? 
+			iText("power_regen_focus",numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
+
+		elebyID("curfocus").innerHTML = numberPrint(DATA.player.focus)
 
 		/*display player level*/
 		let domplayerlevel 	= elebySelector("#playerlevel .playerlevel")
@@ -1654,7 +1728,21 @@ const gameClass = () => {
 		}
 	}
 
-
+	function consumeItem() {
+		let item_id = parseInt(this.getAttribute("data-itemid"))
+		if (item_id >= 1000 && item_id <= 10000) {
+			DATA.player.focus += ITEMS[item_id][5]
+			let removeID = []
+			for (var i = 0; i < DATA.player.inventory.length; i++) {
+				if (DATA.player.inventory[i].id === parseInt(this.getAttribute("data-id"))){
+					removeID.push(i)
+					break
+				}
+			}
+			removeFromArray(DATA.player.inventory, removeID)
+			this.remove()
+		}
+	}
 
 	const initItemsInventoryRender = () => {
 		let domInventoryItemModel 	 = elebySelector("#inventory-items #item-id")
@@ -1670,6 +1758,7 @@ const gameClass = () => {
 				let tiID 	= DATA.player.inventory[i].id
 				ti.id = "item-"+tiID
 				domInventoryItemContainer.appendChild(ti)
+				ti.ondblclick = consumeItem
 
 				elebySelector("#item-"+tiID+" .item-img").id = "item-img-"+tiID
 				elebySelector("#item-"+tiID+" .item-name").id = "item-name-"+tiID
@@ -1683,6 +1772,7 @@ const gameClass = () => {
 					elebySelector("#item-"+tiID+" .dmg-value").id = "item-dmg-"+tiID
 					elebySelector("#item-"+tiID+" .aspd-value").id = "item-aspd-"+tiID
 				}
+				elebySelector("#item-"+tiID+" .item-effect").id = "item-effect-"+tiID
 				elebySelector("#item-"+tiID+" .item-stage").id = "item-stage-"+tiID
 				elebySelector("#item-"+tiID+" .item-grade").id = "item-grade-"+tiID
 				elebySelector("#item-"+tiID+" .item-sell-value").id = "item-sell-"+tiID
@@ -1703,6 +1793,16 @@ const gameClass = () => {
 		GAMEVAR.initialized = true
 
 
+		/* aura */
+		function auraFocusDmgCheck () { DATA.player.settings.aura_focus_dmg = this.checked }
+		function auraFocusPowerRegenCheck () { DATA.player.settings.aura_focus_power_regen = this.checked }
+		function auraFocusCombostreakCheck () { DATA.player.settings.aura_focus_combostreak = this.checked }
+		elebyID("aura-focus-dmg").onchange = auraFocusDmgCheck
+		elebyID("aura-focus-power-regen").onchange = auraFocusPowerRegenCheck
+		elebyID("aura-focus-combostreak").onchange = auraFocusCombostreakCheck
+		elebyID("aura-focus-dmg").checked = DATA.player.settings.aura_focus_dmg || false
+		elebyID("aura-focus-power-regen").checked = DATA.player.settings.aura_focus_power_regen || false
+		elebyID("aura-focus-combostreak").checked = DATA.player.settings.aura_focus_combostreak || false
 		/* battle settings */
 		function autoadvanceCheck () {
 			DATA.player.settings.autoadvance = this.checked
@@ -1719,6 +1819,7 @@ const gameClass = () => {
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
+
 		/* inventory settings */
 		function autosell1Check () { DATA.player.settings.autosell_1 = this.checked }
 		function autosell2Check () { DATA.player.settings.autosell_2 = this.checked }
@@ -1727,11 +1828,11 @@ const gameClass = () => {
 		function autosell5Check () { DATA.player.settings.autosell_5 = this.checked }
 		function autosellLevelCheck () { DATA.player.settings.autosell_level = parseInt(this.value) }
 
-		elebyID("autosell-1").checked = DATA.player.settings.autosell_1
-		elebyID("autosell-2").checked = DATA.player.settings.autosell_2
-		elebyID("autosell-3").checked = DATA.player.settings.autosell_3
-		elebyID("autosell-4").checked = DATA.player.settings.autosell_4
-		elebyID("autosell-5").checked = DATA.player.settings.autosell_5
+		elebyID("autosell-1").checked = DATA.player.settings.autosell_1 || false
+		elebyID("autosell-2").checked = DATA.player.settings.autosell_2 || false
+		elebyID("autosell-3").checked = DATA.player.settings.autosell_3 || false
+		elebyID("autosell-4").checked = DATA.player.settings.autosell_4 || false
+		elebyID("autosell-5").checked = DATA.player.settings.autosell_5 || false
 		elebyID("autosell-level").value = DATA.player.settings.autosell_level || 100
 
 		elebyID("autosell-1").onchange = autosell1Check
@@ -2047,7 +2148,7 @@ const gameClass = () => {
 				let ti 		= ELEMENTMODELS.item.cloneNode(true)
 				ti.id = "item-"+tiID
 				domInventoryItemContainer.appendChild(ti)
-
+				ti.ondblclick = consumeItem
 
 				elebySelector("#item-"+tiID+" .item-img").id = "item-img-"+tiID
 				elebySelector("#item-"+tiID+" .item-name").id = "item-name-"+tiID
@@ -2060,6 +2161,7 @@ const gameClass = () => {
 					elebySelector("#item-"+tiID+" .dmg-value").id = "item-dmg-"+tiID
 					elebySelector("#item-"+tiID+" .aspd-value").id = "item-aspd-"+tiID
 				}
+				elebySelector("#item-"+tiID+" .item-effect").id = "item-effect-"+tiID
 				elebySelector("#item-"+tiID+" .item-stage").id = "item-stage-"+tiID
 				elebySelector("#item-"+tiID+" .item-grade").id = "item-grade-"+tiID
 				elebySelector("#item-"+tiID+" .item-sell-value").id = "item-sell-"+tiID
@@ -2085,6 +2187,9 @@ const gameClass = () => {
 				updateTextByID("item-dmg-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg)))
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
+			if (DATA.player.inventory[i].focus !== null) {
+				updateTextByID("item-effect-"+tiID, iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus))))
+			}
 			updateTextByID("item-stage-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].stage)))
 			updateTextByID("item-grade-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].quality)))
 			updateTextByID("item-sell-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].sell)))
@@ -2093,7 +2198,6 @@ const gameClass = () => {
 		}
 
 		updateTextByID("playerekk", numberPrint(DATA.player.ekk))
-		
 	}
 
 	const inventoryRender = () => {
@@ -2126,6 +2230,7 @@ const gameClass = () => {
 
 	const runGame = () => {
 		let _battleIntervalId = setInterval(battleLoop, 1000 / 40)
+		let _auraIntervalId = setInterval(auraLoop, 1000 / 1)
 		let _inventoryIntervalId = setInterval(inventoryLoop, 1000 / 1)
 		let _passiveIntervalId = setInterval(updatePassives, 1000 / 1)
 		let _activeIntervalId = setInterval(updateActives, 1000 / 1)

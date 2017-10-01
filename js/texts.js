@@ -1,4 +1,7 @@
 const TEXTS = {
+	/* battle */
+	/* counts*/
+	power_regen_focus : "(+{0})",
 	/*weapontypes*/
 	BareHands				: "Bare hands",
 	HandFist				: "Fist",
@@ -70,5 +73,6 @@ const TEXTS = {
 	comboskill_stat_duration : 	"{0}s",
 	comboskill_stat_dmg : 		"{0}",
 	/* Item */
-	item_lv : "Lv.{0}"
+	item_lv : "Lv.{0}",
+	item_food_focus : "Gives {0} Focus after comsuming<br><span class=\"item-note\">Double click to consume</span>"
 }

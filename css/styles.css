@@ -135,3 +135,51 @@ hr {
 .as-hit {
 	font-weight: bold;
 }
+
+.floatingtext {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    position: absolute; /* Sit on top of the screen */
+    z-index: 100000; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    top: 30px; /* 30px from the bottom */
+}
+.floatingtext.show {
+    visibility: visible; /* Show the snackbar */
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.2s, fadeout 1.8s 0.1s;
+    animation: fadein 0.2s, fadeout 1.8s 0.1s;
+}
+
+@-webkit-keyframes fadein {
+    0% {top: 45px; left: 52%; opacity: 0;}
+    70% {top: 41px; left: 50.2%; opacity: 0.9;}
+    100%{top: 40px; left: 50%; opacity: 1;}
+}
+
+@keyframes fadein {
+    0% {top: 45px; left: 52%; opacity: 0;}
+    70% {top: 41px; left: 50.2%; opacity: 0.9;}
+    100%{top: 40px; left: 50%; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    0% {top: 40px; left: 50%; opacity: 1; z-index: 100000;}
+    40% {top: 30px; left: 52%; opacity: 0.8; z-index: 98000;}
+    70% {top: 20px; left: 55%; opacity: 0.6; z-index: 95000;}
+    90% {top: 16px; left: 70%; opacity: 0.3; z-index: 92000;}
+    100%{top: 20px; left: 80%;  opacity: 0; z-index: 90000;}
+}
+
+@keyframes fadeout {
+    0% {top: 40px; left: 50%; opacity: 1; z-index: 100000;}
+    40% {top: 30px; left: 52%; opacity: 0.8; z-index: 98000;}
+    70% {top: 20px; left: 55%; opacity: 0.6; z-index: 95000;}
+    90% {top: 16px; left: 70%; opacity: 0.3; z-index: 92000;}
+    100%{top: 20px; left: 80%;  opacity: 0; z-index: 90000;}
+}
