@@ -72,6 +72,7 @@ const TEXTS = {
 	comboskill_weapon : "W#{0} {1}<span class=\"unit\">DMG</span> | {2}<span class=\"unit\">AS</span>",
 	comboskill_stat_duration : 	"{0}s",
 	comboskill_stat_dmg : 		"{0}",
+	comboskill_stat_dmg_withfocus : 		"{0} <span class=\"orangetext\">(+{1})</span>",
 	/* Item */
 	item_lv : "Lv.{0}",
 	item_food_focus : "Gives {0} Focus after comsuming<br><span class=\"item-note\">Double click to consume</span>"

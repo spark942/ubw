@@ -2093,7 +2093,14 @@ const gameClass = () => {
 				updateTextByID("comboskill-power-"+i,ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][6])
 
 				updateTextByID("comboskill-duration-"+i,iText("comboskill_stat_duration",skilldata.skill.delay))
-				updateTextByID("comboskill-damage-"+i,iText("comboskill_stat_dmg",skilldata.skill.hit))
+				
+				if (DATA.player.settings.aura_focus_dmg === true) {
+					let damagebonusfromfocus = 0
+					damagebonusfromfocus = toDecimal((1 + getPassiveBonusValue("focus_dmg_p")) * skilldata.skill.hit)
+					updateTextByID("comboskill-damage-"+i,iText("comboskill_stat_dmg_withfocus",toDecimal(skilldata.skill.hit),damagebonusfromfocus))
+				} else {
+					updateTextByID("comboskill-damage-"+i,iText("comboskill_stat_dmg",toDecimal(skilldata.skill.hit)))
+				}
 				maxduration += skilldata.skill.delay
 				powerused +=   ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][6]
 
