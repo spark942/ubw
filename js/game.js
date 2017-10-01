@@ -31,6 +31,29 @@ const gameClass = () => {
 			special: null
 		},
 		MAXSTAGE: 50000,
+		AURA: {
+			FOCUS_DMG: {
+				name: "Strengthen",
+				base : 1,
+				curbonus : 0,
+				cost_type: "focus",
+				cost_per_sec: 3,
+			},
+			FOCUS_POWER_REGEN: {
+				name: "Concentration",
+				base : 3,
+				curbonus : 0,
+				cost_type: "focus",
+				cost_per_sec: 5,
+			},
+			FOCUS_COMBO_STREAK: {
+				name: "Wombo Combo",
+				base : 0.03,
+				curbonus : 0.03,
+				cost_type: "focus",
+				cost_per_sec: 10,
+			},
+		},
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
@@ -1115,7 +1138,6 @@ const gameClass = () => {
 							item_id:mobloots[i],
 							stage: DATA.player.currentStage
 						}
-						console.log(laaat)
 						addItemInventory(laaat)
 					}
 				};
@@ -1186,7 +1208,9 @@ const gameClass = () => {
 				&& findPassiveBonusWithValue("autosell_grade", "grade_"+DATA.player.inventory[i].grade) !== false
 				) {
 				toSell.push(i)
-				elebyID("item-"+DATA.player.inventory[i].id).remove()
+				if (elebyID("item-"+DATA.player.inventory[i].id) !== null) {
+					elebyID("item-"+DATA.player.inventory[i].id).remove()
+				}
 				DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
 			}
 		};
@@ -1198,7 +1222,6 @@ const gameClass = () => {
 			if (findPassiveBonusWithValue("autosell_grade", "grade_"+i) === false) {
 				if (DATA.player.settings["autosell_"+i] === true) { DATA.player.settings["autosell_"+i] = false }
 				elebyID("autosell-"+i).disabled = true
-				console.log(i)
 			} else {
 				elebyID("autosell-"+i).disabled = false
 			}
