@@ -921,7 +921,7 @@ const gameClass = () => {
 
 		const takeDamage = (dmg) => {
 			mData.hp -= dmg
-			mData.hp = Math.min(0, mData.hp)
+			mData.hp = Math.max(0, mData.hp)
 		}
 
 		return {
@@ -1197,17 +1197,29 @@ const gameClass = () => {
 	const auraLoop = () => {
 		/* auras */
 		if (DATA.player.currentMonster !== null) {
-			if (DATA.player.settings.aura_focus_dmg === true) {
+			if (DATA.player.settings.aura_focus_dmg === true
+				&& (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec >= 0)) {
 				DATA.player.focus -= TABLES.AURA.FOCUS_DMG.cost_per_sec
+			} else if (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec < 0) {
+				DATA.player.settings.aura_focus_dmg = false
+				elebyID("aura-focus-dmg").checked = false
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
+				&& (DATA.player.focus - TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec >= 0)
 				&& DATA.player.currentPower < getPassiveBonusValue("combo_power")) {
 				DATA.player.focus -= TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec
 				/* Regen power */
 				DATA.player.currentPower += TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") 
+			} else if (DATA.player.focus - TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec < 0) {
+				DATA.player.settings.aura_focus_power_regen = false
+				elebyID("aura-focus-power-regen").checked = false
 			}
-			if (DATA.player.settings.aura_focus_combostreak === true) {
+			if (DATA.player.settings.aura_focus_combostreak === true
+				&& (DATA.player.focus - TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec >= 0)) {
 				DATA.player.focus -= TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec
+			} else if (DATA.player.focus - TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec < 0) {
+				DATA.player.settings.aura_focus_combostreak = false
+				elebyID("aura-focus-combostreak").checked = false
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
