@@ -143,7 +143,9 @@ hr {
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
     color: #fff; /* White text color */
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     text-align: center; /* Centered text */
+    font-weight: bold;
     border-radius: 2px; /* Rounded borders */
     position: absolute; /* Sit on top of the screen */
     z-index: 100000; /* Add a z-index if needed */

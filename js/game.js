@@ -1274,7 +1274,7 @@ const gameClass = () => {
 			}
 		}
 
-		/* sell items */
+		/* consume or sell  items */
 		let toSell = []
 		for (var i = 0; i < DATA.player.inventory.length; i++) {
 			if (isEquipped(DATA.player.inventory[i].id) === false
@@ -1286,7 +1286,11 @@ const gameClass = () => {
 				if (elebyID("item-"+DATA.player.inventory[i].id) !== null) {
 					elebyID("item-"+DATA.player.inventory[i].id).remove()
 				}
-				DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
+				if (DATA.player.inventory[i].item_id > 10000) {
+					DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
+				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
+					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5]
+				}
 			}
 		};
 		if (toSell.length) {
