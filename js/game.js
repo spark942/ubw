@@ -1225,6 +1225,9 @@ const gameClass = () => {
 			/* regen focus if in town */
 			DATA.player.focus += 1 + parseInt(getPassiveBonusValue("focus_idle_regen"))
 		}
+		if (DATA.player.focus < 0) {
+			DATA.player.focus = 0
+		}
 
 		DATA.player.currentPower = toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
