@@ -1709,7 +1709,7 @@ const gameClass = () => {
 		elebyID("autosell-3").checked = DATA.player.settings.autosell_3
 		elebyID("autosell-4").checked = DATA.player.settings.autosell_4
 		elebyID("autosell-5").checked = DATA.player.settings.autosell_5
-		elebyID("autosell-level").value = DATA.player.settings.autosell_level
+		elebyID("autosell-level").value = DATA.player.settings.autosell_level || 100
 
 		elebyID("autosell-1").onchange = autosell1Check
 		elebyID("autosell-2").onchange = autosell2Check
