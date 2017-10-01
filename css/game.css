@@ -12,6 +12,18 @@
 	background-color: #fff;
 	overflow: hidden;
 }
+#game-loading {
+	width: 800px;
+	height: 570px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(255,255,255,0.99);
+	overflow: hidden;
+	z-index: 99999;
+	text-align: center;
+	line-height: 570px;
+}
 
 #game-title {
 	color: #fff;
@@ -182,13 +194,51 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: center;
 	width: 100%;
 }
-#adventure-settings {
+#adventure-settings,
+#xxx-settings,
+#inventory-settings {
 	font-size: 11px;
 	line-height: 19px;
+	display: inline-block;
+	width: 130px;
+	vertical-align: top;
 }
 #adventure-settings input {
 	vertical-align: bottom;
 }
+#xxx-settings {
+	width: 50px;
+}
+#inventory-settings {
+	width: 120px;
+	text-align: center;
+}
+#inventory-settings #autosell-level {
+	width: 70px;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #000;
+}
+#inventory-settings .autosell {
+	display: none;
+}
+#inventory-settings .autosell[type=checkbox] + label {
+	padding: 1px 3px;
+	background-color: rgba(236, 240, 241,1.0);
+	border-radius: 3px;
+	cursor: pointer;
+}
+#inventory-settings .autosell[type=checkbox]:checked + label {
+	color: #fff;
+	background-color: rgba(52, 152, 219,1.0);
+}
+#inventory-settings .autosell[type=checkbox]:disabled + label {
+	color: #fff;
+	background-color: rgba(149, 165, 166,1.0);
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
 
 img {
 	background-color: #1E1E1E;

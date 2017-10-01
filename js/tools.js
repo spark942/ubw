@@ -123,3 +123,10 @@ function wswsByDPS(a,b) {
     return 1;
   return 0;
 }
+
+function removeFromArray(array, indexes) {
+	let newArray = array
+	for (var i = indexes.length -1; i >= 0; i--)
+   	newArray.splice(indexes[i],1);
+  return newArray
+}

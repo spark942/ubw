@@ -12,6 +12,7 @@
 const gameClass = () => {
 	const GAMEVAR = {
 		initialized:false,
+		renderInitialized:false,
 		inventoryspace: 20
 	}
 	const TABLES = {
@@ -59,6 +60,12 @@ const gameClass = () => {
 				reverseadvance: false,
 				droponfail: true,
 				townstop   : false,
+				autosell_level : 100,
+				autosell_1 : false,
+				autosell_2 : false,
+				autosell_3 : false,
+				autosell_4 : false,
+				autosell_5 : false,
 			},
 			lastonline: null,
 			focus: 100,
@@ -533,6 +540,22 @@ const gameClass = () => {
 		return bonusvalue
 	}
 
+	const findPassiveBonusWithValue = (bonus, value) => {
+		/* get bonus from passive */
+		for (var pid in DATA.player.passives) {
+			if (pid == 0) { continue}
+			else if (DATA.player.passives[pid].unlocked === true) {
+				/* check passive bonuses */
+				if (PASSIVES[pid-1][6] === bonus && PASSIVES[pid-1][7].toString() === value.toString()) { return PASSIVES[pid-1][0] }
+				if (PASSIVES[pid-1][8] === bonus && PASSIVES[pid-1][9].toString() === value.toString()) { return PASSIVES[pid-1][0] }
+				if (PASSIVES[pid-1][10] === bonus && PASSIVES[pid-1][11].toString() === value.toString()) { return PASSIVES[pid-1][0] }
+				if (PASSIVES[pid-1][12] === bonus && PASSIVES[pid-1][13].toString() === value.toString()) { return PASSIVES[pid-1][0] }
+				if (PASSIVES[pid-1][14] === bonus && PASSIVES[pid-1][15].toString() === value.toString()) { return PASSIVES[pid-1][0] }
+			}
+		}
+		return false
+	} 
+
 	const getActiveSkillBonusPerLevel = (skill_id, bonuskey) => {
 		let skillbonus = 0
 		let skill_exp  	= DATA.player.actives[skill_id].exp
@@ -847,9 +870,9 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: monsterModel[3] * (1 + stage / 15),
-			maxhp  	: monsterModel[4] * (1 + stage / 10),
-			hp  		: monsterModel[4] * (1 + stage / 10),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.1)/15)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/10)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/10)),
 			timer  	: monsterModel[5],
 			loot    : [
 				monsterModel[7],
@@ -890,6 +913,9 @@ const gameClass = () => {
 			},
 			getTimeleft: () => {
 				return Math.max(mData.timestamp - Date.now(),0).toFixed(2)
+			},
+			extendTime: (seconds) => {
+				mData.timestamp += seconds * 1000
 			},
 		}
 	}
@@ -1004,11 +1030,11 @@ const gameClass = () => {
 					DATA.player.currentMonster.takeDamage(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit])
 					game.setActiveExp(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1))
+						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					game.setPassiveExp(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1))
+						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
 					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+(DATA.player.battle.current_hit+1)] === undefined) {
@@ -1150,6 +1176,34 @@ const gameClass = () => {
 				DATA.player.inventory[i] = thisitemUpdated
 			}
 		}
+
+		/* sell items */
+		let toSell = []
+		for (var i = 0; i < DATA.player.inventory.length; i++) {
+			if (isEquipped(DATA.player.inventory[i].id) === false
+				&& DATA.player.settings["autosell_"+DATA.player.inventory[i].grade] === true
+				&& parseInt(DATA.player.inventory[i].stage) < parseInt(DATA.player.settings.autosell_level)
+				&& findPassiveBonusWithValue("autosell_grade", "grade_"+DATA.player.inventory[i].grade) !== false
+				) {
+				toSell.push(i)
+				elebyID("item-"+DATA.player.inventory[i].id).remove()
+				DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
+			}
+		};
+		if (toSell.length) {
+			removeFromArray(DATA.player.inventory, toSell)
+		}
+		/* disable buttons if not unlocked yet*/
+		for (var i = 1; i <= 5; i++) {
+			if (findPassiveBonusWithValue("autosell_grade", "grade_"+i) === false) {
+				if (DATA.player.settings["autosell_"+i] === true) { DATA.player.settings["autosell_"+i] = false }
+				elebyID("autosell-"+i).disabled = true
+				console.log(i)
+			} else {
+				elebyID("autosell-"+i).disabled = false
+			}
+		};
+		
 	}
 
 	const battleRender = () => {
@@ -1626,6 +1680,7 @@ const gameClass = () => {
 		GAMEVAR.initialized = true
 
 
+		/* battle settings */
 		function autoadvanceCheck () {
 			DATA.player.settings.autoadvance = this.checked
 		}
@@ -1641,6 +1696,27 @@ const gameClass = () => {
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
+		/* inventory settings */
+		function autosell1Check () { DATA.player.settings.autosell_1 = this.checked }
+		function autosell2Check () { DATA.player.settings.autosell_2 = this.checked }
+		function autosell3Check () { DATA.player.settings.autosell_3 = this.checked }
+		function autosell4Check () { DATA.player.settings.autosell_4 = this.checked }
+		function autosell5Check () { DATA.player.settings.autosell_5 = this.checked }
+		function autosellLevelCheck () { DATA.player.settings.autosell_level = parseInt(this.value) }
+
+		elebyID("autosell-1").checked = DATA.player.settings.autosell_1
+		elebyID("autosell-2").checked = DATA.player.settings.autosell_2
+		elebyID("autosell-3").checked = DATA.player.settings.autosell_3
+		elebyID("autosell-4").checked = DATA.player.settings.autosell_4
+		elebyID("autosell-5").checked = DATA.player.settings.autosell_5
+		elebyID("autosell-level").value = DATA.player.settings.autosell_level
+
+		elebyID("autosell-1").onchange = autosell1Check
+		elebyID("autosell-2").onchange = autosell2Check
+		elebyID("autosell-3").onchange = autosell3Check
+		elebyID("autosell-4").onchange = autosell4Check
+		elebyID("autosell-5").onchange = autosell5Check
+		elebyID("autosell-level").onchange = autosellLevelCheck
 	}
 
 	const wieldingSetupRender = () => {
@@ -2009,7 +2085,12 @@ const gameClass = () => {
 		//comboInventoryRender()
 		/* item inventory */
 		itemsInventoryRender()
-	}
+
+		if (GAMEVAR.renderInitialized === false) { 
+			GAMEVAR.renderInitialized = true
+			elebyID("game-loading").classList.add("hidden")
+		}
+	}	
 
 	const updateProgressBar = (selector, progress, max) => {
 		let domProgress 	 = elebySelector(selector+" .progress")
