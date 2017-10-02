@@ -148,7 +148,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	background-color: rgba(0,0,0,0.5);
 	padding: 10px 5px;
 	text-align: center;
-	color: #fff;
+	color: #fff; 
 }
 #bscreen-title #bscreen-t-monster #routename {
 	text-align: left;
@@ -240,6 +240,12 @@ div.progressbar div.progress::-webkit-progress-value {
 	position: absolute;
 	padding: 10px;
 	bottom: 0;
+}
+.aura-header {
+	font-size: 12px;
+}
+.aura-header-info {
+	font-size: 9px;
 }
 #bscreen-auras .aura-container {
 	width: 280px;
