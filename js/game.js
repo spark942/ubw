@@ -1241,9 +1241,9 @@ const gameClass = () => {
 		/* auras */
 		if (DATA.player.currentMonster !== null) {
 			if (DATA.player.settings.aura_focus_dmg === true
-				&& (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec >= 0)) {
-				DATA.player.focus -= TABLES.AURA.FOCUS_DMG.cost_per_sec
-			} else if (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec < 0) {
+				&& (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p")) >= 0)) {
+				DATA.player.focus -= TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))
+			} else if (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p")) < 0) {
 				DATA.player.settings.aura_focus_dmg = false
 				elebyID("aura-focus-dmg").checked = false
 			}
@@ -1275,7 +1275,7 @@ const gameClass = () => {
 		DATA.player.currentPower = toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
-		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec))
+		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))))
 		updateTextByID("aura-focus-dmg-value", numberPrint(percent(1 + getPassiveBonusValue("focus_dmg_p"))))
 		updateTextByID("aura-focus-power-regen-cost", numberPrint(TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec))
 		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
