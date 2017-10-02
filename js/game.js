@@ -1072,24 +1072,16 @@ const gameClass = () => {
 
 				if (DATA.player.battle.current_hit === -1) {
 					//console.log("battling11")
-					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1] !== undefined) {
+					if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
 
-						if (DATA.player.currentPower <= DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.power) {
+						if (DATA.player.currentPower <= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power) {
 							return
 						}
-						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill.delay0 * 1000
+						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay0 * 1000
 						// last delay, now switch to next combo
 						DATA.player.battle.current_combo++
 						DATA.player.battle.current_hit = 1
-
-						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
-							DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
-						} else {
-							DATA.player.battle.combo = null
-							DATA.player.battle.current_combo = null
-							DATA.player.battle.current_hit = null
-							DATA.player.battle.timestamp_next_hit = null
-						}
+						DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
 					} else {
 						DATA.player.battle.combo = null
 						DATA.player.battle.current_combo = null

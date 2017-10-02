@@ -118,6 +118,7 @@ const WIELDINGTYPES = {
 	},
 	God: {
 		awaken     : 80,
+		hidden     : true,
 		weapontype1: [
 			"BareHands","HandFist",
 			"Straightshortswords","Curvedshortswords","Curvedonehandedswords",
