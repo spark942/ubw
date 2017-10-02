@@ -110,6 +110,17 @@ function numberPrint(x, separator) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 }
 
+function numberShort(x) {
+	let order = ["K", "M", "B", "T",  "KT", "MT", "BT", "TT", "K2T", "?"]
+	let range = [1e3, 1e6, 1e9, 1e12, 1e15, 1e18, 1e21, 1e24, 1e27, 1e300]
+
+	if (x < range[0]) { return x }
+	for (var i = 0; i < range.length; i++) {
+		if (x > range[i+1]) { continue }
+		return Math.floor(x/range[i]).toString() + order[i]
+	};
+}
+
 const cloneObj = (obj) => {
 	return JSON.parse(JSON.stringify(obj))
 }
@@ -137,8 +148,8 @@ function damageMonster(number, duration) {
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.innerHTML = numberPrint(toDecimal(number))
 	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,10000000)).toString()
-	newDamage.style.marginTop = Math.floor(rngmm(1,10)).toString() + "px"
-	newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,265)).toString() + "px"
+	newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
+	newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
 	elebyID("bscreen-t-monster").appendChild(newDamage)
 	newDamage.classList.add("show")
 	setTimeout(function(){ newDamage.remove() }, 900);

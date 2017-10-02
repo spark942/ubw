@@ -1,5 +1,10 @@
 const TEXTS = {
 	/* battle */
+	monster_rank_0 : "",
+	monster_rank_1 : "★",
+	monster_rank_2 : "★★",
+	monster_rank_3 : "★★★",
+	monster_rank_4 : "★★★★",
 	/* counts*/
 	power_regen_focus : "(+{0})",
 	/*weapontypes*/

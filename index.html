@@ -18,22 +18,26 @@
 				<div class="g-battlescreen">
 					<section id="bscreen-title">
 						<div id="bscreen-t-monster">
+							<div id="routename">Route #<span id="route"></span> | <span id="timeleft"></span></div>
 							<h3 id="monsterid"></h3>
 							<div id="monstertimer">
 								<div class="progressbar"><div class="progress white"></div></div>
 							</div>
 							<div id="monsterhp">
 								<div class="progressbar"><div class="progress red"></div></div>
-								<h3 id="monstername"></h3>
+								<h3 id="monstername"><span id="monsterrank"></span>&nbsp;<span id="monsternameval"></span></h3>
 								<div class="hpnumber"><span class="currenthp">0</span> / <span class="maxhp">0</span></div>
-								<div>Route <span id="route"></span></div>
 							</div>
 						</div>
 						<div id="bscreen-t-town" class="hidden">
-							<h3 id="townname">Town</h3>
+							<div id="townname">Town #<span id="townid"></span></div>
+							<div id="townactions">
+								<div id="town-enter">Enter Town</div>
+								<!-- <div id="town-gate">Back to gate</div> -->
+								<div id="town-exit">Exit Town</div>
+							</div>
 						</div>
 					</section>
-					<p class="">Time left: <span id="timeleft"></span></p>
 					<div id="cur-skill-bar">
 						<div id="cur-skill-progress" class="pcur-rogressbar">
 							<div id="cur-skill-percent" class="progress orange"></div>
@@ -92,7 +96,7 @@
 							</label>
 							<div class="aura-description">
 								<span>Strengthen</span><span class="auracost"><span id="aura-focus-dmg-cost">0</span> focus per second</span><br>
-								<span class="aura-text">Increase damage by <span id="aura-focus-dmg-value">0</span>%</span>
+								<span class="aura-text">Increase damage by <span id="aura-focus-dmg-value">0</span>%. Focus consumption in battle only</span>
 							</div>
 						</div>
 						<div class="aura-container">
@@ -110,7 +114,7 @@
 							</label>
 							<div class="aura-description">
 								<span>Battle Trance</span><span class="auracost"><span id="aura-focus-combostreak-cost">0</span> focus per second</span><br>
-								<span class="aura-text">Increase damage by <span>0</span>% every hit until the combo ends</span>
+								<span class="aura-text">NOT WORKING Increase damage by <span>0</span>% every hit until the combo ends</span>
 							</div>
 						</div>
 					</section>
@@ -126,6 +130,7 @@
 						</div>
 					</section>
 					<section id="adventure-settings">
+						<label for="town-stop"><input id="town-stop" type="checkbox" name="town-stop"> Stop at towns</label><br>
 						<label for="auto-advance"><input id="auto-advance" type="checkbox" name="auto-advance"> Auto-advance</label><br>
 						<label for="reverse-advance"><input id="reverse-advance" type="checkbox" name="reverse-advance"> Reverse-advance</label><br>
 						<label for="drop-on-fail"><input id="drop-on-fail" type="checkbox" name="drop-on-fail"> Drop on fail</label>

@@ -73,15 +73,21 @@
 /* Defaults */
 
 /* Battle Screen */
-#bscreen-t-monster {
+#bscreen-title  {
+	height: 120px;
+}
+/* Monster */
+#bscreen-title #bscreen-t-monster,
+#bscreen-title #bscreen-t-town {
 	position: relative;
+	padding: 10px;
 }
 h3#monsterid {
 	display: none;
 }
 h3#monstername {
 	display: block;
-	width: 270px;
+	width: 100%;
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
@@ -94,6 +100,9 @@ h3#monstername {
 	color: #fff;
 	text-shadow: 0 0 2px #000000;
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.1), 1px -1px 1px rgba(0,0,0,0.1);
+}
+h3#monstername #monsterrank {
+	font-size: 20px;
 }
 
 div.progressbar {
@@ -111,20 +120,17 @@ div.progressbar div.progress::-webkit-progress-value {
 }
 
 #monsterhp {
-	width: 270px;
-	margin-left:20px;
+	width: calc(100% - 50px);
 	position: relative;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 #monsterhp .progressbar,
 #monsterhp .progressbar .progress {
 	border-radius: 3px;
 }
 #monstertimer {
-	width: 270px;
-	margin-left:20px;
+	width: calc(100% - 50px);
 	position: relative;
-	margin-top: 10px;
 }
 #monstertimer .progressbar .progress {
 	height: 10px;
@@ -133,10 +139,50 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: right;
 	margin-right: 16px;
 	font-family: 'Cutive Mono', monospace;
+	letter-spacing: -2px;
 }
-#cur-skill-bar {
+
+#bscreen-title #bscreen-t-monster #routename,
+#bscreen-title #bscreen-t-town #townname {
+	width: calc(100% - 60px);
+	background-color: rgba(0,0,0,0.5);
+	padding: 10px 5px;
 	text-align: center;
-	width: 310px;
+	color: #fff;
+}
+#bscreen-title #bscreen-t-monster #routename {
+	text-align: left;
+    text-indent: 10px;
+}
+#bscreen-title #bscreen-t-town #townactions {
+	margin-top: 10px;
+}
+#bscreen-title #bscreen-t-town #townactions > div {
+	display: inline-block;
+	height: 30px;
+	border-radius: 3px;
+	padding: 5px 10px;
+	line-height: 30px;
+	width: calc(50% - 50px);
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+	background-color: #eee;
+	text-align: center;
+}
+#bscreen-title #bscreen-t-town #townactions > div:hover {
+	background-color: #fff;
+	cursor: pointer;
+}
+#bscreen-title #bscreen-t-town #townactions #town-enter {
+	cursor: not-allowed;
+}
+
+
+/* current skill bar */
+#cur-skill-bar {
+	width: 100%;
+	padding: 0 10px;
 }
 #cur-skill-bar #cur-skill-progress {
 	position: relative;
@@ -146,7 +192,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	margin: 0px;
 	border-radius: 2px;
 	border: 1px solid #BBBBBB;
-	width: 270px;
+	width: calc(100% - 70px);
 	height: 6px;
 	display: inline-block;
 }
@@ -211,6 +257,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	border-width: 3px;
 	border-color: rgba(0,0,0,0.2);
 	border-style: solid;
+	cursor: pointer;
 }
 #bscreen-auras .aura-description {
 	display: inline-block;
@@ -257,6 +304,7 @@ div.progressbar div.progress::-webkit-progress-value {
 #playerexp .progressbar .progress {
 	height: 16px;
 }
+/* this is for all exp in bars*/
 .expnumber {
 	text-align: right;
 	position: absolute;
@@ -266,6 +314,9 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: center;
 	width: 100%;
 }
+#playerexp .expnumber {
+	letter-spacing: -3px;
+}
 #adventure-settings,
 #xxx-settings,
 #inventory-settings {
@@ -274,6 +325,9 @@ div.progressbar div.progress::-webkit-progress-value {
 	display: inline-block;
 	width: 130px;
 	vertical-align: top;
+}
+#adventure-settings label {
+	cursor: pointer;
 }
 #adventure-settings input {
 	vertical-align: bottom;

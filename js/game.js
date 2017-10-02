@@ -82,7 +82,7 @@ const gameClass = () => {
 				autoadvance: true,
 				reverseadvance: false,
 				droponfail: true,
-				townstop   : false,
+				townstop   : true,
 				autosell_level : 100,
 				autosell_1 : false,
 				autosell_2 : false,
@@ -102,7 +102,11 @@ const gameClass = () => {
 			currentPower: 0,
 			exp_char    : 1,
 			awaken_stage: 0,
-			max_stage    : 1,
+			max_stage    : {
+				all : 1,
+				asia : 1,
+				europe : 1,
+			},
 			ekk         : 1000,
 			equipments  	 : [],
 			wieldingsetups : {},
@@ -898,9 +902,9 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.1)/150)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/100)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/100)),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.1)/45)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/30)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/30)),
 			timer  	: monsterModel[5],
 			loot    : [
 				monsterModel[7],
@@ -955,8 +959,9 @@ const gameClass = () => {
 		let sdata = getStageModelByStage(stage)
 
 		DATA.player.currentStage = stage
-
 		if (sdata[1] === 0) {/*battle*/
+			elebyID("bscreen-t-monster").classList.remove("hidden")
+			elebyID("bscreen-t-town").classList.add("hidden")
 			DATA.player.currentStageIsTown = false
 			let mob_id = null
 
@@ -968,14 +973,35 @@ const gameClass = () => {
 			}
 			DATA.player.currentMonster = createMonster(mob_id, stage)
 		} else if (sdata[1] === 1) { /*town*/
+
+			elebyID("bscreen-t-town").classList.remove("hidden")
+			elebyID("bscreen-t-monster").classList.add("hidden")
 			console.log("TOWN")
 			/* skip town for now */
-
-			/*DATA.player.currentStageIsTown = true
-			DATA.player.currentMonster = null*/
+			DATA.player.currentStageIsTown = true
+			DATA.player.currentMonster = null
 			return true
 		}
+
+		if (DATA.player.currentStage > DATA.player.max_stage.all) {
+			DATA.player.max_stage.all = DATA.player.currentStage
+		}
+		if (DATA.player.currentStage > DATA.player.max_stage[DATA.player.currentRegion]) {
+			DATA.player.max_stage[DATA.player.currentRegion] = DATA.player.currentStage
+		}
 		//console.log(DATA)
+	}
+
+	const exitTown = (stage) => {
+
+	}
+
+	const goToStage = (stage) => {
+
+	}
+
+	const goToRegion = (region) => {
+
 	}
 
 	const loadData = () => {
@@ -1191,6 +1217,18 @@ const gameClass = () => {
 				}
 				battling()
 			}
+		} else {
+			if (DATA.player.currentStageIsTown === true && DATA.player.settings.townstop === false) {
+				if (DATA.player.settings.reverseadvance === true) {
+					DATA.player.currentStage--
+				} else {
+					DATA.player.currentStage++
+				}
+				updateStage(DATA.player.currentStage)
+			} else {
+				console.log("rest in town")
+			}
+			
 		}
 	}
 
@@ -1315,30 +1353,21 @@ const gameClass = () => {
 			let domMonsterhp 		= elebySelector("#monsterhp .currenthp")
 			let domMonstermaxhp = elebySelector("#monsterhp .maxhp")
 
-			if (domMonsterid.innerHTML !== DATA.player.currentMonster.id()) {
-				domMonsterid.innerHTML = DATA.player.currentMonster.id()
-			}
-			if (domMonstername.innerHTML !== DATA.player.currentMonster.name()) {
-				domMonstername.innerHTML = DATA.player.currentMonster.name()
-			}
-
-			if (DATA.player.currentMonster.getTimeleft()) {
-				elebyID("timeleft").innerHTML = DATA.player.currentMonster.getTimeleft()/1000 + "s"
-			}
-			elebyID("route").innerHTML = DATA.player.currentStage
-
-
+			updateTextByID("monsterid", DATA.player.currentMonster.id())
+			updateTextByID("monsterrank", iText("monster_rank_"+DATA.player.currentMonster.rank()))
+			updateTextByID("monsternameval", DATA.player.currentMonster.name())
+			updateTextByID("timeleft", toDecimal(DATA.player.currentMonster.getTimeleft()/1000,1) + "s")
+			/* route number*/
+			updateTextByID("route", DATA.player.currentStage)
+			/* render progress bar*/
 			updateProgressBar("#monstertimer", DATA.player.currentMonster.getTimeleft()/1000, DATA.player.currentMonster.timer())
 			updateProgressBar("#monsterhp", DATA.player.currentMonster.hp(), DATA.player.currentMonster.maxhp())
+			/* render numbers */
+			updateTextBySelector("#monsterhp .currenthp", numberPrint(Math.floor(DATA.player.currentMonster.hp())))
+			updateTextBySelector("#monsterhp .maxhp", numberPrint(Math.floor(DATA.player.currentMonster.maxhp())))
 
-			if (domMonsterhp.innerHTML !== numberPrint(Math.floor(DATA.player.currentMonster.hp()))) {
-				domMonsterhp.innerHTML = numberPrint(Math.floor(DATA.player.currentMonster.hp()))
-			}
-			if (domMonstermaxhp.innerHTML !== numberPrint(Math.floor(DATA.player.currentMonster.maxhp()))) {
-				domMonstermaxhp.innerHTML = numberPrint(Math.floor(DATA.player.currentMonster.maxhp()))
-			}
 		} else {
-
+			updateTextByID("townid", DATA.player.currentStage)
 		}
 
 		/* display skillbar */
@@ -1811,7 +1840,16 @@ const gameClass = () => {
 		initItemsInventoryRender()
 		GAMEVAR.initialized = true
 
-
+		/* Town buttons */
+		elebyID("town-exit").onclick = function() {
+			DATA.player.currentStageIsTown = false
+			if (DATA.player.settings.reverseadvance === true) {
+				DATA.player.currentStage--
+			} else {
+				DATA.player.currentStage++
+			}
+			updateStage(DATA.player.currentStage)
+		}
 		/* aura */
 		function auraFocusDmgCheck () { DATA.player.settings.aura_focus_dmg = this.checked }
 		function auraFocusPowerRegenCheck () { DATA.player.settings.aura_focus_power_regen = this.checked }
@@ -1823,6 +1861,9 @@ const gameClass = () => {
 		elebyID("aura-focus-power-regen").checked = DATA.player.settings.aura_focus_power_regen || false
 		elebyID("aura-focus-combostreak").checked = DATA.player.settings.aura_focus_combostreak || false
 		/* battle settings */
+		function townstopCheck () {
+			DATA.player.settings.townstop = this.checked
+		}
 		function autoadvanceCheck () {
 			DATA.player.settings.autoadvance = this.checked
 		}
@@ -1832,9 +1873,11 @@ const gameClass = () => {
 		function droponfailCheck () {
 			DATA.player.settings.droponfail = this.checked
 		}
+		elebyID("town-stop").checked = DATA.player.settings.townstop
 		elebyID("auto-advance").checked = DATA.player.settings.autoadvance
 		elebyID("reverse-advance").checked = DATA.player.settings.reverseadvance
 		elebyID("drop-on-fail").checked = DATA.player.settings.droponfail
+		elebyID("town-stop").onchange = townstopCheck
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
@@ -2220,7 +2263,7 @@ const gameClass = () => {
 			updateTextByID("item-grade-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].quality)))
 			updateTextByID("item-sell-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].sell)))
 
-			updateTextByID("item-img-stage-"+tiID, iText("item_lv",numberPrint(toDecimal(DATA.player.inventory[i].stage))))
+			updateTextByID("item-img-stage-"+tiID, iText("item_lv",numberShort(toDecimal(DATA.player.inventory[i].stage))))
 		}
 
 		updateTextByID("playerekk", numberPrint(DATA.player.ekk))
