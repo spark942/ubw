@@ -1179,6 +1179,7 @@ const gameClass = () => {
 			if (DATA.player.currentMonster.getTimeleft() <= 0) {
 				if (DATA.player.settings.droponfail === true) {
 					DATA.player.currentStage--
+					DATA.player.settings.autoadvance = false
 				}
 				updateStage(DATA.player.currentStage)
 				saveData()
