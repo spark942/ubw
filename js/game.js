@@ -1261,7 +1261,7 @@ const gameClass = () => {
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
-			DATA.player.focus += 1 + parseInt(getPassiveBonusValue("focus_idle_regen"))
+			DATA.player.focus += 2 + parseInt(getPassiveBonusValue("focus_idle_regen"))
 		}
 		if (DATA.player.focus < 0) {
 			DATA.player.focus = 0
