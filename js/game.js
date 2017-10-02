@@ -836,6 +836,10 @@ const gameClass = () => {
 
 	const addItemInventory = (object) => {
 		object = object || null
+		/* can't add if inventory full*/
+		if (DATA.player.inventory.length >= getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")) {
+			return false
+		}
 
 		if (object.type === "c" 
 			&& object.hasOwnProperty("stage")) {
@@ -1283,17 +1287,7 @@ const gameClass = () => {
 		updateWieldingSetupUnlock()
 
 		/* count available slots */
-		let inventorySlots = 0
-		for (var pid in DATA.player.passives) {
-			if (pid == 0) { continue}
-			else if (DATA.player.passives[pid].unlocked === true) {
-				if (PASSIVES[pid-1][6] === "inventory_base" || PASSIVES[pid-1][6] === "inventory") { inventorySlots += PASSIVES[pid-1][7]}
-				if (PASSIVES[pid-1][8] === "inventory_base" || PASSIVES[pid-1][8] === "inventory") { inventorySlots += PASSIVES[pid-1][9]}
-				if (PASSIVES[pid-1][10] === "inventory_base" || PASSIVES[pid-1][10] === "inventory") { inventorySlots += PASSIVES[pid-1][11]}
-				if (PASSIVES[pid-1][12] === "inventory_base" || PASSIVES[pid-1][12] === "inventory") { inventorySlots += PASSIVES[pid-1][13]}
-				if (PASSIVES[pid-1][14] === "inventory_base" || PASSIVES[pid-1][14] === "inventory") { inventorySlots += PASSIVES[pid-1][15]}
-			}
-		}
+		let inventorySlots = getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")
 		GAMEVAR.inventoryspace = inventorySlots
 		updateTextByID("invitemcount", DATA.player.inventory.length)
 		updateTextByID("invslots", inventorySlots)
