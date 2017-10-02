@@ -1078,9 +1078,14 @@ const gameClass = () => {
 							return
 						}
 						DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay0 * 1000
-						// last delay, now switch to next combo
+						// it was the last delay, now switch to next combo
+						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
+							DATA.player.battle.combo_ts_start = now
+							DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay * 1000
+						}
 						DATA.player.battle.current_combo++
 						DATA.player.battle.current_hit = 1
+						
 						DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
 					} else {
 						DATA.player.battle.combo = null
@@ -1108,13 +1113,10 @@ const gameClass = () => {
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
+					
+					/* it has the last hit, just need to add the after skill delay */
 					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+(DATA.player.battle.current_hit+1)] === undefined) {
 						DATA.player.battle.current_hit = -1
-						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
-							DATA.player.battle.combo_ts_start = now
-							DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay * 1000
-						}
-						
 					} else {
 						DATA.player.battle.current_hit++
 					}
