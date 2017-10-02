@@ -1322,7 +1322,7 @@ const gameClass = () => {
 				if (DATA.player.inventory[i].item_id > 10000) {
 					DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
 				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
-					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5]
+					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))
 				}
 			}
 		};
@@ -1773,8 +1773,9 @@ const gameClass = () => {
 
 	function consumeItem() {
 		let item_id = parseInt(this.getAttribute("data-itemid"))
+		let stage_val = parseInt(this.getAttribute("data-stage"))
 		if (item_id >= 1000 && item_id <= 10000) {
-			DATA.player.focus += ITEMS[item_id][5]
+			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
 			let removeID = []
 			for (var i = 0; i < DATA.player.inventory.length; i++) {
 				if (DATA.player.inventory[i].id === parseInt(this.getAttribute("data-id"))){
@@ -2237,6 +2238,7 @@ const gameClass = () => {
 			updateAttributeByID("item-"+tiID, "data-id", DATA.player.inventory[i].id)
 			updateAttributeByID("item-"+tiID, "data-itemid", DATA.player.inventory[i].item_id)
 			updateAttributeByID("item-"+tiID, "data-grade", DATA.player.inventory[i].grade)
+			updateAttributeByID("item-"+tiID, "data-stage", DATA.player.inventory[i].stage)
 			updateAttributeByID("item-"+tiID, "data-equipped", isEquipped(DATA.player.inventory[i].id) ? true : false)
 			updateAttributeByID("item-img-"+tiID, "alt", DATA.player.inventory[i].item_id)
 			
@@ -2252,7 +2254,7 @@ const gameClass = () => {
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
 			if (DATA.player.inventory[i].focus !== null) {
-				updateTextByID("item-effect-"+tiID, iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus))))
+				updateTextByID("item-effect-"+tiID, iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))))))
 			}
 			updateTextByID("item-stage-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].stage)))
 			updateTextByID("item-grade-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].quality)))
