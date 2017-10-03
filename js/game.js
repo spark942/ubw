@@ -41,7 +41,7 @@ const gameClass = () => {
 			},
 			FOCUS_POWER_REGEN: {
 				name: "Concentration",
-				base : 3,
+				base : 30,
 				curbonus : 0,
 				cost_type: "focus",
 				cost_per_sec: 5,
