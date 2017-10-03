@@ -10,6 +10,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet"> 
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<link rel="stylesheet" type="text/css" href="css/game.css">
+	<link rel="stylesheet" type="text/css" href="css/game-images.css">
 </head>
 <body>
 	<div id="wrapper">
@@ -112,10 +113,11 @@
 						<div class="aura-container">
 							<input id="aura-focus-combostreak" class="aura-checkbox" type="checkbox" name="aaura-focus-combostreak">
 							<label id="aura-focus-combostreak-icon" for="aura-focus-combostreak" class="aura toggleable">
+								<span class="aura-bonus">+<span id="aura-focus-combostreak-streak">0</span>%</span>
 							</label>
 							<div class="aura-description">
 								<span>Battle Trance</span><span class="auracost"><span id="aura-focus-combostreak-cost">0</span> focus per second</span><br>
-								<span class="aura-text">NOT WORKING Increase damage by <span>0</span>% every hit until the combo ends</span>
+								<span class="aura-text">Increase damage by <span id="aura-focus-combostreak-value">0</span>% every hit until the combo ends</span>
 							</div>
 						</div>
 					</section>
@@ -239,7 +241,8 @@
 						</section>
 						<section id="passiveskills-list">
 							<div id="ps-skill-id" class="ps-skill tooltip" data-unlocked="false" data-canexp="false" data-level="0">
-								<img class="ps-skill-img" src="" alt="P#1">
+								<!-- <img class="ps-skill-img" src="" alt="P#1"> -->
+								<div class="ps-skill-realimg"></div>
 								<div class="tooltiptext">
 									<span class="ps-name">Skill name</span><hr>
 									<div id="ps-req-id" class="ps-requirement">{unlock requirements}</div>
@@ -265,7 +268,8 @@
 						</section>
 						<section id="activeskills-list">
 							<div id="as-skill-id" class="as-skill tooltip" data-unlocked="false" data-canexp="false" data-level="0">
-								<img class="as-skill-img" src="" alt="P#1">
+								<!-- <img class="as-skill-img" src="" alt="P#1"> -->
+								<div class="as-skill-realimg"></div>
 								<div class="tooltiptext">
 									<span class="as-name">Skill name</span><hr>
 									<div id="as-req-id" class="as-requirement">{unlock requirements}</div>
@@ -398,6 +402,46 @@
 				<li>Add the Punch skill</li>
 				<li>Enjoy</li>
 			</ol>
+		</section>
+		<section id="credit">
+			<div>
+				<h2>CREDITS</h2>
+				<h2>Images</h2>
+				<p>
+					<a class="artist" href="http://www.freepik.com/">Freepik</a> from <a href="www.flaticon.com">www.flaticon.com</a><br>
+					<a class="artist" href="https://www.flaticon.com/authors/linector">Linector</a> from <a href="www.flaticon.com">www.flaticon.com</a><br>
+					<a class="artist" href="https://www.flaticon.com/authors/roundicons">Roundicons</a> from <a href="www.flaticon.com">www.flaticon.com</a><br>
+
+					
+					<a class="artist" href="http://lorcblog.blogspot.com">Lorc</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://delapouite.com">Delapouite</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://ninmunanmu.com">John Colburn</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://blackdogofdoom.blogspot.co.uk">Felbrigg</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://www.uniquedicetowers.com">John Redman</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="https://twitter.com/unstoppableCarl">Carl Olsen</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://opengameart.org/content/95-game-icons">Sbed</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">PriorBlue</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://wjbstories.blogspot.com">Willdabeast</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://viscious-speed.deviantart.com">Viscious Speed</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://berandas.deviantart.com">Lord Berandas</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://ecesisllc.wix.com/home">Irongamer</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://www.gnomosygoblins.blogspot.com">HeavenlyDog</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Lucas</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://fungustoken.deviantart.com">Faithtoken</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Skoll</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://www.se.rit.edu/~andy/">Andy Meneely</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Cathelineau</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Kier Heyl</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Aussiesim</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://citizenparker.com">Sparker</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Zeromancer</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Rihlsul</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">Quoting</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="https://guard13007.com">Guard13007</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<a class="artist" href="http://darkzaitzev.deviantart.com">DarkZaitzev</a> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+					<span class="artist">SpencerDub</span> from <a href="http://game-icons.net/">http://game-icons.net/</a><br>
+				</p>
+			</div>
 		</section>
 	</div>
 	<script type="text/javascript" src="js/data_actives.js"></script>

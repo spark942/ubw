@@ -191,3 +191,23 @@ However, delay the fade out process for 2.5 seconds */
 ol li:before {
 	content: "- ";
 }
+
+#credit {
+	font-size: 10px;
+	background-color: rgba(33,33,33 ,1);
+	padding: 20px;
+	-webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+    line-height: 13px;
+    color: #aaa;
+}
+#credit a,
+#credit a:visited,
+#credit a:active {
+	color: rgba(189, 195, 199,1.0)
+}
+.artist,
+a.artist {
+	color: rgba(243, 156, 18,1.0) !important
+}

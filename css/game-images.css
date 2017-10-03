@@ -1,0 +1,228 @@
+.aura {
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+}
+#aura-focus-dmg-icon {
+	background-image: url("../img/auras/strengthen.png");
+}
+#aura-focus-power-regen-icon {
+	background-image: url("../img/auras/energy.png");
+}
+#aura-focus-combostreak-icon {
+	background-image: url("../img/auras/enrage.png");
+}
+
+.as-skill-realimg,
+.ps-skill-realimg {
+	width: 40px;
+	height: 40px;
+	background-size: 40px 40px;
+}
+.as-skill-realimg {
+	background-image: url("../img/passives/---.png");
+}
+.as-skill-realimg {
+	background-image: url("../img/actives/---.png");
+}
+
+/* passives */
+.passive-1, .passive-2, .passive-3,
+.passive-4, .passive-5 {
+	background-color: rgba(156,39,176 ,0.7);
+	background-image: url("../img/passives/focus.png");
+}
+.passive-7, .passive-8, .passive-9,
+.passive-10, .passive-11, .passive-12,
+.passive-13, .passive-14, .passive-15,
+.passive-16, .passive-17, .passive-18,
+.passive-20, .passive-21, .passive-23, 
+.passive-24 {
+	background-color: rgba(255,152,0 ,0.8);
+	background-image: url("../img/passives/combo.png");
+}
+.passive-6, .passive-19, .passive-22 {
+	background-color: rgba(245,124,0 ,1);
+	background-image: url("../img/passives/combo.png");
+}
+
+.passive-25, .passive-40, .passive-48 {
+	background-color: rgba(109,76,65 ,1);
+	background-image: url("../img/passives/inventory.png");
+}
+.passive-26, .passive-27, .passive-28,
+.passive-29, .passive-30, .passive-31,
+.passive-32, .passive-33, .passive-34,
+.passive-35, .passive-36, .passive-37,
+.passive-38, .passive-39, .passive-41,
+.passive-42, .passive-43, .passive-44,
+.passive-45, .passive-46, .passive-47 {
+	background-color: rgba(141,110,99 ,0.8);
+	background-image: url("../img/passives/inventory.png");
+}
+.passive-49, .passive-50, .passive-51,
+.passive-52, .passive-53 {
+	background-image: url("../img/passives/autosell.png");
+}
+.passive-49 { background-color: rgba(189, 195, 199,1.0) }
+.passive-50 { background-color: rgba(236, 240, 241,1.0) }
+.passive-51 { background-color: rgba(39, 174, 96,1.0) }
+.passive-52 { background-color: rgba(41, 128, 185,1.0) }
+.passive-53 { background-color: rgba(142, 68, 173,1.0) }
+.passive-54 {
+	background-color: rgba(52, 73, 94,1.0);
+	background-image: url("../img/passives/martialart.png");
+}
+.passive-55 {
+	background-color: rgba(41, 128, 185,1.0);
+	background-image: url("../img/passives/1hsword.png");
+}
+.passive-56 {
+	background-color: rgba(39, 174, 96,1.0);
+	background-image: url("../img/passives/1hcsword.png");
+}
+.passive-57 {
+	background-color: rgba(128,222,234 ,1);
+	background-image: url("../img/passives/dagger.png");
+}
+.passive-58 {
+	background-color: rgba(63,81,181 ,1);
+	background-image: url("../img/passives/2hsword.png");
+}
+.passive-59 {
+	background-color: rgba(0,150,136 ,1);
+	background-image: url("../img/passives/2hcsword.png");
+}
+
+/* actives */
+.active-1 {
+	background-color: rgba(52, 73, 94,0.9);
+	background-image: url("../img/actives/punch.png");
+}
+.active-2 {
+	background-color: rgba(52, 73, 94,1.0);
+	background-image: url("../img/actives/punch-blast.png");
+}
+.active-3 {
+	background-color: rgba(44, 62, 80,1.0);
+	background-image: url("../img/actives/punch.png");
+}
+.active-4 {
+	background-color: rgba(52, 73, 94,1.0);
+	background-image: url("../img/actives/artificial-hive.png");
+}
+.active-5 {
+	background-color: rgba(52, 73, 94,1.0);
+	background-image: url("../img/actives/halt.png");
+}
+.active-6 {
+	background-color: rgba(11,11,11,1.0);
+	background-image: url("../img/actives/lotus.png");
+}
+.active-21 {
+	background-color: rgba(52, 152, 219,0.8);
+	background-image: url("../img/actives/quick-slash.png");
+}
+.active-22 {
+	background-color: rgba(52, 152, 219,0.8);
+	background-image: url("../img/actives/crossed-slashes.png");
+}
+.active-23 {
+	background-color: rgba(52, 152, 219,0.8);
+	background-image: url("../img/actives/divided-square.png");
+}
+.active-24 {
+	background-color: rgba(41, 128, 185,1.0);
+	background-image: url("../img/actives/quick-slash-vertical.png");
+}
+.active-25 {
+	background-color: rgba(41, 128, 185,1.0);
+	background-image: url("../img/actives/crossed-slashes-vertical.png");
+}
+.active-26 {
+	background-color: rgba(41, 128, 185,1.0);
+	background-image: url("../img/actives/divided-square.png");
+}
+.active-27 {
+	background-color: rgba(41, 128, 185,0.7);
+	background-image: url("../img/actives/blade-drag.png");
+}
+.active-28 {
+	background-color: rgba(41, 128, 185,0.7);
+	background-image: url("../img/actives/bouncing-sword.png");
+}
+.active-29 {
+	background-color: rgba(41, 128, 185,0.7);
+	background-image: url("../img/actives/air-zigzag.png");
+}
+.active-30 {
+	background-color: rgba(41, 128, 185,1);
+	background-image: url("../img/actives/star-swirl.png");
+}
+.active-31 {
+	background-color: rgba(41, 128, 185,0.7);
+	background-image: url("../img/actives/pointy-sword.png");
+}
+.active-32 {
+	background-color: rgba(155, 89, 182,0.6);
+	background-image: url("../img/actives/zebra-shield.png");
+}
+.active-33 {
+	background-color: rgba(52, 152, 219,1);
+	background-image: url("../img/actives/running-ninja.png");
+}
+.active-34 {
+	background-color: rgba(192, 57, 43,1.0);
+	background-image: url("../img/actives/spiral-thrust.png");
+}
+.active-35 {
+	background-color: rgba(33,150,243,1);
+	background-image: url("../img/actives/perpendicular-rings.png");
+}
+.active-36 {
+	background-color: rgba(192, 57, 43,1.0);
+	background-image: url("../img/actives/meteor.png");
+}
+.active-37 {
+	background-color: rgba(96,125,139,1);
+	background-image: url("../img/actives/raven.png");
+}
+.active-38 {
+	background-color: rgba(96,125,139,1);
+	background-image: url("../img/actives/steam.png");
+}
+.active-39 {
+	background-color: rgba(102, 204, 153,1);
+	background-image: url("../img/actives/fairy.png");
+}
+.active-40 {
+	background-color: rgba(102, 204, 153,1.0);
+	background-image: url("../img/actives/tornado.png");
+}
+.active-41 {
+	background-color: rgba(103, 128, 159,1.0);
+	background-image: url("../img/actives/sunset.png");
+}
+.active-42 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/actives/electrical-crescent.png");
+}
+.active-43 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/actives/uppercut.png");
+}
+.active-44 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/actives/moon.png");
+}
+.active-45 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/actives/bear-head.png");
+}
+.active-46 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/actives/spinning-sword.png");
+}
+.active-53 {
+	background-color: rgba(243, 156, 18,0.8);
+	background-image: url("../img/actives/knock-down.png");
+}

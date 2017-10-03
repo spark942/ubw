@@ -49,7 +49,7 @@ const gameClass = () => {
 			FOCUS_COMBO_STREAK: {
 				name: "Wombo Combo",
 				base : 0.03,
-				curbonus : 0.03,
+				bonusperhit : 0.03,
 				cost_type: "focus",
 				cost_per_sec: 10,
 			},
@@ -100,6 +100,8 @@ const gameClass = () => {
 			currentStageIsTown: false,
 			currentMonster: null,
 			currentPower: 0,
+			comboPowerUsed: 0,
+			currentComboStreak: 0,
 			exp_char    : 1,
 			awaken_stage: 0,
 			max_stage    : {
@@ -725,7 +727,10 @@ const gameClass = () => {
 
 	function addSkillToCombo() {
 		/* TO DO: check if enough power to add */
-		DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].push(parseInt(this.getAttribute("data-skillid")))
+		let skill_id = parseInt(this.getAttribute("data-skillid"))
+		if (DATA.player.actives[skill_id].power + DATA.player.comboPowerUsed <= getPassiveBonusValue("combo_power")) {
+			DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].push(skill_id)
+		}
 	}
 
 	const updateActives = () => {
@@ -749,8 +754,15 @@ const gameClass = () => {
 				} else {
 					DATA.player.actives[ACTIVES[i][0]].type = ACTIVES[i][3]
 				}
-
-				
+			} else {
+				if (ACTIVES[i][3].includes("_")) {
+					let skill_typeArr = ACTIVES[i][3].split("_")
+					DATA.player.actives[ACTIVES[i][0]].type = skill_typeArr[0]
+					DATA.player.actives[ACTIVES[i][0]].curve = skill_typeArr[1]
+				} else {
+					DATA.player.actives[ACTIVES[i][0]].type = ACTIVES[i][3]
+				}
+				DATA.player.actives[ACTIVES[i][0]].power = ACTIVES[i][6] || 1
 			}
 			if (TABLES.activesPerClass.hasOwnProperty(ACTIVES[i][4]) === false) {
 				TABLES.activesPerClass[ACTIVES[i][4]] = ACTIVES[i][0]
@@ -1062,6 +1074,10 @@ const gameClass = () => {
 		localStorage.setItem('lastonline', 		JSON.stringify(DATA.player.lastonline))
 	}
 
+	const getComboStreakBonus = () => {
+		return toDecimal(TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit * DATA.player.currentComboStreak,2)
+	}
+
 	const battling = () => {
 		if (DATA.player.battle.combo !== null) {
 			//console.log("battling")
@@ -1082,11 +1098,10 @@ const gameClass = () => {
 						if (DATA.player.battle.combo[DATA.player.battle.current_combo] !== undefined) {
 							DATA.player.battle.combo_ts_start = now
 							DATA.player.battle.combo_ts_end = now + DATA.player.battle.combo[DATA.player.battle.current_combo].skill.delay * 1000
+							DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
 						}
 						DATA.player.battle.current_combo++
 						DATA.player.battle.current_hit = 1
-						
-						DATA.player.currentPower -= DATA.player.battle.combo[DATA.player.battle.current_combo].skill.power
 					} else {
 						DATA.player.battle.combo = null
 						DATA.player.battle.current_combo = null
@@ -1101,6 +1116,9 @@ const gameClass = () => {
 					let finaldmg = DATA.player.settings.aura_focus_dmg === true ? 
 						(2 + getPassiveBonusValue("focus_dmg_p")) * DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] : DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit]
 					DATA.player.currentMonster.takeDamage(finaldmg)
+					if (DATA.player.settings.aura_focus_combostreak === true) {
+						finaldmg = finaldmg * (1 + getComboStreakBonus())
+					}
 					/* SHOW FLOATING NUMBER */
 					damageMonster(finaldmg)
 					/* EXP SKILLS */
@@ -1113,6 +1131,11 @@ const gameClass = () => {
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
+					
+					/* Increase combostreak if activated */
+					if (DATA.player.settings.aura_focus_combostreak === true) {
+						DATA.player.currentComboStreak++
+					}
 					
 					/* it has the last hit, just need to add the after skill delay */
 					if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+(DATA.player.battle.current_hit+1)] === undefined) {
@@ -1161,6 +1184,7 @@ const gameClass = () => {
 			DATA.player.battle.current_combo = 1
 			DATA.player.battle.current_hit   = 1
 			DATA.player.currentPower -= thisCombo[0].skill.power
+			DATA.player.currentComboStreak = 0
 			let now = Date.now()
 			DATA.player.battle.timestamp_next_hit = now + thisCombo[0].skill.delay0 * 1000
 			DATA.player.battle.combo_ts_start = now
@@ -1274,6 +1298,7 @@ const gameClass = () => {
 		updateTextByID("aura-focus-power-regen-cost", numberPrint(TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec))
 		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
 		updateTextByID("aura-focus-combostreak-cost", numberPrint(TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec))
+		updateTextByID("aura-focus-combostreak-value", numberPrint(percent(TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit)))
 	}
 
 	const inventoryLoop = () => {
@@ -1396,6 +1421,9 @@ const gameClass = () => {
 			iText("power_regen_focus",numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
 
 		elebyID("curfocus").innerHTML = numberPrint(DATA.player.focus)
+
+		/* use this loop instead of aura because more fps */
+		updateTextByID("aura-focus-combostreak-streak", numberPrint(percent(getComboStreakBonus())))
 
 		/*display player level*/
 		let domplayerlevel 	= elebySelector("#playerlevel .playerlevel")
@@ -1642,7 +1670,8 @@ const gameClass = () => {
 				if (thispsModel[5] !== null) {
 					thisPS.setAttribute("data-canexp", "true"); 
 				}
-				thisPS.children[0].setAttribute("alt","#"+thispsID)
+				thisPS.children[0].setAttribute("data-id", thispsID)
+				thisPS.children[0].classList.add("passive-"+thispsID)
 				if (thisPS.children[1].children[0].className == "ps-name") {
 					thisPS.children[1].children[0].innerHTML = thispsModel[4]
 				}
@@ -1691,7 +1720,8 @@ const gameClass = () => {
 				if (thisasModel[5] !== null) {
 					thisAS.setAttribute("data-canexp", "true")
 				}
-				thisAS.children[0].setAttribute("alt","#"+thisasID)
+				thisAS.children[0].setAttribute("data-id","#"+thisasID)
+				thisAS.children[0].classList.add("active-"+thisasID)
 				if (thisAS.children[1].children[0].className == "as-name") {
 					thisAS.children[1].children[0].innerHTML = thisasModel[5]
 				}
@@ -2155,8 +2185,8 @@ const gameClass = () => {
 				}
 				maxduration += skilldata.skill.delay
 				powerused +=   ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][6]
-
 			}
+			DATA.player.comboPowerUsed = powerused
 			updateTextByID("combo-setup-comboduration", toDecimal(maxduration,2) || "0")
 			updateTextByID("combo-setup-powerused", powerused || "0")
 			updateTextByID("combo-setup-maxpower", getPassiveBonusValue("combo_power"))
