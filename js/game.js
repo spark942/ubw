@@ -30,7 +30,7 @@ const gameClass = () => {
 			europe: null,
 			special: null
 		},
-		MAXSTAGE: 50000,
+		MAXSTAGE: 250000,
 		AURA: {
 			FOCUS_DMG: {
 				name: "Strengthen",
