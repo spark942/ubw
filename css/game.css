@@ -893,6 +893,16 @@ input[type="radio"]:checked + label:after {
 	text-align: center;
 	cursor: pointer;
 }
+#combolist > div.shown {
+	background-color: rgba(52, 73, 94,1.0);
+	color: #fff;
+}
+#combolist > div.used {
+	animation: blinker 1s linear infinite;
+}
+@keyframes blinker {  
+  50% { color: rgba(231, 76, 60,1.0); }
+}
 .comboreq {
 	position: absolute;
 	top: 0;
@@ -913,6 +923,15 @@ input[type="radio"]:checked + label:after {
 }
 #comboedit #combosetup #combo-choosesetup #combo-setupselection {
 	width: 150px;
+}
+#use-combo {
+	display: inline-block;
+	background-color: rgba(231, 76, 60,1.0);
+	border-radius: 3px;
+	padding: 3px 5px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
 }
 #comboedit #combosetup #combo-choosesetup,
 #comboedit #combosetup .setup-note {

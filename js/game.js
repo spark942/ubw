@@ -1103,10 +1103,7 @@ const gameClass = () => {
 						DATA.player.battle.current_combo++
 						DATA.player.battle.current_hit = 1
 					} else {
-						DATA.player.battle.combo = null
-						DATA.player.battle.current_combo = null
-						DATA.player.battle.current_hit = null
-						DATA.player.battle.timestamp_next_hit = null
+						killCombo()
 					}
 				} else if (DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] !== undefined) {
 					//console.log("battling12")
@@ -1150,13 +1147,17 @@ const gameClass = () => {
 				// kill combo
 				// mob die then, collect loot and create a new mob
 				// and destroy current combo
-				DATA.player.battle.combo = null
-				DATA.player.battle.current_combo = null
-				DATA.player.battle.current_hit = null
-				DATA.player.battle.timestamp_next_hit = null
+				killCombo()
 			}
 		}
 		// we have no combo, need to wait till next frame to call createBattleCombo()
+	}
+
+	const killCombo = () => {
+		DATA.player.battle.combo = null
+		DATA.player.battle.current_combo = null
+		DATA.player.battle.current_hit = null
+		DATA.player.battle.timestamp_next_hit = null
 	}
 
 	const createBattleCombo = () => {
@@ -1165,8 +1166,8 @@ const gameClass = () => {
 
 		if (DATA.player.activescombo["combosetup"+thisComboID] && DATA.player.activescombo["combo"+thisComboID].length) {
 			let thisCombo = []
-			for (var i = 0; i < DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].length; i++) {
-				let setupname = DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo]
+			for (var i = 0; i < DATA.player.activescombo["combo"+DATA.player.activescombo.usedcombo].length; i++) {
+				let setupname = DATA.player.activescombo["combosetup"+DATA.player.activescombo.usedcombo]
 				let rotation = getWeaponComboRotation(setupname)
 				let weapon_item_id = DATA.player.wieldingsetups[setupname]["weapon"+rotation[i]] || 0
 				let weaponObj = getItemFromInventoryByID(weapon_item_id) || {}
@@ -1175,7 +1176,7 @@ const gameClass = () => {
 					weapon_item_id, 
 					weaponObj.dmg || TABLES.defaultWeapon.dmg, 
 					weaponObj.aspd || TABLES.defaultWeapon.aspd, 
-					ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][0])))
+					ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.usedcombo][i]-1][0])))
 			}
 			if (DATA.player.currentPower <= thisCombo[0].skill.power) {
 				return
@@ -2118,6 +2119,48 @@ const gameClass = () => {
 			}
 		}
 
+		elebyID("navcombo"+DATA.player.activescombo.viewcombo).classList.add("shown")
+		elebyID("navcombo"+DATA.player.activescombo.usedcombo).classList.add("used")
+
+		function switchCombo() {
+			let comboid = parseInt(this.getAttribute("data-comboid"))
+			let comboreq = parseInt(this.getAttribute("data-req"))
+
+			if (comboreq <= DATA.player.awaken_stage) {
+				DATA.player.activescombo.viewcombo = comboid
+
+				elebyID("navcombo1").classList.remove("shown")
+				elebyID("navcombo2").classList.remove("shown")
+				elebyID("navcombo3").classList.remove("shown")
+				elebyID("navcombo4").classList.remove("shown")
+				elebyID("navcombo"+comboid).classList.add("shown")
+
+				comboSetupRender()
+				elebyID("comboskills").innerHTML = ""
+				comboInventoryRender()
+			}
+
+		}
+		elebyID("navcombo1").onclick = switchCombo
+		elebyID("navcombo2").onclick = switchCombo
+		elebyID("navcombo3").onclick = switchCombo
+		elebyID("navcombo4").onclick = switchCombo
+
+
+		updateAttributeByID("use-combo", "data-comboid", DATA.player.activescombo.viewcombo)
+		function useCombo() {
+			let comboid = parseInt(this.getAttribute("data-comboid"))
+			DATA.player.activescombo.usedcombo = comboid
+			killCombo()
+
+			elebyID("navcombo1").classList.remove("used")
+			elebyID("navcombo2").classList.remove("used")
+			elebyID("navcombo3").classList.remove("used")
+			elebyID("navcombo4").classList.remove("used")
+			elebyID("navcombo"+comboid).classList.add("used")
+		}
+		elebyID("use-combo").onclick = useCombo
+
 		updateTextByID("combo-setupselection",comboSetupHTML)
 		function setSetup() {
 			if (DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo] !== this.value) {
@@ -2190,6 +2233,8 @@ const gameClass = () => {
 			updateTextByID("combo-setup-comboduration", toDecimal(maxduration,2) || "0")
 			updateTextByID("combo-setup-powerused", powerused || "0")
 			updateTextByID("combo-setup-maxpower", getPassiveBonusValue("combo_power"))
+
+			/* remove */
 		}
 
 		/* list of available skills */
@@ -2359,5 +2404,4 @@ const game = gameClass()
 game.init()
 game.run()
 game.setPlayer()
-
 

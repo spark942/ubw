@@ -291,15 +291,15 @@
 					<div id="g-in-activescombo" class="g-inventory hidden">
 						<h2>Combos</h2>
 						<section id="combolist">
-							<div>Combo 1</div>
-							<div>Combo 2</div>
-							<div>Combo 3<span class="comboreq">Awaken 1</span></div>
-							<div>Combo 4<span class="comboreq">Awaken 10</span></div>
+							<div id="navcombo1" data-comboid="1" data-req="0">Combo 1</div>
+							<div id="navcombo2" data-comboid="2" data-req="0">Combo 2</div>
+							<div id="navcombo3" data-comboid="3" data-req="1">Combo 3<span class="comboreq">Awaken 1</span></div>
+							<div id="navcombo4" data-comboid="4" data-req="10">Combo 4<span class="comboreq">Awaken 10</span></div>
 						</section>
 						<section id="comboedit">
 							<div id="combosetup">
 								<div id="combo-choosesetup">
-									<select id="combo-setupselection"></select><br>
+									<select id="combo-setupselection"></select>&nbsp; <div id="use-combo" class="usecombo-button" data-comboid="1">Use this combo</div> <br>
 									<span>Max Power <span id="combo-setup-powerused">0</span>/<span id="combo-setup-maxpower">19</span></span>&nbsp;
 									<span>Duration <span id="combo-setup-comboduration">0</span>s</span>
 								</div>
