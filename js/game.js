@@ -123,7 +123,7 @@ const gameClass = () => {
 				combo3: [],
 				combosetup4: null,
 				combo4: [],
-				usedcombo: 0,
+				usedcombo: 1,
 				viewcombo: 1
 			},
 			inventory  		 : [],
@@ -1715,7 +1715,9 @@ const gameClass = () => {
 				let thisasModel = getActiveModelByID(thisasID)
 
 				thisAS.id = "as-skill-"+thisasID
-
+				if (ACTIVES[i][4].includes("placeholder")) {
+					thisAS.classList.add("hidden")
+				}
 				thisAS.setAttribute("data-unlocked", "false")
 				thisAS.setAttribute("data-canexp", "false")
 				if (thisasModel[5] !== null) {
@@ -2103,6 +2105,9 @@ const gameClass = () => {
 
 	/* called when init,awakening, and swapping combo view */
 	const comboSetupRender = () => {
+		if (DATA.player.activescombo.usedcombo === 0) {
+			DATA.player.activescombo.usedcombo = 1
+		}
 		let currentcombo = DATA.player.activescombo.usedcombo > 0 ? DATA.player.activescombo.usedcombo : 1
 
 		/* retrieve select options */
