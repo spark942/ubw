@@ -1769,7 +1769,7 @@ const gameClass = () => {
 				let domASEffects = elebySelector("#as-skill-"+thisasID+" .as-effect")
 				let asEffectsHtml = iText("skill_hit","astype_"+ACTIVES[i][3].split("_")[0], getActiveHitCount(ACTIVES[i][0])) + "<br>"
 				let skillhits = getActiveHits(ACTIVES[i][0])
-				asEffectsHtml += iText("skillhit_dmg_p", skillhits[0],) + "<br>"
+				asEffectsHtml += iText("skillhit_dmg_p", skillhits[0]) + "<br>"
 				asEffectsHtml += iText("skillhit_duration_p", skillhits[1]) + "<br>"
 				domASEffects.innerHTML = asEffectsHtml
 			}
