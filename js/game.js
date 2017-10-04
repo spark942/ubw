@@ -1484,6 +1484,22 @@ const gameClass = () => {
 				let domwsName 	 = elebySelector("#ws-"+wt+" .ws-setup-name")
 				domwsName.innerHTML = iText("wieldingsetup_"+wt)
 
+				/* Weapon Rotation */
+				let wcb = []
+				let rotationHTML = ""
+				if (WIELDINGTYPES[wt].hasOwnProperty("weaponcomborotation") === false) {
+					wcb = [1]
+				} else {
+					wcb = WIELDINGTYPES[wt].weaponcomborotation
+				}
+				for (var i = 0; i < wcb.length; i++) {
+					if (i !== 0) { rotationHTML += "&nbsp;>&nbsp;"}
+					rotationHTML += wcb[i].toString()
+				};
+
+				let domwsRotation 	 = elebySelector("#ws-"+wt+" .rotation-value")
+				domwsRotation.innerHTML = rotationHTML
+
 				let domwsWeaponList1 = elebySelector("#ws-"+wt+" .ws-wa-1 .weaponlist")
 				let thisWL1 = ""
 				for (var i = 0; i < WIELDINGTYPES[wt].weapontype1.length; i++) {

@@ -74,7 +74,7 @@ const TEXTS = {
 	comboselect : "<option value=\"{1}\" {2}>{0}</option>",
 	comboselected : "selected=\"selected\"",
 	comboskill_dmg : "Deals <span class=\"activedmgtruepercent\">{0}%</span> of Weapon Damage",
-	comboskill_weapon : "W#{0} {1}<span class=\"unit\">DMG</span> | {2}<span class=\"unit\">AS</span>",
+	comboskill_weapon : "<span class=\"comborotationid\">W#{0}</span> {1}<span class=\"unit\">DMG</span> | {2}<span class=\"unit\">AS</span>",
 	comboskill_stat_duration : 	"{0}s",
 	comboskill_stat_dmg : 		"{0}",
 	comboskill_stat_dmg_withfocus : 		"{0} <span class=\"orangetext\">(+{1})</span>",

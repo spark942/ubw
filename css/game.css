@@ -492,12 +492,29 @@ input[type="radio"]:checked + label:after {
 	width: calc(100% - 5px);
 	padding: 0 5px 3px 5px;
 	margin-bottom: 5px;
+	position: relative;
 }
 .ws-setup[data-unlocked=false] {
 	display: none;
 }
 .ws-setup-name {
 	font-size: 12px;
+	line-height: 20px;
+    font-weight: bold;
+}
+.ws-setup-rotation {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 11px;
+	padding: 2px 5px;
+	background-color: rgba(52, 73, 94,1.0);
+	color: rgba(236, 240, 241,1.0);
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.rotation-value {
+	color: rgba(230, 126, 34,1.0)
 }
 .ws-setup-main > div {
 	display: inline-block;
@@ -982,6 +999,13 @@ input[type="radio"]:checked + label:after {
 #comboedit #comboskills .comboskill .comboskill-desc > div {
 	display: inline-block;
 	font-size: 10px;
+}
+
+#comboedit #comboskills .comboskill .comborotationid {
+	color: rgba(230, 126, 34,1.0);
+	background-color: rgba(52, 73, 94,1.0);
+	padding: 0 3px;
+	border-radius: 3px;
 }
 #comboedit #comboskills .comboskill .unit {
 	color: rgba(127, 140, 141,1.0)
