@@ -431,7 +431,7 @@ const gameClass = () => {
 			let curCharLevel = getCharacterLevelByExp()
 			/* check if unlocked */
 			if (PASSIVES[i][1] === "charlevel" 
-				&& PASSIVES[i][2] <= curCharLevel
+				&& (PASSIVES[i][2] <= curCharLevel || DATA.player.awaken_stage > 0)
 				&& DATA.player.passives[PASSIVES[i][0]].unlocked === false) {
 				DATA.player.passives[PASSIVES[i][0]].unlocked = true
 			} else if (PASSIVES[i][1] === "charlevel" 
@@ -728,7 +728,7 @@ const gameClass = () => {
 	function addSkillToCombo() {
 		/* TO DO: check if enough power to add */
 		let skill_id = parseInt(this.getAttribute("data-skillid"))
-		if (DATA.player.actives[skill_id].power + DATA.player.comboPowerUsed <= getPassiveBonusValue("combo_power")) {
+		if ((DATA.player.actives[skill_id].power + DATA.player.comboPowerUsed) <= getPassiveBonusValue("combo_power")) {
 			DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].push(skill_id)
 		}
 	}
@@ -918,9 +918,9 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.1)/45)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/30)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.1)/30)),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/45)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
 			timer  	: monsterModel[5],
 			loot    : [
 				monsterModel[7],
@@ -1033,7 +1033,6 @@ const gameClass = () => {
 			DATA.player.currentStage		= JSON.parse(localStorage.getItem('currentStage'))
 		if (localStorage.getItem('exp_char'))
 			DATA.player.exp_char 				= toDecimal(localStorage.getItem('exp_char'))
-		console.log(localStorage.getItem('exp_char'))
 		if (JSON.parse(localStorage.getItem('ekk')))
 			DATA.player.ekk 						= JSON.parse(localStorage.getItem('ekk'))
 		if (JSON.parse(localStorage.getItem('equipments')))
@@ -2270,6 +2269,11 @@ const gameClass = () => {
 			
 			updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-dmg", iText("comboskill_dmg",percent(dmgmod[0],1)))
 			updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-duration", iText("skillhit_duration_p",skillhits[1]))
+		}
+
+		if (DATA.player.comboPowerUsed > getPassiveBonusValue("combo_power")) {
+			DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].pop()
+			comboInventoryRender()
 		}
 	}
 

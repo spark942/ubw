@@ -43,7 +43,7 @@ const TEXTS = {
 	wieldingsetup_DualDagger : 					"Assassin",
 	wieldingsetup_God : 						"God",
 	weaponlist_weapon : "<span class=\"weapontypename\">{0}</span>",
-	wswsdpsaspd : "{0} <span class=\"ws-ws-dps\">DPS</span> | {1} <span class=\"ws-ws-aspd\">AS</span>",
+	wswsdpsaspd : "{0} <span class=\"ws-ws-dps\">DPS</span> | {1} <span class=\"ws-ws-aspd\">AR</span>",
 	/*passives*/
 	charlevel : "Requires character <span class=\"charlevel\">level {0}</span>",
 	awaken : "Requires character <span class=\"awakeningstage\">Awakening Stage {0}</span>",
