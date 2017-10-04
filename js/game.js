@@ -94,7 +94,7 @@ const gameClass = () => {
 				aura_focus_combostreak : false,
 			},
 			lastonline: null,
-			focus: 100,
+			focus: 10000,
 			currentRegion: "asia",
 			currentStage: 1,
 			currentStageIsTown: false,
