@@ -71,7 +71,7 @@ const gameClass = () => {
 		weaponstarter : {
 			type: "w",
 			item_id:15144,
-			stage: 10,
+			stage: 40,
 			quality:128
 		}
 	} 

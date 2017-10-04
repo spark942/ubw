@@ -1,5 +1,5 @@
 const STAGES = [
-	[1,1,0,null],
+	[1,0,0,null],
 	[10,0,1,null],
 	[11,0,0,null],
 	[15,1,0,null],
