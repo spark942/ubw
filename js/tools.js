@@ -96,9 +96,10 @@ const percent = (number, decimal) => {
 }
 
 const toDecimal = (number, decimal) => {
-	number = number || 1
+	number = number || 0
 	decimal = decimal || 0
 	var dec = Math.pow(10,decimal)
+	if (number === 0) { return 0 }
 	return Math.round(number * dec) / dec
 }
 
