@@ -1992,6 +1992,9 @@ const gameClass = () => {
 		let expratio = getCharacterExpRatio()
 		updateTextByID("charexpratio-total", numberPrint(expratio))
 
+		
+		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
+
 		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
 		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
 		updateTextByID("dmgbonus-pskill", numberPrint(percent(dmgbonus_passive)))
