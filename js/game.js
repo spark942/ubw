@@ -479,9 +479,12 @@ const gameClass = () => {
 			
 			/*update passive*/
 			let curCharLevel = getCharacterLevelByExp()
+			if (DATA.player.awaken_stage > 0) {
+				curCharLevel = 101
+			}
 			/* check if unlocked */
 			if (PASSIVES[i][1] === "charlevel" 
-				&& (PASSIVES[i][2] <= curCharLevel || DATA.player.awaken_stage > 0)
+				&& (PASSIVES[i][2] <= curCharLevel)
 				&& DATA.player.passives[PASSIVES[i][0]].unlocked === false) {
 				DATA.player.passives[PASSIVES[i][0]].unlocked = true
 			} else if (PASSIVES[i][1] === "charlevel" 
@@ -820,6 +823,9 @@ const gameClass = () => {
 			
 			/*update active*/
 			let curCharLevel = getCharacterLevelByExp()
+			if (DATA.player.awaken_stage > 0) {
+				curCharLevel = 101
+			}
 			/* check if unlocked */
 			if (ACTIVES[i][1].length > 0
 				&& ACTIVES[i][2] !== null

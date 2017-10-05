@@ -92,6 +92,48 @@
 	background-color: rgba(0,150,136 ,1);
 	background-image: url("../img/passives/2hcsword.png");
 }
+/* Awakening Passives */
+
+.passive-66 {
+	background-color: rgba(230, 126, 34,1.0);
+	background-image: url("../img/passives/mountaintop.png");
+}
+.passive-67 {
+	background-color: rgba(52, 152, 219,0.3);
+	background-image: url("../img/passives/fluffy-cloud.png");
+}
+.passive-68 {
+	background-color: rgba(52, 152, 219,1.0);
+	background-image: url("../img/passives/big-wave.png");
+}
+.passive-69 {
+	background-color: rgba(241, 196, 15,1.0);
+	background-image: url("../img/passives/lightning-helix.png");
+}
+.passive-70 {
+	background-color: rgba(44, 62, 80,1.0);
+	background-image: url("../img/passives/prayer.png");
+}
+.passive-71 {
+	background-color: rgba(142, 68, 173,1.0);
+	background-image: url("../img/passives/overmind.png");
+}
+.passive-72 {
+	background-color: rgba(46, 204, 113,1.0);
+	background-image: url("../img/passives/flower-twirl.png");
+}
+.passive-73 {
+	background-color: rgba(192, 57, 43,1.0);
+	background-image: url("../img/passives/evil-wings.png");
+}
+.passive-74 {
+	background-color: rgba(231, 76, 60,1.0);
+	background-image: url("../img/passives/dragon-breath.png");
+}
+.passive-75 {
+	background-color: rgba(243, 156, 18,1.0);
+	background-image: url("../img/passives/phoenix.png");
+}
 
 /* actives */
 .active-1 {
