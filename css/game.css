@@ -482,6 +482,9 @@ input[type="radio"]:checked + label:after {
 }
 #character-stats {
 	width: calc(100% - 20px);
+	overflow-y: scroll;
+	height: calc(100% - 40px);
+	margin-top: 15px;
 }
 #character-stats .stat-block {
 	position: relative;

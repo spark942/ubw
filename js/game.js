@@ -143,6 +143,14 @@ const gameClass = () => {
 				combo_ts_start : null,
 				combo_ts_end   : null,
 				combo_ts_now   : null,
+			},
+			lts : {
+				creationdate : null,
+				playtime     : 1,
+				looted_legendary : 0,
+				looted_mythical  : 0,
+				looted_ekk       : 0,
+				killedenemies    : 0,
 			}
 		}
 	}
@@ -169,6 +177,12 @@ const gameClass = () => {
 
 
 		loadData()
+		if (DATA.player.lts.creationdate === null) {
+			DATA.player.lts.creationdate = Date.now()
+		}
+		if (DATA.player.lts.hasOwnProperty("playtime") === false) {
+			DATA.player.lts.playtime = 1
+		}
 		updateWieldingSetups()
 		updatePassives()
 		updateActives()
@@ -882,8 +896,9 @@ const gameClass = () => {
 		
 	}
 
-	const addItemInventory = (object) => {
+	const addItemInventory = (object, source) => {
 		object = object || null
+		source = source || null
 		/* can't add if inventory full*/
 		if (DATA.player.inventory.length >= getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")) {
 			return false
@@ -892,6 +907,9 @@ const gameClass = () => {
 		if (object.type === "c" 
 			&& object.hasOwnProperty("stage")) {
 			DATA.player.ekk += getItemCost(object)
+			if (source === "loot") {
+				DATA.player.lts.looted_ekk += getItemCost(object)
+			}
 			return true
 		}
 		if (object === null || object.hasOwnProperty("item_id") === false) {return false}
@@ -906,7 +924,11 @@ const gameClass = () => {
 			thisItem.hasOwnProperty("quality")? thisItem.quality : null,
 			tiModel.aspd)
 
-		
+		if (source === "loot" && updatedItem.grade === 6) {
+			DATA.player.lts.looted_legendary++
+		} else if (source === "loot" && updatedItem.grade === 7) {
+			DATA.player.lts.looted_mythical++
+		}
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
 	}
@@ -1087,6 +1109,10 @@ const gameClass = () => {
 			DATA.player.lastitemid 			= JSON.parse(localStorage.getItem('lastitemid'))
 		if (JSON.parse(localStorage.getItem('lastonline')))
 			DATA.player.lastonline 			= JSON.parse(localStorage.getItem('lastonline'))
+		if (JSON.parse(localStorage.getItem('max_stage')))
+			DATA.player.max_stage 			= JSON.parse(localStorage.getItem('max_stage'))
+		if (JSON.parse(localStorage.getItem('lts')))
+			DATA.player.lts 						= JSON.parse(localStorage.getItem('lts'))
 		if (window.location.toString().includes("file"))
 			console.log(DATA)
 	}
@@ -1108,6 +1134,8 @@ const gameClass = () => {
 		localStorage.setItem('inventory', 		JSON.stringify(DATA.player.inventory))
 		localStorage.setItem('lastitemid', 		JSON.stringify(DATA.player.lastitemid))
 		localStorage.setItem('lastonline', 		JSON.stringify(DATA.player.lastonline))
+		localStorage.setItem('max_stage', 					JSON.stringify(DATA.player.max_stage))
+		localStorage.setItem('lts', 					JSON.stringify(DATA.player.lts))
 	}
 
 	const getComboStreakBonus = () => {
@@ -1244,6 +1272,7 @@ const gameClass = () => {
 				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
 				DATA.player.exp_char += toDecimal( (DATA.player.currentMonster.exp() * (1 + getCharacterBonusExp().total)) * getCharacterExpRatio() )
+				DATA.player.lts.killedenemies++
 				/* LOOT */
 				let mobloots = DATA.player.currentMonster.loot()
 				for (var i = 0; i < mobloots.length; i++) {
@@ -1254,7 +1283,7 @@ const gameClass = () => {
 							item_id:mobloots[i],
 							stage: DATA.player.currentStage /* TODO: stage bonus based on world */
 						}
-						addItemInventory(laaat)
+						addItemInventory(laaat, "loot")
 					}
 				};
 				if (DATA.player.settings.autoadvance === true) {
@@ -1338,7 +1367,10 @@ const gameClass = () => {
 		updateTextByID("aura-focus-combostreak-value", numberPrint(percent(TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit)))
 	}
 
+	/* Keep this loop at 1 per second */
 	const inventoryLoop = () => {
+		DATA.player.lts.playtime += 1
+
 		/* wielding setup */
 		updateWieldingSetupUnlock()
 
@@ -1982,6 +2014,8 @@ const gameClass = () => {
 
 	/* loop renders */
 	const statsRender = () => {
+
+		/* CHARACTER */
 		let expbonus = getCharacterBonusExp()
 		updateTextByID("charexpbonus-total", numberPrint(percent(expbonus.total)))
 		updateTextByID("charexpbonus-askill", numberPrint(percent(expbonus.askill)))
@@ -1992,9 +2026,9 @@ const gameClass = () => {
 		let expratio = getCharacterExpRatio()
 		updateTextByID("charexpratio-total", numberPrint(expratio))
 
-		
 		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
 
+		/* BATTLE */
 		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
 		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
 		updateTextByID("dmgbonus-pskill", numberPrint(percent(dmgbonus_passive)))
@@ -2002,6 +2036,19 @@ const gameClass = () => {
 		let dmgflatbonus_passive = getPassiveBonusValue("dmg_f")
 		updateTextByID("dmgflatbonus-total", numberPrint(dmgflatbonus_passive))
 		updateTextByID("dmgflatbonus-pskill", numberPrint(dmgflatbonus_passive))
+
+		/* LIFETIME STATS */
+		updateTextByID("lts-timeplayed", toHHMMSS(DATA.player.lts.playtime))
+		updateTextByID("lts-killedenemies", numberPrint(DATA.player.lts.killedenemies))
+		updateTextByID("lts-looted-ekk", numberPrint(DATA.player.lts.looted_ekk))
+		updateTextByID("lts-looted-legendary", numberPrint(DATA.player.lts.looted_legendary))
+		updateTextByID("lts-looted-mythical", numberPrint(DATA.player.lts.looted_mythical))
+		updateTextByID("maxstage-total", numberPrint(DATA.player.max_stage.all))
+		updateTextByID("maxstage-earth", numberPrint(Math.max(DATA.player.max_stage.asia, DATA.player.max_stage.europe)))
+		updateTextByID("maxstage-asia", numberPrint(DATA.player.max_stage.asia))
+		updateTextByID("maxstage-europe", numberPrint(DATA.player.max_stage.europe))
+		updateTextByID("maxstage-asgard", numberPrint(Math.max(DATA.player.max_stage.valhalla, DATA.player.max_stage.valhalla)))
+		updateTextByID("maxstage-valhalla", numberPrint(DATA.player.max_stage.valhalla))
 	}
 
 	const wieldingSetupRender = () => {
