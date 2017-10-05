@@ -409,7 +409,7 @@ const gameClass = () => {
 		let activeskill_bonus = TABLES.EXP_BONUS.per_activeskill_level * getTotalActiveSkillLevel()
 		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 100
 		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 100
-		console.log(route_asgard)
+
 		return {
 			askill: toDecimal(activeskill_bonus, 2),
 			route_earth: toDecimal(route_earth, 2),
