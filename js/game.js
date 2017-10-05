@@ -58,6 +58,8 @@ const gameClass = () => {
 			per_activeskill_level : 0.01,
 			per_awaken_stage : 0.1,
 		},
+		regions: ["asia","europe"],
+		towns: [],
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
@@ -100,6 +102,8 @@ const gameClass = () => {
 			lastonline: null,
 			focus: 10000,
 			currentRegion: "asia",
+			currentTownTab: "portal",
+			currentTownPortalTab: "route",
 			currentStage: 1,
 			currentStageIsTown: false,
 			currentMonster: null,
@@ -219,9 +223,12 @@ const gameClass = () => {
 				special[mobrank].push(MONSTERS[i][0])
 			}
 		}
+
 		TABLES.MONSTERS_ID.asia 	= asia
 		TABLES.MONSTERS_ID.europe = europe
 		TABLES.MONSTERS_ID.special = special
+
+		TABLES.towns = getTowns()
 	}
 
 	const setVariable = () => {
@@ -230,6 +237,18 @@ const gameClass = () => {
 	}
 
 	const setElement = () => {
+		/* town view */
+		function showTown() {
+			elebyID("game-container").classList.add("intown")
+			elebyID("game-container").classList.add(DATA.player.currentRegion)
+		}
+		function showGate() {
+			updateAttributeByID("game-container", "class", "")
+		}
+		elebyID("town-enter").onclick = showTown
+		elebyID("town-gate").onclick = showGate
+
+
 		function changeInventory() {
 			let inventories = eleByClass("g-inventory")
 			for(var i = 0; i < inventories.length; i++)
@@ -1056,7 +1075,7 @@ const gameClass = () => {
 
 			elebyID("bscreen-t-town").classList.remove("hidden")
 			elebyID("bscreen-t-monster").classList.add("hidden")
-			console.log("TOWN")
+			//console.log("TOWN")
 			/* skip town for now */
 			DATA.player.currentStageIsTown = true
 			DATA.player.currentMonster = null
@@ -1072,18 +1091,23 @@ const gameClass = () => {
 		//console.log(DATA)
 	}
 
+	/* TOWN */
+	const getTowns = () => {
+		let towns = []
+		for (var i = 0; i < STAGES.length; i++) {
+			if (STAGES[i][1] === 1) {
+				towns.push(STAGES[i])
+			}
+		}
+		return towns
+	}
+
 	const exitTown = (stage) => {
 
 	}
 
-	const goToStage = (stage) => {
 
-	}
-
-	const goToRegion = (region) => {
-
-	}
-
+	/* Player data handling */
 	const loadData = () => {
 		if (JSON.parse(localStorage.getItem('settings')))
 			DATA.player.settings		= JSON.parse(localStorage.getItem('settings'))
@@ -1321,7 +1345,7 @@ const gameClass = () => {
 				}
 				updateStage(DATA.player.currentStage)
 			} else {
-				console.log("rest in town")
+				//console.log("rest in town")
 			}
 			
 		}
@@ -1433,6 +1457,83 @@ const gameClass = () => {
 			}
 		};
 		
+	}
+	const initTownRender = () => {
+		elebyID("town-portal").classList.add("hidden")
+		elebyID("town-market").classList.add("hidden")
+		elebyID("town-blacksmith").classList.add("hidden")
+
+		function showRegionalDestinations() {
+			DATA.player.currentTownPortalTab = "route"
+			updateAttributeByID("town-portal", "class", "route")
+		}
+		function showWorldsDestinations() {
+			DATA.player.currentTownPortalTab = "world"
+			updateAttributeByID("town-portal", "class", "world")
+		}
+		elebyID("town-portal-region-routes").onclick = showRegionalDestinations
+		elebyID("town-portal-worlds").onclick = showWorldsDestinations
+	}
+
+	const townRender = () => {
+		if (DATA.player.currentStageIsTown === false) {
+			return false
+		}
+
+		function goToRoute() {
+			let route =	parseInt(this.getAttribute("data-route"))
+			let price = toDecimal(Math.abs(route - DATA.player.currentStage)*1000)
+
+			if (DATA.player.ekk - price >= 0) {
+				DATA.player.currentStage = route
+				DATA.player.ekk -= price
+				updateStage(DATA.player.currentStage)
+				elebyID("town-gate").click()
+			}
+		}
+
+		function goToRegion() {
+			let region =	this.getAttribute("data-region")
+			let price = 100000000
+
+			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
+				DATA.player.currentStage = 15
+				DATA.player.currentRegion = region
+				DATA.player.ekk -= price
+				updateStage(DATA.player.currentStage)
+			}
+		}
+
+		/* body */
+		elebyID("town-portal").classList.add("hidden")
+
+		if (DATA.player.currentTownTab === "portal") {
+			updateAttributeByID("town-portal", "class", DATA.player.currentTownPortalTab)
+			if (DATA.player.currentTownPortalTab === "route") {
+				let portalDestionationsHTML = ""
+				for (var i = TABLES.towns.length - 1; i >= 0; i--) {
+					if (DATA.player.max_stage[DATA.player.currentRegion] < TABLES.towns[i][0]) { continue }
+					let button = iText(
+						"destination_route", 
+						TABLES.towns[i][0], numberPrint(toDecimal(Math.abs(TABLES.towns[i][0] - DATA.player.currentStage)*1000)), 
+						TABLES.towns[i][0]+"-button")
+					portalDestionationsHTML += button.replace("data-route=\"\"", "data-route=\""+TABLES.towns[i][0]+"\"")
+					
+				}
+				if (elebyID("region-destinations").innerHTML !== portalDestionationsHTML) {
+					updateTextByID("region-destinations", portalDestionationsHTML)
+					/* add the onclick function */
+					for (var i = TABLES.towns.length - 1; i >= 0; i--) {
+						if (DATA.player.max_stage[DATA.player.currentRegion] < TABLES.towns[i][0]) { continue }
+						let destElement = elebyID("gotoroute-"+TABLES.towns[i][0]+"-button")
+						destElement.onclick = goToRoute
+					}
+				}
+			} else if (DATA.player.currentTownPortalTab === "world") {
+				
+			}
+
+		}
 	}
 
 	const battleRender = () => {
@@ -1946,6 +2047,7 @@ const gameClass = () => {
 
 
 	const initRender = () => {
+		initTownRender()
 		initWieldingSetupsRender()
 		initPassivesRender()
 		initActivesRender()
@@ -1961,6 +2063,7 @@ const gameClass = () => {
 			} else {
 				DATA.player.currentStage++
 			}
+			updateAttributeByID("game-container", "class", "")
 			updateStage(DATA.player.currentStage)
 		}
 		/* aura */
@@ -2476,6 +2579,8 @@ const gameClass = () => {
 
 	const inventoryRender = () => {
 		if (GAMEVAR.initialized === false) { return false}
+		townRender()
+
 		statsRender()
 		/* wielding setups */
 		wieldingSetupRender()

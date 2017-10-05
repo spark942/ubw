@@ -45,8 +45,25 @@
 	height: 150px;
 	position: absolute;
 	left: 0;
-	top: 400px;
-	background-color: rgba(52, 152, 219,0.3)
+	bottom: 0;
+	background-color: rgba(52, 152, 219,0.3);
+	z-index: 1;
+	transition: bottom 0.5s ease;
+}
+.intown .g-battlesettings {
+	bottom: -134px;
+}
+.g-town {
+	position: absolute;
+	left: 0;
+	bottom: -550px;
+	width: 353px;
+	height: 550px;
+	background-color: orange;
+	transition: bottom 0.5s ease;
+}
+.intown .g-town {
+	bottom: 0;
 }
 
 .g-inventorynav {
@@ -55,6 +72,7 @@
 	position: absolute;
 	left: 300px;
 	top: 0;
+	z-index: 1;
 	/*background-color: rgba(255,0,0,0.12);*/
 }
 .g-inventories {
@@ -68,20 +86,11 @@
 	border-right: none;
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
+	z-index: 2;
 }
 
 /* Defaults */
 
-/* Battle Screen */
-#bscreen-title  {
-	height: 120px;
-}
-/* Monster */
-#bscreen-title #bscreen-t-monster,
-#bscreen-title #bscreen-t-town {
-	position: relative;
-	padding: 10px;
-}
 h3#monsterid {
 	display: none;
 }
@@ -154,6 +163,8 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: left;
     text-indent: 10px;
 }
+
+/* Town */
 #bscreen-title #bscreen-t-town #townactions {
 	margin-top: 10px;
 }
@@ -174,10 +185,104 @@ div.progressbar div.progress::-webkit-progress-value {
 	background-color: #fff;
 	cursor: pointer;
 }
-#bscreen-title #bscreen-t-town #townactions #town-enter {
+.intown #bscreen-title #bscreen-t-town #townactions #town-enter,
+#bscreen-title #bscreen-t-town #townactions #town-gate {
+	display: none;
+}
+.intown #bscreen-title #bscreen-t-town #townactions #town-gate {
+	display: inline-block;
+}
+#town-sections {
+	margin-top: 100px;
+	padding: 10px 0 0 10px;
+}
+.town-section {
+	padding: 5px;
+	background-color: white;
+	width: auto;
+	display: inline-block;
+	font-size: 15px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px 1px 0 1px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	margin-right: 2px;
+	cursor: pointer;
+}
+#town-nav-market,
+#town-nav-blacksmith {
 	cursor: not-allowed;
 }
+#town-body {
+	width: calc(100% - 73px);
+	background-color: rgba(255,255,255,0.5);
+	height: calc(100% - 165px);
+	margin-left: 10px;
+	margin-top: -1px;
+	border: 1px solid #000;
+}
+#town-portal,
+#town-portal-destinations #region-destinations,
+#town-portal-destinations #world-destinations {
+	height: 100%;
+}
+#town-portals {
+	padding-left: 5px;
+}
+#town-body #town-portals > div {
+	display: inline-block;
+	font-size: 13px;
+	width: calc(50% - 5px);
+	background-color: rgba(0,0,0,0.2);
+	text-align: center;
+	font-weight: bold;
+	padding: 3px 0;
+	margin-top: 5px;
+	cursor: pointer;
+}
+#town-portal-destinations {
+	height: calc(100% - 44px);
+	padding: 10px;
+	overflow-y: scroll;
+}
+#town-portal-destinations > div {
+	display: none;
+}
 
+#town-portal.route #region-destinations, 
+#town-portal.world #world-destinations {
+	display: block;
+}
+.destroute {
+	font-size: 12px;
+	position: relative;
+	padding: 5px 0;
+	cursor: pointer;
+}
+.destroute:hover {
+	background-color: white;
+}
+.destroute .destination-route {
+	font-weight: bold;
+}
+.destroute .destination-price {
+	position: absolute;
+	right: 0;
+	font-size: 10px;
+}
+
+/* Battle Screen */
+#bscreen-title  {
+	height: 120px;
+}
+/* Monster */
+#bscreen-title #bscreen-t-monster,
+#bscreen-title #bscreen-t-town {
+	position: relative;
+	padding: 10px;
+	z-index: 1;
+}
 
 /* current skill bar */
 #cur-skill-bar {

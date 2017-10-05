@@ -1,4 +1,6 @@
 const TEXTS = {
+	/* Town */
+	destination_route : "<div id=\"gotoroute-{2}\" class=\"destroute\" data-route=\"\"><span class=\"destination-route\">Route #{0}</span><span class=\"destination-price\">Cost {1} Ekk</span></div>",
 	/* battle */
 	monster_rank_0 : "",
 	monster_rank_1 : "★",
