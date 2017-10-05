@@ -89,9 +89,10 @@ const iText = (code, value, value2, value3) => {
 }
 
 const percent = (number, decimal) => {
-	number = number || 1
+	number = number || 0
 	decimal = decimal || 0
-	return toDecimal(Math.round(number * 100),decimal)
+	if (number === 0) { return 0 }
+	return toDecimal(Math.floor(number * 100),decimal)
 }
 
 const toDecimal = (number, decimal) => {

@@ -54,6 +54,10 @@ const gameClass = () => {
 				cost_per_sec: 10,
 			},
 		},
+		EXP_BONUS: {
+			per_activeskill_level : 0.01,
+			per_awaken_stage : 0.1,
+		},
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
@@ -106,8 +110,11 @@ const gameClass = () => {
 			awaken_stage: 0,
 			max_stage    : {
 				all : 1,
+				/* earth */
 				asia : 1,
-				europe : 1,
+				europe : 0,
+				/* asgard */
+				valhalla : 0,
 			},
 			ekk         : 1000,
 			equipments  	 : [],
@@ -385,6 +392,35 @@ const gameClass = () => {
 		let skill_base_exp_of_level = TABLES["EXP_SKILL"+expcurve][skill_current_level-2] || 0
 		let skill_max_exp_of_level = TABLES["EXP_SKILL"+expcurve][skill_current_level-1] || TABLES["EXP_SKILL"+expcurve][TABLES.EXP_CHAR.length-1]
 		return skill_max_exp_of_level - skill_base_exp_of_level
+	}
+
+	/* exp bonus */
+	const getTotalActiveSkillLevel = () => {
+		let totalLevel = 0
+
+		for (var adata in DATA.player.actives) { 
+			if (DATA.player.actives[adata].unlocked === true) {
+				totalLevel += getSkillLevelByExp(DATA.player.actives[adata].exp, parseInt(DATA.player.actives[adata].curve))
+			}
+		}
+		return totalLevel
+	}
+	const getCharacterBonusExp = () => {
+		let activeskill_bonus = TABLES.EXP_BONUS.per_activeskill_level * getTotalActiveSkillLevel()
+		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 100
+		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 100
+
+		return {
+			askill: toDecimal(activeskill_bonus, 2),
+			route_earth: toDecimal(route_earth, 2),
+			route_asgard: toDecimal(route_asgard, 2),
+			route_worlds: toDecimal(route_earth + route_asgard, 2),
+			total : toDecimal(activeskill_bonus + route_earth + route_asgard,2)
+		}
+	}
+	/* every Awakening Stage reduce the exp */
+	const getCharacterExpRatio = () => {
+		return toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,3)
 	}
 
 	const getPassiveModelByID = (passiveID) => {
@@ -1051,7 +1087,8 @@ const gameClass = () => {
 			DATA.player.lastitemid 			= JSON.parse(localStorage.getItem('lastitemid'))
 		if (JSON.parse(localStorage.getItem('lastonline')))
 			DATA.player.lastonline 			= JSON.parse(localStorage.getItem('lastonline'))
-		console.log(DATA)
+		if (window.location.toString().includes("file"))
+			console.log(DATA)
 	}
 
 	const saveData = () => {
@@ -1206,7 +1243,7 @@ const gameClass = () => {
 				updateStage(DATA.player.currentStage)
 				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
-				DATA.player.exp_char += toDecimal(DATA.player.currentMonster.exp())
+				DATA.player.exp_char += toDecimal( (DATA.player.currentMonster.exp() * (1 + getCharacterBonusExp().total)) * getCharacterExpRatio() )
 				/* LOOT */
 				let mobloots = DATA.player.currentMonster.loot()
 				for (var i = 0; i < mobloots.length; i++) {
@@ -1215,7 +1252,7 @@ const gameClass = () => {
 						let laaat = {
 							type: mobloots[i] === 1 ? "c" : mobloots[i] < 10000 ? "f" : "w",
 							item_id:mobloots[i],
-							stage: DATA.player.currentStage
+							stage: DATA.player.currentStage /* TODO: stage bonus based on world */
 						}
 						addItemInventory(laaat)
 					}
@@ -1943,6 +1980,27 @@ const gameClass = () => {
 		elebyID("autosell-level").onchange = autosellLevelCheck
 	}
 
+	/* loop renders */
+	const statsRender = () => {
+		let expbonus = getCharacterBonusExp()
+		updateTextByID("charexpbonus-total", numberPrint(percent(expbonus.total)))
+		updateTextByID("charexpbonus-askill", numberPrint(percent(expbonus.askill)))
+		updateTextByID("charexpbonus-maxroute", numberPrint(percent(expbonus.route_worlds)))
+		updateTextByID("charexpbonus-world-earth-maxroute", numberPrint(percent(expbonus.route_earth)))
+		updateTextByID("charexpbonus-world-asgard-maxroute", numberPrint(percent(expbonus.route_asgard)))
+
+		let expratio = getCharacterExpRatio()
+		updateTextByID("charexpratio-total", numberPrint(expratio))
+
+		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
+		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
+		updateTextByID("dmgbonus-pskill", numberPrint(percent(dmgbonus_passive)))
+
+		let dmgflatbonus_passive = getPassiveBonusValue("dmg_f")
+		updateTextByID("dmgflatbonus-total", numberPrint(dmgflatbonus_passive))
+		updateTextByID("dmgflatbonus-pskill", numberPrint(dmgflatbonus_passive))
+	}
+
 	const wieldingSetupRender = () => {
 		for (var wt in WIELDINGTYPES) {
 			if (ELEMENTS.wieldingSetups.hasOwnProperty(wt)) {
@@ -2362,6 +2420,7 @@ const gameClass = () => {
 
 	const inventoryRender = () => {
 		if (GAMEVAR.initialized === false) { return false}
+		statsRender()
 		/* wielding setups */
 		wieldingSetupRender()
 		/* passive skills */
