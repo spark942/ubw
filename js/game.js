@@ -1079,7 +1079,6 @@ const gameClass = () => {
 			/* skip town for now */
 			DATA.player.currentStageIsTown = true
 			DATA.player.currentMonster = null
-			return true
 		}
 
 		if (DATA.player.currentStage > DATA.player.max_stage.all) {
@@ -1604,7 +1603,7 @@ const gameClass = () => {
 		/*display player level*/
 		let domplayerlevel 	= elebyID("playerlevel-value")
 		let domplayercurexp = elebyID("player-currentexp")
-		let domplayermaxexp = elebyID("player-maxhp")
+		let domplayermaxexp = elebyID("player-maxexp")
 		if (domplayerlevel.innerHTML !== getCharacterLevelByExp()) {
 			domplayerlevel.innerHTML = getCharacterLevelByExp()
 		}
@@ -1888,6 +1887,19 @@ const gameClass = () => {
 				if (PASSIVES[i][12] !== null && PASSIVES[i][13] !== null) { psEffectsHtml += "<br>" + iText(PASSIVES[i][12], PASSIVES[i][13]) }
 				if (PASSIVES[i][14] !== null && PASSIVES[i][15] !== null) { psEffectsHtml += "<br>" + iText(PASSIVES[i][14], PASSIVES[i][15]) }
 				domPSEffects.innerHTML = psEffectsHtml
+
+				if (DATA.player.passives[thispsID].hasOwnProperty("exp")) {
+					let domSkillTooltipLevel = elebySelector("#ps-exp-"+thispsID+" .level")
+					domSkillTooltipLevel.id = "ps-exp-level-value-"+thispsID
+					let domSkillImgLevel = elebySelector("#ps-skill-"+thispsID+" .slevel")
+					domSkillImgLevel.id = "ps-skill-slevel-value-"+thispsID
+					let domSkillcurexp = elebySelector("#ps-exp-"+thispsID+" .currentexp")
+					domSkillcurexp.id = "ps-exp-currentexp-value-"+thispsID
+					let domSkillmaxexp = elebySelector("#ps-exp-"+thispsID+" .maxexp")
+					domSkillmaxexp.id = "ps-exp-maxexp-value-"+thispsID
+					let domSkillbonusdmg = elebySelector("#ps-exp-"+thispsID+" .ps-bonusdmg")
+					domSkillbonusdmg.id = "ps-exp-ps-bonusdmg-value-"+thispsID
+				}
 			}
 		}
 	}
@@ -1947,7 +1959,21 @@ const gameClass = () => {
 				let skillhits = getActiveHits(ACTIVES[i][0])
 				asEffectsHtml += iText("skillhit_dmg_p", skillhits[0]) + "<br>"
 				asEffectsHtml += iText("skillhit_duration_p", skillhits[1]) + "<br>"
+				domASEffects.id = "as-skill-as-effect-value-"+thisasID
 				domASEffects.innerHTML = asEffectsHtml
+
+				if (DATA.player.passives[thisasID].hasOwnProperty("exp")) {
+					let domSkillTooltipLevel = elebySelector("#as-exp-"+thisasID+" .level")
+					domSkillTooltipLevel.id = "as-exp-level-value-"+thisasID
+					let domSkillImgLevel = elebySelector("#as-skill-"+thisasID+" .slevel")
+					domSkillImgLevel.id = "as-skill-slevel-value-"+thisasID
+					let domSkillcurexp = elebySelector("#as-exp-"+thisasID+" .currentexp")
+					domSkillcurexp.id = "as-exp-currentexp-value-"+thisasID
+					let domSkillmaxexp = elebySelector("#as-exp-"+thisasID+" .maxexp")
+					domSkillmaxexp.id = "as-exp-maxexp-value-"+thisasID
+					let domSkillbonusdmg = elebySelector("#as-exp-"+thisasID+" .as-bonus")
+					domSkillbonusdmg.id = "as-exp-as-bonus-value-"+thisasID
+				}
 			}
 		}
 	}
@@ -2238,33 +2264,13 @@ const gameClass = () => {
 				let skill_curexp = getSkillCurrentExpOfLevel(skill_exp)
 				let skill_maxexp = getSkillCurrentLevelTotalExp(skill_exp)
 
-				let domSkillTooltipLevel = elebySelector("#ps-exp-"+pdata+" .level")
-				if (domSkillTooltipLevel.innerHTML !== skill_level) {
-					domSkillTooltipLevel.innerHTML = skill_level
-				}
-				let domSkillImgLevel = elebySelector("#ps-skill-"+pdata+" .slevel")
-				if (domSkillImgLevel.innerHTML !== skill_level) {
-					domSkillImgLevel.innerHTML = skill_level
-				}
+				updateTextByID("ps-exp-level-value-"+pdata, skill_level)
+				updateTextByID("ps-skill-slevel-value-"+pdata, skill_level)
 				updateProgressBar("#ps-exp-"+pdata, skill_curexp, skill_maxexp)
-
-				let domSkillcurexp = elebySelector("#ps-exp-"+pdata+" .currentexp")
-				let domSkillmaxexp = elebySelector("#ps-exp-"+pdata+" .maxexp")
-
-				if (domSkillcurexp.innerHTML !== numberPrint(skill_curexp)) {
-					domSkillcurexp.innerHTML = numberPrint(skill_curexp)
-				}
-				if (domSkillmaxexp.innerHTML !== numberPrint(skill_maxexp)) {
-					domSkillmaxexp.innerHTML = numberPrint(skill_maxexp)
-				}
-
-				let domSkillbonusdmg = elebySelector("#ps-exp-"+pdata+" .ps-bonusdmg")
-				if (domSkillbonusdmg.innerHTML !== skill_level) {
-					domSkillbonusdmg.innerHTML = skill_level
-				}
+				updateTextByID("ps-exp-currentexp-value-"+pdata, numberPrint(skill_curexp))
+				updateTextByID("ps-exp-maxexp-value-"+pdata, numberPrint(skill_maxexp))
+				updateTextByID("ps-exp-ps-bonusdmg-value-"+pdata, skill_level)
 			}
-			
-
 			//console.log(pdata, ELEMENTS.passiveskills[pdata])
 		}
 	}
@@ -2286,25 +2292,11 @@ const gameClass = () => {
 				let skill_curexp = getSkillCurrentExpOfLevel(skill_exp, skill_curve)
 				let skill_maxexp = getSkillCurrentLevelTotalExp(skill_exp, skill_curve)
 
-				let domSkillTooltipLevel = elebySelector("#as-exp-"+adata+" .level")
-				if (domSkillTooltipLevel.innerHTML !== skill_level) {
-					domSkillTooltipLevel.innerHTML = skill_level
-				}
-				let domSkillImgLevel = elebySelector("#as-skill-"+adata+" .slevel")
-				if (domSkillImgLevel.innerHTML !== skill_level) {
-					domSkillImgLevel.innerHTML = skill_level
-				}
+				updateTextByID("as-exp-level-value-"+adata, skill_level)
+				updateTextByID("as-skill-slevel-value-"+adata, skill_level)
 				updateProgressBar("#as-exp-"+adata, skill_curexp, skill_maxexp)
-
-				let domSkillcurexp = elebySelector("#as-exp-"+adata+" .currentexp")
-				let domSkillmaxexp = elebySelector("#as-exp-"+adata+" .maxexp")
-
-				if (domSkillcurexp.innerHTML !== numberPrint(skill_curexp)) {
-					domSkillcurexp.innerHTML = numberPrint(skill_curexp)
-				}
-				if (domSkillmaxexp.innerHTML !== numberPrint(skill_maxexp)) {
-					domSkillmaxexp.innerHTML = numberPrint(skill_maxexp)
-				}
+				updateTextByID("as-exp-currentexp-value-"+adata, numberPrint(skill_curexp))
+				updateTextByID("as-exp-maxexp-value-"+adata, numberPrint(skill_maxexp))
 
 				let asbonusHTML = ""
 				let skillbonus = 0
@@ -2314,20 +2306,15 @@ const gameClass = () => {
 						skillbonus += TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level
 					}
 				}
+				updateTextByID("as-exp-as-bonus-value-"+adata, asbonusHTML)
 
-				let domSkillbonusdmg = elebySelector("#as-exp-"+adata+" .as-bonus")
-				if (domSkillbonusdmg.innerHTML !== asbonusHTML) {
-					domSkillbonusdmg.innerHTML = asbonusHTML
-				}
-
-				let domASEffects = elebySelector("#as-skill-"+adata+" .as-effect")
 				let asEffectsHtml = iText("skill_power", skill_power) + "<br>"
 				asEffectsHtml += iText("skill_hit","astype_"+skill_type, getActiveHitCount(adata)) + "<br>"
 				let skillhits = getActiveHits(adata)
 				let dmgmod = damageMultiplier(skillhits[0], skillbonus)
 				asEffectsHtml += iText("skillhit_dmg_p", skillhits[0], dmgmod[1], percent(dmgmod[0],1)) + "<br>"
 				asEffectsHtml += iText("skillhit_duration_p", skillhits[1]) + "<br>"
-				domASEffects.innerHTML = asEffectsHtml
+				updateTextByID("as-skill-as-effect-value-"+adata, asEffectsHtml)
 			}
 			
 
