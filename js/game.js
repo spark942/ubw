@@ -44,7 +44,7 @@ const gameClass = () => {
 				base : 30,
 				curbonus : 0,
 				cost_type: "focus",
-				cost_per_sec: 5,
+				cost_per_sec: 2,
 			},
 			FOCUS_COMBO_STREAK: {
 				name: "Wombo Combo",
@@ -456,7 +456,7 @@ const gameClass = () => {
 	}
 	/* every Awakening Stage reduce the exp */
 	const getCharacterExpRatio = () => {
-		return toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,6)
+		return Math.max(toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,6), 0.000001)
 	}
 
 	const getPassiveModelByID = (passiveID) => {
@@ -1360,6 +1360,8 @@ const gameClass = () => {
 
 	const auraLoop = () => {
 		/* auras */
+		let focusPowerRegenCost = TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec + Math.ceil(Math.pow(TABLES.AURA.FOCUS_POWER_REGEN.base / getPassiveBonusValue("combo_regen_sec"), 2))
+
 		if (DATA.player.currentMonster !== null) {
 			if (DATA.player.settings.aura_focus_dmg === true
 				&& (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p")) >= 0)) {
@@ -1369,12 +1371,12 @@ const gameClass = () => {
 				elebyID("aura-focus-dmg").checked = false
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
-				&& (DATA.player.focus - TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec >= 0)
+				&& (DATA.player.focus - focusPowerRegenCost >= 0)
 				&& DATA.player.currentPower < getPassiveBonusValue("combo_power")) {
-				DATA.player.focus -= TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec
+				DATA.player.focus -= focusPowerRegenCost
 				/* Regen power */
 				DATA.player.currentPower += TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") 
-			} else if (DATA.player.focus - TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec < 0) {
+			} else if (DATA.player.focus - focusPowerRegenCost < 0) {
 				DATA.player.settings.aura_focus_power_regen = false
 				elebyID("aura-focus-power-regen").checked = false
 			}
@@ -1398,7 +1400,7 @@ const gameClass = () => {
 
 		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))))
 		updateTextByID("aura-focus-dmg-value", numberPrint(percent(1 + getPassiveBonusValue("focus_dmg_p"))))
-		updateTextByID("aura-focus-power-regen-cost", numberPrint(TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec))
+		updateTextByID("aura-focus-power-regen-cost", numberPrint(focusPowerRegenCost))
 		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
 		updateTextByID("aura-focus-combostreak-cost", numberPrint(TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec))
 		updateTextByID("aura-focus-combostreak-value", numberPrint(percent(TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit)))
@@ -1709,7 +1711,7 @@ const gameClass = () => {
 				if (WIELDINGTYPES[wt].hasOwnProperty("weapontype2") === true) {
 					let domwsWeaponList2 = elebySelector("#ws-"+wt+" .ws-wa-2 .weaponlist")
 					let thisWL2 = ""
-					for (var i = 0; i < WIELDINGTYPES[wt].weapontype1.length; i++) {
+					for (var i = 0; i < WIELDINGTYPES[wt].weapontype2.length; i++) {
 						if (i > 0) { thisWL2 += ", "}
 						thisWL2 += iText("weaponlist_weapon", WIELDINGTYPES[wt].weapontype2[i])
 					};
@@ -1718,7 +1720,7 @@ const gameClass = () => {
 				if (WIELDINGTYPES[wt].hasOwnProperty("weapontype3") === true) {
 					let domwsWeaponList3 = elebySelector("#ws-"+wt+" .ws-wa-3 .weaponlist")
 					let thisWL3 = ""
-					for (var i = 0; i < WIELDINGTYPES[wt].weapontype1.length; i++) {
+					for (var i = 0; i < WIELDINGTYPES[wt].weapontype3.length; i++) {
 						if (i > 0) { thisWL3 += ", "}
 						thisWL3 += iText("weaponlist_weapon", WIELDINGTYPES[wt].weapontype3[i])
 					};
