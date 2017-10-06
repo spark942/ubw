@@ -166,8 +166,10 @@ function damageMonster(number, duration) {
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.innerHTML = numberPrint(toDecimal(number))
 	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,10000000)).toString()
-	newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
-	newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
+	//newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
+	//newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
+	newDamage.style.marginTop = Math.floor(rngmm(24,26)).toString() + "px"
+	newDamage.style.marginLeft = "-" + Math.floor(rngmm(144,147)).toString() + "px"
 	elebyID("bscreen-t-monster").appendChild(newDamage)
 	newDamage.classList.add("show")
 	setTimeout(function(){ newDamage.remove() }, 900);

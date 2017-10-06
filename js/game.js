@@ -456,7 +456,7 @@ const gameClass = () => {
 	}
 	/* every Awakening Stage reduce the exp */
 	const getCharacterExpRatio = () => {
-		return toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,3)
+		return toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,6)
 	}
 
 	const getPassiveModelByID = (passiveID) => {
