@@ -125,11 +125,14 @@
 				</div>
 				<div class="g-battlesettings">
 					<section id="bsettings-player">
-						<h3 id="playerlevel">Lv. <span id="playerlevel-value" class="playerlevel">999</span></h3>
-						<div id="playerexp">
+						<h3 id="playerlevel"><span class="notawaken">Lv.</span><span class="isawaken"><span id="awakenstage-value"></span></span> <span id="playerlevel-value" class="playerlevel">999</span></h3>
+						<div id="playerexp" data-playerlevel="1">
 							<div class="progressbar">
 								<div class="progress lime"></div>
 								<div class="expnumber"><span id="player-currentexp" class="currentexp">0</span> / <span id="player-maxexp" class="maxexp">0</span></div>
+							</div>
+							<div id="awakennow" class="awaken-button">
+								Awakening
 							</div>
 						</div>
 					</section>

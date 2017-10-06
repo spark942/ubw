@@ -165,7 +165,7 @@ function removeFromArray(array, indexes) {
 function damageMonster(number, duration) {
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.innerHTML = numberPrint(toDecimal(number))
-	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,10000000)).toString()
+	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,100000000)).toString()
 	//newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
 	//newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
 	newDamage.style.marginTop = Math.floor(rngmm(24,26)).toString() + "px"
@@ -173,4 +173,19 @@ function damageMonster(number, duration) {
 	elebyID("bscreen-t-monster").appendChild(newDamage)
 	newDamage.classList.add("show")
 	setTimeout(function(){ newDamage.remove() }, 900);
+}
+
+function charExpGained(number, duration) {
+	duration = duration || 900
+	let newDamage = elebyID("floatingtexttest").cloneNode(true)
+	newDamage.classList.add("char-exp-gained")
+	newDamage.innerHTML = "+" + numberPrint(toDecimal(number)) + " EXP"
+	newDamage.id = "tempfloatingexp-" + Math.floor(rngmm(1000000,100000000)).toString()
+	//newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
+	//newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
+	newDamage.style.marginTop = Math.floor(rngmm(24,26)).toString() + "px"
+	newDamage.style.marginLeft = "-" + Math.floor(rngmm(144,147)).toString() + "px"
+	elebyID("playerexp").appendChild(newDamage)
+	newDamage.classList.add("show")
+	setTimeout(function(){ newDamage.remove() }, duration);
 }

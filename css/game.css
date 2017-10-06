@@ -416,11 +416,35 @@ div.progressbar div.progress::-webkit-progress-value {
 	top: 0px;
 	left: 6px;
 	text-align: center;
+	letter-spacing: -2px;
+	background-color: rgba(236, 240, 241,1.0);
+	border-radius: 3px;
 }
 #playerexp {
 	width: 250px;
 	display: inline-block;
 	margin-right: 20px;
+	position: relative;
+}
+#bsettings-player .notawaken {
+	display: none;
+}
+#bsettings-player[data-awakenstage="0"] .notawaken {
+	display: inline;
+}
+#bsettings-player[data-awakenstage="0"] .isawaken {
+	display: none;
+}
+#bsettings-player[data-awakenstage="0"] #playerlevel {
+	background-color: transparent;
+	border-radius: none;
+}
+
+#awakenstage-value {
+	color: rgb(0, 255, 246);
+	background-color: rgba(44, 62, 80,1.0);
+	border-radius: 3px;
+	padding: 0 5px 0 3px;
 }
 #playerexp .progressbar,
 #playerexp .progressbar .progress {
@@ -439,6 +463,23 @@ div.progressbar div.progress::-webkit-progress-value {
 #playerexp .expnumber {
 	letter-spacing: -3px;
 }
+#playerexp .awaken-button {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(0, 255, 246);
+	color: #000;
+	font-size: 14px;
+	text-align: center;
+	cursor: pointer;
+	display: none;
+}
+#playerexp[data-playerlevel="101"] .awaken-button {
+	display: block;
+}
+
 #adventure-settings,
 #xxx-settings,
 #inventory-settings {

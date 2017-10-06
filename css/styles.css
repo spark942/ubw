@@ -191,6 +191,18 @@ However, delay the fade out process for 2.5 seconds */
     -webkit-animation: fadeout 1s;
     animation: fadeout 1s;
 }
+.floatingtext.char-exp-gained {
+	font-size: 10px;
+	top: -10px;
+	padding-left: 30px;
+}
+.floatingtext.char-exp-gained.show {
+    visibility: visible; /* Show the snackbar */
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadeoutcharexp 1s;
+    animation: fadeoutcharexp 1s;
+}
 
 @-webkit-keyframes fadeout {
     0%  {top: 50px; left: 50%;   opacity: 1;   z-index: 100000; font-size: 26px;}
@@ -206,6 +218,22 @@ However, delay the fade out process for 2.5 seconds */
     70% { 			left: 50.3%; opacity: 0.6; z-index: 95000; font-size: 24px;}
     90% {top: 3px;  left: 51%;   opacity: 0.3; z-index: 92000;}
     100%{top: 5px;  left: 53%;   opacity: 0.2; z-index: 90000; font-size: 20px;}
+}
+
+@-webkit-keyframes fadeoutcharexp {
+    0%  {top: -10px; left: 50%;   opacity: 1;   z-index: 100000; font-size: 10px;}
+    40% {			left: 50.3%; opacity: 0.8; z-index: 98000; font-size: 9.9px;}
+    70% { 			left: 50.3%; opacity: 0.6; z-index: 95000; font-size: 9px;}
+    90% {top: -30px;  left: 51%;   opacity: 0.3; z-index: 92000;}
+    100%{top: -35px;  left: 53%;   opacity: 0.2; z-index: 90000; font-size: 8px;}
+}
+
+@keyframes fadeoutcharexp {
+    0%  {top: -10px; left: 50%;   opacity: 1;   z-index: 100000; font-size: 10px;}
+    40% {			left: 50.3%; opacity: 0.8; z-index: 98000; font-size: 9.9px;}
+    70% { 			left: 50.3%; opacity: 0.6; z-index: 95000; font-size: 9px;}
+    90% {top: -30px;  left: 51%;   opacity: 0.3; z-index: 92000;}
+    100%{top: -35px;  left: 53%;   opacity: 0.2; z-index: 90000; font-size: 8px;}
 }
 
 ol li:before {

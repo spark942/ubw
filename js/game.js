@@ -1143,6 +1143,8 @@ const gameClass = () => {
 			DATA.player.lastonline 			= JSON.parse(localStorage.getItem('lastonline'))
 		if (JSON.parse(localStorage.getItem('max_stage')))
 			DATA.player.max_stage 			= JSON.parse(localStorage.getItem('max_stage'))
+		if (JSON.parse(localStorage.getItem('awaken_stage')))
+			DATA.player.awaken_stage 		= JSON.parse(localStorage.getItem('awaken_stage'))
 		if (JSON.parse(localStorage.getItem('lts')))
 			DATA.player.lts 						= JSON.parse(localStorage.getItem('lts'))
 		if (window.location.toString().includes("file"))
@@ -1166,7 +1168,8 @@ const gameClass = () => {
 		localStorage.setItem('inventory', 		JSON.stringify(DATA.player.inventory))
 		localStorage.setItem('lastitemid', 		JSON.stringify(DATA.player.lastitemid))
 		localStorage.setItem('lastonline', 		JSON.stringify(DATA.player.lastonline))
-		localStorage.setItem('max_stage', 					JSON.stringify(DATA.player.max_stage))
+		localStorage.setItem('max_stage', 		JSON.stringify(DATA.player.max_stage))
+		localStorage.setItem('awaken_stage', 	JSON.stringify(DATA.player.awaken_stage))
 		localStorage.setItem('lts', 					JSON.stringify(DATA.player.lts))
 	}
 
@@ -1303,7 +1306,9 @@ const gameClass = () => {
 				updateStage(DATA.player.currentStage)
 				saveData()
 			} else if (DATA.player.currentMonster.hp() <= 0) {
-				DATA.player.exp_char += toDecimal( (DATA.player.currentMonster.exp() * (1 + getCharacterBonusExp().total)) * getCharacterExpRatio() )
+				let char_exp_gained = (DATA.player.currentMonster.exp() * (1 + getCharacterBonusExp().total)) * getCharacterExpRatio() 
+				DATA.player.exp_char += toDecimal(char_exp_gained)
+				charExpGained(char_exp_gained, 400)
 				DATA.player.lts.killedenemies++
 				/* LOOT */
 				let mobloots = DATA.player.currentMonster.loot()
@@ -1617,22 +1622,23 @@ const gameClass = () => {
 		/* use this loop instead of aura because more fps */
 		updateTextByID("aura-focus-combostreak-streak", numberPrint(percent(getComboStreakBonus())))
 
+		updateAttributeByID("bsettings-player", "data-awakenstage", DATA.player.awaken_stage)
+		updateTextByID("awakenstage-value", DATA.player.awaken_stage)
+
 		/*display player level*/
 		let domplayerlevel 	= elebyID("playerlevel-value")
 		let domplayercurexp = elebyID("player-currentexp")
 		let domplayermaxexp = elebyID("player-maxexp")
-		if (domplayerlevel.innerHTML !== getCharacterLevelByExp()) {
-			domplayerlevel.innerHTML = getCharacterLevelByExp()
-		}
+		updateTextByID("playerlevel-value", getCharacterLevelByExp())
 		let charcurexp = getCharacterCurrentExpOfLevel()
-		if (domplayercurexp.innerHTML !== numberPrint(charcurexp)) {
-			domplayercurexp.innerHTML = numberPrint(charcurexp)
-		}
+		updateTextByID("player-currentexp", numberPrint(charcurexp))
 		let charmaxexp = getCharacterCurrentLevelTotalExp()
-		if (domplayermaxexp.innerHTML !== numberPrint(charmaxexp)) {
-			domplayermaxexp.innerHTML = numberPrint(charmaxexp)
-		}
+		updateTextByID("player-maxexp", numberPrint(charmaxexp))
+
 		updateProgressBar("#playerexp", charcurexp, charmaxexp)
+
+
+		updateAttributeByID("playerexp", "data-playerlevel", getCharacterLevelByExp())
 	}
 
 	const initWieldingSetupsRender = () => {
@@ -2141,6 +2147,16 @@ const gameClass = () => {
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
 
+		/* PLAYER : Awakening*/
+		function awakenPlayer () {
+			if (getCharacterLevelByExp() === 101) {
+				DATA.player.awaken_stage++
+				DATA.player.exp_char = 0
+			}
+		}
+
+		elebyID("awakennow").onclick = awakenPlayer
+
 		/* inventory settings */
 		function autosell1Check () { DATA.player.settings.autosell_1 = this.checked }
 		function autosell2Check () { DATA.player.settings.autosell_2 = this.checked }
@@ -2179,7 +2195,7 @@ const gameClass = () => {
 
 
 		let expratio = getCharacterExpRatio()
-		updateTextByID("charexpratio-total", numberPrint(expratio))
+		updateTextByID("charexpratio-total", "x"+expratio)
 
 		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
 
