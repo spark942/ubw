@@ -443,12 +443,15 @@ const gameClass = () => {
 		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 100
 		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 100
 
+		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 100
+
 		return {
 			askill: toDecimal(activeskill_bonus, 2),
 			route_earth: toDecimal(route_earth, 2),
 			route_asgard: toDecimal(route_asgard, 2),
 			route_worlds: toDecimal(route_earth + route_asgard, 2),
-			total : toDecimal(activeskill_bonus + route_earth + route_asgard,2)
+			killcount   : toDecimal(killcount_bonus, 2),
+			total : toDecimal(activeskill_bonus + route_earth + route_asgard + killcount_bonus,2)
 		}
 	}
 	/* every Awakening Stage reduce the exp */
@@ -2157,6 +2160,9 @@ const gameClass = () => {
 		updateTextByID("charexpbonus-maxroute", numberPrint(percent(expbonus.route_worlds)))
 		updateTextByID("charexpbonus-world-earth-maxroute", numberPrint(percent(expbonus.route_earth)))
 		updateTextByID("charexpbonus-world-asgard-maxroute", numberPrint(percent(expbonus.route_asgard)))
+
+		updateTextByID("charexpbonus-killcount", numberPrint(percent(expbonus.killcount)))
+
 
 		let expratio = getCharacterExpRatio()
 		updateTextByID("charexpratio-total", numberPrint(expratio))
