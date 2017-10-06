@@ -88,6 +88,10 @@ const iText = (code, value, value2, value3) => {
 	return render
 }
 
+const capFirst = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const percent = (number, decimal) => {
 	number = number || 0
 	decimal = decimal || 0

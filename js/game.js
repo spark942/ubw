@@ -443,7 +443,7 @@ const gameClass = () => {
 		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 100
 		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 100
 
-		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 100
+		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 20
 
 		return {
 			askill: toDecimal(activeskill_bonus, 2),
@@ -1496,8 +1496,9 @@ const gameClass = () => {
 
 		function goToRegion() {
 			let region =	this.getAttribute("data-region")
-			let price = 100000000
-
+			let price = parseInt(this.getAttribute("data-price"))
+			console.log(region)
+			if (region === DATA.player.currentRegion) { return false }
 			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
 				DATA.player.currentStage = 15
 				DATA.player.currentRegion = region
@@ -1532,7 +1533,19 @@ const gameClass = () => {
 					}
 				}
 			} else if (DATA.player.currentTownPortalTab === "world") {
-				
+				for (var i = TABLES.regions.length - 1; i >= 0; i--) {
+					if (TABLES.regions[i] === DATA.player.currentRegion) {
+						updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_world", "0"))
+						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", 0)
+					} else {
+						updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_world", 100000000))
+						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", 100000000)
+					}
+					if (typeof elebyID("gotoworld-"+TABLES.regions[i]).onclick !== "function") {
+						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-region", TABLES.regions[i])
+						elebyID("gotoworld-"+TABLES.regions[i]).onclick = goToRegion
+					}
+				}
 			}
 
 		}
@@ -1559,6 +1572,7 @@ const gameClass = () => {
 			updateTextBySelector("#monsterhp .maxhp", numberPrint(Math.floor(DATA.player.currentMonster.maxhp())))
 
 		} else {
+			updateTextByID("regionname", capFirst(DATA.player.currentRegion))
 			updateTextByID("townid", DATA.player.currentStage)
 		}
 

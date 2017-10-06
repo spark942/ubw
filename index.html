@@ -31,7 +31,7 @@
 							</div>
 						</div>
 						<div id="bscreen-t-town" class="hidden">
-							<div id="townname">Town #<span id="townid"></span></div>
+							<div id="townname"><span id="regionname"></span> | Town #<span id="townid"></span></div>
 							<div id="townactions">
 								<div id="town-enter">Enter Town</div>
 								<div id="town-gate">Go to gate</div>
@@ -169,7 +169,14 @@
 									Routes
 								</div>
 								<div id="world-destinations">
-									<div></div>
+									<div id="gotoworld-europe" class="destworld" data-route="europe">
+										<span class="destination-world">Europe</span>
+										<span id="dest-europe-price" class="destination-price">Cost {0} Ekk</span>
+									</div>
+									<div id="gotoworld-asia" class="destworld" data-route="asia">
+										<span class="destination-world">Asia</span>
+										<span id="dest-asia-price" class="destination-price">Cost {0} Ekk</span>
+									</div>
 								</div>
 							</div>
 						</div>

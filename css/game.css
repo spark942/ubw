@@ -253,19 +253,23 @@ div.progressbar div.progress::-webkit-progress-value {
 #town-portal.world #world-destinations {
 	display: block;
 }
-.destroute {
+.destroute,
+.destworld {
 	font-size: 12px;
 	position: relative;
 	padding: 5px 0;
 	cursor: pointer;
 }
-.destroute:hover {
+.destroute:hover,
+.destworld:hover {
 	background-color: white;
 }
-.destroute .destination-route {
+.destroute .destination-route,
+.destworld .destination-world {
 	font-weight: bold;
 }
-.destroute .destination-price {
+.destroute .destination-price,
+.destworld .destination-price {
 	position: absolute;
 	right: 0;
 	font-size: 10px;
