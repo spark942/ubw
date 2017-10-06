@@ -27,7 +27,7 @@
 							<div id="monsterhp">
 								<div class="progressbar"><div class="progress red"></div></div>
 								<h3 id="monstername"><span id="monsterrank"></span>&nbsp;<span id="monsternameval"></span></h3>
-								<div class="hpnumber"><span class="currenthp">0</span> / <span class="maxhp">0</span></div>
+								<div class="hpnumber"><span id="monster-currenthp" class="currenthp">0</span> / <span id="monster-maxhp" class="maxhp">0</span></div>
 							</div>
 						</div>
 						<div id="bscreen-t-town" class="hidden">
@@ -125,11 +125,11 @@
 				</div>
 				<div class="g-battlesettings">
 					<section id="bsettings-player">
-						<h3 id="playerlevel">Lv. <span class="playerlevel">999</span></h3>
+						<h3 id="playerlevel">Lv. <span id="playerlevel-value" class="playerlevel">999</span></h3>
 						<div id="playerexp">
 							<div class="progressbar">
 								<div class="progress lime"></div>
-								<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+								<div class="expnumber"><span id="player-currentexp" class="currentexp">0</span> / <span id="player-maxexp" class="maxexp">0</span></div>
 							</div>
 						</div>
 					</section>
@@ -169,7 +169,7 @@
 									Routes
 								</div>
 								<div id="world-destinations">
-									Worlds
+									<div></div>
 								</div>
 							</div>
 						</div>

@@ -1540,8 +1540,8 @@ const gameClass = () => {
 		if (DATA.player.currentMonster !== null) {
 			let domMonsterid 		= elebyID("monsterid")
 			let domMonstername 	= elebyID("monstername")
-			let domMonsterhp 		= elebySelector("#monsterhp .currenthp")
-			let domMonstermaxhp = elebySelector("#monsterhp .maxhp")
+			let domMonsterhp 		= elebyID("monster-currenthp")
+			let domMonstermaxhp = elebyID("monster-maxhp")
 
 			updateTextByID("monsterid", DATA.player.currentMonster.id())
 			updateTextByID("monsterrank", iText("monster_rank_"+DATA.player.currentMonster.rank()))
@@ -1602,9 +1602,9 @@ const gameClass = () => {
 		updateTextByID("aura-focus-combostreak-streak", numberPrint(percent(getComboStreakBonus())))
 
 		/*display player level*/
-		let domplayerlevel 	= elebySelector("#playerlevel .playerlevel")
-		let domplayercurexp = elebySelector("#playerexp .currentexp")
-		let domplayermaxexp = elebySelector("#playerexp .maxexp")
+		let domplayerlevel 	= elebyID("playerlevel-value")
+		let domplayercurexp = elebyID("player-currentexp")
+		let domplayermaxexp = elebyID("player-maxhp")
 		if (domplayerlevel.innerHTML !== getCharacterLevelByExp()) {
 			domplayerlevel.innerHTML = getCharacterLevelByExp()
 		}
