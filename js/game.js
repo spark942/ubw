@@ -440,8 +440,8 @@ const gameClass = () => {
 	}
 	const getCharacterBonusExp = () => {
 		let activeskill_bonus = TABLES.EXP_BONUS.per_activeskill_level * getTotalActiveSkillLevel()
-		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 100
-		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 100
+		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 30
+		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 30
 
 		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 20
 

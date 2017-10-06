@@ -486,7 +486,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-size: 11px;
 	line-height: 19px;
 	display: inline-block;
-	width: 130px;
+	width: 160px;
 	vertical-align: top;
 }
 #adventure-settings label {

@@ -101,23 +101,24 @@ const WIELDINGTYPES = {
 		requirement: 5,
 		weapontype1: ["Daggers"],
 	},
+	DualDagger: {
+		awaken     : 1,
+		weapontype1: ["Daggers"],
+		weapontype2: ["Daggers"],
+		weaponcomborotation: [1,2],
+	},
 	TwohandedSword: {
 		requirement: 40,
 		weapontype1: ["Twohandedgreatswords"],
 		weaponcomborotation: [1],
 	},
-	TwhohandedCurvedSword: {
+	TwohandedCurvedSword: {
 		requirement: 40,
 		weapontype1: ["Curvedtwohandedswords"],
 		weaponcomborotation: [1],
 	},
-	DualDagger: {
-		awaken     : 1,
-		weapontype1: ["Daggers"],
-		weapontype2: ["Daggers"],
-	},
 	God: {
-		awaken     : 80,
+		awaken     : 9000,
 		hidden     : true,
 		weapontype1: [
 			"BareHands","HandFist",

@@ -42,7 +42,7 @@ const TEXTS = {
 	wieldingsetup_SimpleCurvedSwordAndShield : 	"Gladiator",
 	wieldingsetup_SimpleDagger : 				"Rogue",
 	wieldingsetup_TwohandedSword : 				"Knight",
-	wieldingsetup_TwhohandedCurvedSword : 		"Samurai",
+	wieldingsetup_TwohandedCurvedSword : 		"Samurai",
 	wieldingsetup_DualDagger : 					"Assassin",
 	wieldingsetup_God : 						"God",
 	weaponlist_weapon : "<span class=\"weapontypename\">{0}</span>",
