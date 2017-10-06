@@ -1962,7 +1962,7 @@ const gameClass = () => {
 				domASEffects.id = "as-skill-as-effect-value-"+thisasID
 				domASEffects.innerHTML = asEffectsHtml
 
-				if (DATA.player.passives[thisasID].hasOwnProperty("exp")) {
+				if (DATA.player.actives[thisasID].hasOwnProperty("exp")) {
 					let domSkillTooltipLevel = elebySelector("#as-exp-"+thisasID+" .level")
 					domSkillTooltipLevel.id = "as-exp-level-value-"+thisasID
 					let domSkillImgLevel = elebySelector("#as-skill-"+thisasID+" .slevel")
