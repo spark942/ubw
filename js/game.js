@@ -2682,6 +2682,10 @@ const gameClass = () => {
 		addItem:addItemInventory,
 		setPassiveExp:updatePassive,
 		setActiveExp:updateActive,
+		goto: (stage) => {
+			DATA.player.currentStage = stage
+			updateStage(stage)
+		},
 		getActiveHitCount:getActiveHitCount,
 		getTables: () => { return TABLES },
 		getElements: () => { return ELEMENTS },
