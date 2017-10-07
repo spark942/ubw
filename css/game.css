@@ -1021,8 +1021,9 @@ input[type="radio"]:checked + label:after {
 }
 .passiveskill-exp .progressbar,
 .activeskill-exp .progressbar {
-	width: 200px;
-	background-color: rgba(241, 196, 15,0.3)
+	width: 240px;
+	background-color: rgba(241, 196, 15,0.3);
+	letter-spacing: -1px;
 }
 .passiveskill-exp .progressbar .progress,
 .activeskill-exp .progressbar .progress {

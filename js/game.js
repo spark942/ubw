@@ -2260,6 +2260,9 @@ const gameClass = () => {
 
 		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
 
+
+		updateTextByID("skillexpbonus-total", numberPrint(percent(DATA.player.awaken_stage * 0.2)))
+
 		/* BATTLE */
 		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
 		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
