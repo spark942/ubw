@@ -89,6 +89,7 @@ const gameClass = () => {
 				autoadvance: true,
 				reverseadvance: false,
 				droponfail: true,
+				autoawaken: false,
 				townstop   : true,
 				autosell_level : 100,
 				autosell_1 : false,
@@ -324,6 +325,13 @@ const gameClass = () => {
 		let char_base_exp_of_level = TABLES.EXP_CHAR[char_current_level-2] || 0
 		let char_max_exp_of_level = TABLES.EXP_CHAR[char_current_level-1] || TABLES.EXP_CHAR[TABLES.EXP_CHAR.length-1]
 		return char_max_exp_of_level - char_base_exp_of_level
+	}
+
+	function awakenPlayer () {
+		if (getCharacterLevelByExp() === 101) {
+			DATA.player.awaken_stage++
+			DATA.player.exp_char = 0
+		}
 	}
 
 	const getWeaponTypeByWeaponClass = (weaponClass) => {
@@ -618,7 +626,7 @@ const gameClass = () => {
 		newIObject.stage = stage
 		newIObject.quality = quality
 		newIObject.aspd = aspd
-		newIObject.sell =  toDecimal(iObj.cost * (1 + stage/100 + quality/500), 0)
+		newIObject.sell =  toDecimal(iObj.cost * (1 + stage/100) * (1 + quality/500), 0)
 		if (newIObject.hasOwnProperty("id") === false) {
 			newIObject.id = DATA.player.lastitemid + 1
 			DATA.player.lastitemid = newIObject.id
@@ -799,6 +807,21 @@ const gameClass = () => {
 		} else {
 			return false
 		}
+	}
+
+	const getActiveSkillSetups = (activeID) => {
+		let asSetups = []
+
+		if (ACTIVES[activeID-1][7] !== null) { asSetups.push(ACTIVES[activeID-1][7]) }
+		if (ACTIVES[activeID-1][8] !== null) { asSetups.push(ACTIVES[activeID-1][8]) }
+		if (ACTIVES[activeID-1][9] !== null) { asSetups.push(ACTIVES[activeID-1][9]) }
+		if (ACTIVES[activeID-1][10] !== null) { asSetups.push(ACTIVES[activeID-1][10]) }
+		if (ACTIVES[activeID-1][11] !== null) { asSetups.push(ACTIVES[activeID-1][11]) }
+		if (ACTIVES[activeID-1][12] !== null) { asSetups.push(ACTIVES[activeID-1][12]) }
+		if (ACTIVES[activeID-1][13] !== null) { asSetups.push(ACTIVES[activeID-1][13]) }
+		if (ACTIVES[activeID-1][14] !== null) { asSetups.push(ACTIVES[activeID-1][14]) }
+		if (ACTIVES[activeID-1][15] !== null) { asSetups.push(ACTIVES[activeID-1][15]) }
+		return asSetups
 	}
 
 	function addSkillToCombo() {
@@ -1219,11 +1242,11 @@ const gameClass = () => {
 					/* SHOW FLOATING NUMBER */
 					damageMonster(finaldmg)
 					/* EXP SKILLS */
-					game.setActiveExp(
+					updateActive(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
-					game.setPassiveExp(
+					updatePassive(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
 						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
@@ -1355,7 +1378,9 @@ const gameClass = () => {
 			} else {
 				//console.log("rest in town")
 			}
-			
+		}
+		if (getCharacterLevelByExp() === 101 && DATA.player.settings.autoawaken === true) {
+			awakenPlayer()
 		}
 	}
 
@@ -1646,6 +1671,12 @@ const gameClass = () => {
 
 
 		updateAttributeByID("playerexp", "data-playerlevel", getCharacterLevelByExp())
+
+		if (DATA.player.awaken_stage > 2) {
+			updateAttributeByID("autoawaken-button", "class", "")
+		} else {
+			updateAttributeByID("autoawaken-button", "class", "hidden")
+		}
 	}
 
 	const initWieldingSetupsRender = () => {
@@ -1841,27 +1872,31 @@ const gameClass = () => {
 				inventoryLoop()
 			}
 			let thisID = DATA.player.inventory[i].id
+			/* need this because if the setup select is called multiple times in other setups, it will crash as it can not have twice the same id */
+			let thisIDplusUniqueID = thisID.toString() + "-" + toDecimal(rngmm(100000000,100000000000)).toString()
 			if (!isNumeric(thisID)) { continue }
 			if (WIELDINGTYPES[wsid]["weapontype"+slot].indexOf(getWeaponTypeByWeaponClass(DATA.player.inventory[i].class)) !== -1) {
 				if (isEquipped(thisID) === false || isEquipped(thisID) !== wsid+"-weapon"+slot) {
+					console.log(isEquipped(thisID))
 					//console.log(DATA.player.inventory[i])
 					let selectableItem = ELEMENTMODELS.wsitem.cloneNode(true)
-					selectableItem.id = "ws-item-"+thisID
+					selectableItem.id = "ws-item-"+thisIDplusUniqueID
 					selectContainer.appendChild(selectableItem)
 
 					selectableItem.onclick = addToSlot
-					elebySelector("#ws-item-"+thisID+" .ws-item-name").id = "ws-item-name-"+thisID
-					elebySelector("#ws-item-"+thisID+" .ws-dps-value").id = "ws-item-dps-"+thisID
+					elebySelector("#ws-item-"+thisIDplusUniqueID+" .ws-item-name").id = "ws-item-name-"+thisIDplusUniqueID
+					elebySelector("#ws-item-"+thisIDplusUniqueID+" .ws-dps-value").id = "ws-item-dps-"+thisIDplusUniqueID
 					let thisDPS = toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd)
-					updateAttributeByID("ws-item-"+thisID, "data-wsid", wsid)
-					updateAttributeByID("ws-item-"+thisID, "data-slot", slot)
-					updateAttributeByID("ws-item-"+thisID, "data-id", thisID)
-					updateAttributeByID("ws-item-"+thisID, "data-grade", DATA.player.inventory[i].grade)
-					updateAttributeByID("ws-item-"+thisID, "data-dps", thisDPS)
-					elebyID("ws-item-"+thisID).style.order = toDecimal(thisDPS)
+					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-wsid", wsid)
+					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-slot", slot)
+					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-id", thisID)
+					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-grade", DATA.player.inventory[i].grade)
+					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-dps", thisDPS)
+					elebyID("ws-item-"+thisIDplusUniqueID).style.order = toDecimal(thisDPS)
 					let isEquippedPrefix = isEquipped(thisID) ? "[E] " : ""
-					updateTextByID("ws-item-name-"+thisID, isEquippedPrefix+DATA.player.inventory[i].name)
-					updateTextByID("ws-item-dps-"+thisID, iText("wswsdpsaspd",numberPrint(thisDPS),numberPrint(toDecimal(DATA.player.inventory[i].aspd,2))))
+					updateTextByID("ws-item-name-"+thisIDplusUniqueID, isEquippedPrefix+DATA.player.inventory[i].name)
+					console.log(isEquippedPrefix+DATA.player.inventory[i].name)
+					updateTextByID("ws-item-dps-"+thisIDplusUniqueID, iText("wswsdpsaspd",numberPrint(thisDPS),numberPrint(toDecimal(DATA.player.inventory[i].aspd,2))))
 				}
 			}
 		}
@@ -2003,6 +2038,18 @@ const gameClass = () => {
 					domSkillmaxexp.id = "as-exp-maxexp-value-"+thisasID
 					let domSkillbonusdmg = elebySelector("#as-exp-"+thisasID+" .as-bonus")
 					domSkillbonusdmg.id = "as-exp-as-bonus-value-"+thisasID
+				}
+
+				let domASsetups = elebySelector("#as-skill-"+thisasID+" #as-setups-id")
+				domASsetups.id = "as-setup-" + thisasID
+				let setupsArr = getActiveSkillSetups(thisasID)
+				if (setupsArr.length) {
+					let setupsHTML = iText("list_of_setups_using_active")
+					for (var iSetup = 0; iSetup < setupsArr.length; iSetup++) {
+						if (WIELDINGTYPES[setupsArr[iSetup]].hasOwnProperty("hidden")) { continue }
+						setupsHTML += "- " + iText("wieldingsetup_"+setupsArr[iSetup]) + "<br>"
+					}
+					domASsetups.innerHTML = setupsHTML
 				}
 			}
 		}
@@ -2152,22 +2199,22 @@ const gameClass = () => {
 		function droponfailCheck () {
 			DATA.player.settings.droponfail = this.checked
 		}
+		function autoawakenCheck () {
+			DATA.player.settings.autoawaken = this.checked
+		}
 		elebyID("town-stop").checked = DATA.player.settings.townstop
 		elebyID("auto-advance").checked = DATA.player.settings.autoadvance
 		elebyID("reverse-advance").checked = DATA.player.settings.reverseadvance
 		elebyID("drop-on-fail").checked = DATA.player.settings.droponfail
+		elebyID("auto-awaken").checked = DATA.player.settings.autoawaken
 		elebyID("town-stop").onchange = townstopCheck
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
+		elebyID("auto-awaken").onchange = autoawakenCheck
 
 		/* PLAYER : Awakening*/
-		function awakenPlayer () {
-			if (getCharacterLevelByExp() === 101) {
-				DATA.player.awaken_stage++
-				DATA.player.exp_char = 0
-			}
-		}
+		
 
 		elebyID("awakennow").onclick = awakenPlayer
 

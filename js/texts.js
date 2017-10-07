@@ -73,6 +73,7 @@ const TEXTS = {
 	astype_blunt : "Blunt",
 	skillhit_dmg_p : "Deals <span class=\"activedmgtruepercent\">{2}%</span> (<span class=\"activerawpercent\">{0}%</span> x <span class=\"bonuspercent\">{1}</span>) of Weapon Damage",
 	skillhit_duration_p : "Duration: <span class=\"activedmgtruepercent\">{0}%</span> of Weapon Attack Speed",
+	list_of_setups_using_active : "<hr>List of Wielding Setups using this Active Skill<br>",
 	/* Combos */
 	comboselect : "<option value=\"{1}\" {2}>{0}</option>",
 	comboselected : "selected=\"selected\"",

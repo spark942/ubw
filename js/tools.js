@@ -107,7 +107,7 @@ const toDecimal = (number, decimal) => {
 	return Math.round(number * dec) / dec
 }
 
-const toHHMMSS = function (seconds) {
+const toHHMMSS = (seconds) => {
     var sec_num = parseInt(seconds, 10); // don't forget the second param
     var hours   = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
@@ -117,6 +117,16 @@ const toHHMMSS = function (seconds) {
     if (minutes < 10) {minutes = "0"+minutes;}
     if (seconds < 10) {seconds = "0"+seconds;}
     return hours+':'+minutes+':'+seconds;
+}
+
+const toFix = (i) => {
+	var str='';
+	do{
+		let a = i%10;
+		i=Math.trunc(i/10);
+		str = a+str;
+	}while(i>0)
+	return str;
 }
 
 const isNumeric = (number) => {
