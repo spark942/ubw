@@ -1133,7 +1133,22 @@ input[type="radio"]:checked + label:after {
 	background-color: rgba(149, 165, 166,1.0);
 	cursor: not-allowed;
 	border-radius: 10px;
+	display: none;
 }
+#combolist[data-awakenstage="0"] #navcombo3 .comboreq,
+#combolist[data-awakenstage="0"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="1"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="2"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="3"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="4"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="5"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="6"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="7"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="8"] #navcombo4 .comboreq,
+#combolist[data-awakenstage="9"] #navcombo4 .comboreq {
+	display: block;
+}
+
 #comboedit {
 	position: relative;
 }

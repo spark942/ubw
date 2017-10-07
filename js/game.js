@@ -2495,7 +2495,7 @@ const gameClass = () => {
 	}
 
 	const comboInventoryRender = () => {
-
+		updateAttributeByID("combolist", "data-awakenstage", DATA.player.awaken_stage)
 		/* retrieve combo skills */
 		/* WARNING TO DO : need to empty the #comboskills when switching combos or change setup or delete skill */
 		let setupname = DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo]
