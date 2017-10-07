@@ -200,5 +200,4 @@ function shrink()
     let newFontSize = Math.max(Math.floor((textDivWidth / textSpanWidth) * 20 * 0.7), 8)
     newFontSize = Math.min(newFontSize, 25)
     textSpan.style.fontSize = newFontSize.toString() + "px"
-    console.log("mah", newFontSize, textSpan.innerHTML)
 }
