@@ -149,7 +149,10 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-family: 'Cutive Mono', monospace;
 	letter-spacing: -2px;
 }
-
+#monsternameval {
+	font-size: 20px;
+	white-space:nowrap;
+}
 #bscreen-title #bscreen-t-monster #routename,
 #bscreen-title #bscreen-t-town #townname {
 	width: calc(100% - 60px);

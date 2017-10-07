@@ -189,3 +189,16 @@ function charExpGained(number, duration) {
 	newDamage.classList.add("show")
 	setTimeout(function(){ newDamage.remove() }, duration);
 }
+
+function shrink()
+{
+    var textSpan = elebyID("monsternameval");
+    var textDiv = elebyID("monstername");
+    let textDivWidth = 300
+    textSpan.style.fontSize = "20px"
+    let textSpanWidth = textSpan.offsetWidth
+    let newFontSize = Math.max(Math.floor((textDivWidth / textSpanWidth) * 20 * 0.7), 8)
+    newFontSize = Math.min(newFontSize, 25)
+    textSpan.style.fontSize = newFontSize.toString() + "px"
+    console.log("mah", newFontSize, textSpan.innerHTML)
+}

@@ -25,6 +25,7 @@ const gameClass = () => {
 		ITEM_DROPRATE: [5,10,20,40,80,160,320,640,1280,2560,5120,10240],
 		ITEM_QUALITY_MIN: [5,10,30,80,200,500,1000],
 		ITEM_QUALITY_MAX: [9,29,79,199,499,999,1999],
+		MONSTERDEF_PER_RANK : [0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45],
 		MONSTERS_ID: {
 			asia: null,
 			europe: null,
@@ -1567,7 +1568,11 @@ const gameClass = () => {
 
 			updateTextByID("monsterid", DATA.player.currentMonster.id())
 			updateTextByID("monsterrank", iText("monster_rank_"+DATA.player.currentMonster.rank()))
+			let resizeMonsterName = DATA.player.currentMonster.name() !== elebyID("monsternameval").innerHTML ? true : false
 			updateTextByID("monsternameval", DATA.player.currentMonster.name())
+			if (resizeMonsterName === true) {
+				shrink()
+			}
 			updateTextByID("timeleft", toDecimal(DATA.player.currentMonster.getTimeleft()/1000,1) + "s")
 			/* route number*/
 			updateTextByID("route", DATA.player.currentStage)
