@@ -700,7 +700,7 @@ const gameClass = () => {
 
 	const getWeaponSkillCalculated = (weaponkind_id, weapon_dmg, weapon_aspd, skill_id) => {
 		let dmg_f = getPassiveBonusValue("dmg_f")
-		let dmg_p = getPassiveBonusValue("dmg_p")
+		let dmg_p = getPassiveBonusValue("dmg_p") + DATA.player.awaken_stage * 0.33
 		let skill_dmg_p = getActiveSkillBonusPerLevel(skill_id, "dmg_p")
 		let rawActive = {
 			delay0:  ACTIVES[skill_id-1][16],
@@ -1244,11 +1244,11 @@ const gameClass = () => {
 					/* EXP SKILLS */
 					updateActive(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					updatePassive(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 						)
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
 					
@@ -1421,7 +1421,7 @@ const gameClass = () => {
 			DATA.player.focus = 0
 		}
 
-		DATA.player.currentPower = toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
+		DATA.player.currentPower = toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
 		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))))
@@ -1645,7 +1645,7 @@ const gameClass = () => {
 
 		elebyID("curpower-count").innerHTML = numberPrint(toDecimal(DATA.player.currentPower,2))
 		elebyID("maxpower-count").innerHTML = numberPrint(getPassiveBonusValue("combo_power"))
-		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal(getPassiveBonusValue("combo_regen")/getPassiveBonusValue("combo_regen_sec"), 1))
+		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec"), 1))
 		elebyID("powerregen-count-focus").innerHTML = DATA.player.settings.aura_focus_power_regen === true ? 
 			iText("power_regen_focus",numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
 
@@ -2264,6 +2264,7 @@ const gameClass = () => {
 		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
 		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
 		updateTextByID("dmgbonus-pskill", numberPrint(percent(dmgbonus_passive)))
+		updateTextByID("dmgbonus-astage", numberPrint(percent(DATA.player.awaken_stage * 0.33)))
 
 		let dmgflatbonus_passive = getPassiveBonusValue("dmg_f")
 		updateTextByID("dmgflatbonus-total", numberPrint(dmgflatbonus_passive))
