@@ -153,7 +153,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	display: inline-block;
 	height: 30px;
 	width: auto;
-	max-width: 40px;
+	max-width: 50px;
 	vertical-align: top;
 	line-height: 30px;
 }

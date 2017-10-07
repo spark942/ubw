@@ -610,7 +610,7 @@ const gameClass = () => {
 		if (iObj === null) { return false }
 		let newIObject = JSON.parse(JSON.stringify(iObj))
 		if (iObj.type === "w") {
-			newIObject.dmg = iObj.base_dmg * (1 + stage/10 + quality/100)
+			newIObject.dmg = iObj.base_dmg * (1 + stage/10) * (1 + quality/300)
 		}
 		if (quality === null) {
 			quality = toDecimal(rngmm(TABLES.ITEM_QUALITY_MIN[iObj.grade-1], TABLES.ITEM_QUALITY_MAX[iObj.grade-1]))
@@ -1058,7 +1058,7 @@ const gameClass = () => {
 
 	const updateStage = (stage) => {
 
-		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE-1) || 1
+		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE) || 1
 		let sdata = getStageModelByStage(stage)
 
 		DATA.player.currentStage = stage
