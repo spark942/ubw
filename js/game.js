@@ -2020,27 +2020,34 @@ const gameClass = () => {
 		/* nothing to do, here*/
 
 		/* combo list skills */
+		refreshComboInventorySkillListRender()
+	}
+
+	const refreshComboInventorySkillListRender = () => {
 		let domComboSkillContainer 	 = elebyID("comboskill-lists-skills")
+		elebyID("comboskill-lists-skills").innerHTML = ""
 		for (var i = 0; i < ACTIVES.length; i++) {
-			let domps 	 = elebySelector("#comboskill-lists-skills #combolist-skill-"+ACTIVES[i][0])
-			if (domps === null) {
-				let thisCA 		= ELEMENTMODELS.combolistskill.cloneNode(true)
-				let thiscaID 	= ACTIVES[i][0]
-				let thiscaModel = getActiveModelByID(thiscaID)
+			if (DATA.player.actives[i+1].unlocked === true && canUseActive(i+1, DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo])) {
+				let domps 	 = elebySelector("#comboskill-lists-skills #combolist-skill-"+ACTIVES[i][0])
+				if (domps === null) {
+					let thisCA 		= ELEMENTMODELS.combolistskill.cloneNode(true)
+					let thiscaID 	= ACTIVES[i][0]
+					let thiscaModel = getActiveModelByID(thiscaID)
 
-				thisCA.id = "combolist-skill-"+thiscaID
+					thisCA.id = "combolist-skill-"+thiscaID
 
-				thisCA.setAttribute("data-canuse", "false")
-				thisCA.setAttribute("data-power", ACTIVES[i][6])
+					thisCA.setAttribute("data-canuse", "false")
+					thisCA.setAttribute("data-power", ACTIVES[i][6])
 
-				domComboSkillContainer.appendChild(thisCA)
+					domComboSkillContainer.appendChild(thisCA)
 
-				updateAttributeBySelector("#combolist-skill-"+thiscaID+" .combolist-skill-add", "data-skillid", ACTIVES[i][0])
-				updateTextBySelector("#combolist-skill-"+thiscaID+" .cbl-name-value", ACTIVES[i][5])
-				updateTextBySelector("#combolist-skill-"+thiscaID+" .cbl-power-value", ACTIVES[i][6])
+					updateAttributeBySelector("#combolist-skill-"+thiscaID+" .combolist-skill-add", "data-skillid", ACTIVES[i][0])
+					updateTextBySelector("#combolist-skill-"+thiscaID+" .cbl-name-value", ACTIVES[i][5])
+					updateTextBySelector("#combolist-skill-"+thiscaID+" .cbl-power-value", ACTIVES[i][6])
 
-				let thisAddButton = elebySelector("#combolist-skill-"+thiscaID+" .combolist-skill-add")
-				thisAddButton.onclick = addSkillToCombo
+					let thisAddButton = elebySelector("#combolist-skill-"+thiscaID+" .combolist-skill-add")
+					thisAddButton.onclick = addSkillToCombo
+				}
 			}
 		}
 	}
@@ -2434,6 +2441,7 @@ const gameClass = () => {
 				DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo] = this.value
 				DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo] = []
 				elebyID("comboskills").innerHTML = ""
+				refreshComboInventorySkillListRender()
 			}
 		}
 		elebyID("combo-setupselection").onchange = setSetup
@@ -2504,39 +2512,42 @@ const gameClass = () => {
 			/* remove */
 		}
 
-		/* list of available skills */
-		for (var adata in DATA.player.actives) { 
-
-			if (DATA.player.actives[adata].unlocked === true && canUseActive(adata, DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo])) {
-				updateAttributeByID("combolist-skill-"+adata, "data-canuse", "true")
-			} else {
-				updateAttributeByID("combolist-skill-"+adata, "data-canuse", "false")
-			}
-
-			let skill_exp  	= DATA.player.actives[adata].exp
-			let skill_power  	= DATA.player.actives[adata].power
-			let skill_type  = DATA.player.actives[adata].type ? DATA.player.actives[adata].type : TABLES.defaultActiveSkillType
-			let skill_curve = DATA.player.actives[adata].curve
-			let skill_level = getSkillLevelByExp(skill_exp, skill_curve)
-
-			updateTextBySelector("#combolist-skill-"+adata+" .cbl-level-value", skill_level.toString())
-
-			let skillbonus = 0
-			for (var bonus in TABLES.activeSkillBonusPerLevel[skill_type]) {
-				if (bonus === "dmg_p") {
-					skillbonus += TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level
-				}
-			}
-			let skillhits = getActiveHits(adata)
-			let dmgmod = damageMultiplier(skillhits[0], skillbonus)
-			
-			updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-dmg", iText("comboskill_dmg",percent(dmgmod[0],1)))
-			updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-duration", iText("skillhit_duration_p",skillhits[1]))
-		}
+		comboInventorySkillListRender()
 
 		if (DATA.player.comboPowerUsed > getPassiveBonusValue("combo_power")) {
 			DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].pop()
 			comboInventoryRender()
+		}
+	}
+
+	const comboInventorySkillListRender = () => {
+		/* list of available skills */
+		for (var adata in DATA.player.actives) { 
+			if (DATA.player.actives[adata].unlocked === true && canUseActive(adata, DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo])) {
+				if (elebyID("combolist-skill-"+adata) === null) {
+					refreshComboInventorySkillListRender()
+				}
+				updateAttributeByID("combolist-skill-"+adata, "data-canuse", "true")
+				let skill_exp  	= DATA.player.actives[adata].exp
+				let skill_power  	= DATA.player.actives[adata].power
+				let skill_type  = DATA.player.actives[adata].type ? DATA.player.actives[adata].type : TABLES.defaultActiveSkillType
+				let skill_curve = DATA.player.actives[adata].curve
+				let skill_level = getSkillLevelByExp(skill_exp, skill_curve)
+
+				updateTextBySelector("#combolist-skill-"+adata+" .cbl-level-value", skill_level.toString())
+
+				let skillbonus = 0
+				for (var bonus in TABLES.activeSkillBonusPerLevel[skill_type]) {
+					if (bonus === "dmg_p") {
+						skillbonus += TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level
+					}
+				}
+				let skillhits = getActiveHits(adata)
+				let dmgmod = damageMultiplier(skillhits[0], skillbonus)
+				
+				updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-dmg", iText("comboskill_dmg",percent(dmgmod[0],1)))
+				updateTextBySelector("#combolist-skill-"+adata+" .combolist-skill-duration", iText("skillhit_duration_p",skillhits[1]))
+			}
 		}
 	}
 
@@ -2630,7 +2641,10 @@ const gameClass = () => {
 	}	
 
 	const updateProgressBar = (selector, progress, max) => {
-		let domProgress 	 = elebySelector(selector+" .progress")
+		if (elebyID(selector.replace(/^#+/, "")+"-progress") === null) {
+			elebySelector(selector+" .progress").id = selector.replace(/^#+/, "")+"-progress"
+		}
+		let domProgress 	 = elebyID(selector.replace(/^#+/, "")+"-progress")
 		let width = Math.round(progress / max * 100 * 100) / 100
 
 		if (domProgress.style.width !== width + '%') {

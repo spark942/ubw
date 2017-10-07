@@ -149,6 +149,23 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-family: 'Cutive Mono', monospace;
 	letter-spacing: -2px;
 }
+#monsterrank-container {
+	display: inline-block;
+	height: 30px;
+	width: auto;
+	max-width: 40px;
+	vertical-align: top;
+	line-height: 30px;
+}
+#monsterrank {
+	vertical-align: middle;
+	word-wrap: break-word;
+	line-height: 12px;
+	display: inline-block;
+	height: auto;
+	width: 100%;
+	margin-top: -7px;
+}
 #monsternameval {
 	font-size: 20px;
 	white-space:nowrap;
