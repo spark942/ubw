@@ -1079,12 +1079,10 @@ const gameClass = () => {
 			mData.hp = Math.max(0, mData.hp)
 
 			let stunned = false
-			console.log(mobtimer)
 			if (mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
 				mData.timestamp += mobtimerduration * 1000 / (1 + mData.rank)
 				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000)
 				stunned = true
-				console.log("eh")
 			}
 
 			/* SHOW FLOATING NUMBER */
