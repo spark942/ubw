@@ -1046,8 +1046,8 @@ const gameClass = () => {
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
 			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/82) * (1 + monsterModel[6] || 0)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/100) * (1 + monsterModel[6] || 0)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/100) * (1 + monsterModel[6] || 0)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/250) * (1 + monsterModel[6] || 0)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/250) * (1 + monsterModel[6] || 0)),
 			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
 			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
 			timer  	: monsterModel[5],
@@ -1541,9 +1541,24 @@ const gameClass = () => {
 		
 	}
 	const initTownRender = () => {
-		elebyID("town-portal").classList.add("hidden")
 		elebyID("town-market").classList.add("hidden")
 		elebyID("town-blacksmith").classList.add("hidden")
+
+		function swapTownSection () {
+			let sectionName = this.id.toString().replace("town-nav-", "")
+			elebyID("town-nav-portal").classList.remove("selected")
+			elebyID("town-nav-market").classList.remove("selected")
+			elebyID("town-nav-blacksmith").classList.remove("selected")
+			elebyID("town-nav-"+sectionName).classList.add("selected")
+
+			elebyID("town-portal").classList.add("hidden")
+			elebyID("town-market").classList.add("hidden")
+			elebyID("town-blacksmith").classList.add("hidden")
+			elebyID("town-"+sectionName).classList.remove("hidden")
+		}
+		elebyID("town-nav-portal").onclick = swapTownSection
+		elebyID("town-nav-market").onclick = swapTownSection
+		elebyID("town-nav-blacksmith").onclick = swapTownSection
 
 		function showRegionalDestinations() {
 			DATA.player.currentTownPortalTab = "route"
@@ -1588,10 +1603,9 @@ const gameClass = () => {
 		}
 
 		/* body */
-		elebyID("town-portal").classList.add("hidden")
 
 		if (DATA.player.currentTownTab === "portal") {
-			updateAttributeByID("town-portal", "class", DATA.player.currentTownPortalTab)
+			elebyID("town-portal").classList.add(DATA.player.currentTownPortalTab)
 			if (DATA.player.currentTownPortalTab === "route") {
 				let portalDestionationsHTML = ""
 				for (var i = TABLES.towns.length - 1; i >= 0; i--) {
@@ -1628,7 +1642,7 @@ const gameClass = () => {
 				}
 			}
 		} else if (DATA.player.currentTownTab === "market") {
-
+			
 		}
 	}
 
@@ -2224,6 +2238,7 @@ const gameClass = () => {
 			updateAttributeByID("game-container", "class", "")
 			updateStage(DATA.player.currentStage)
 		}
+
 		/* aura */
 		function auraFocusDmgCheck () { DATA.player.settings.aura_focus_dmg = this.checked }
 		function auraFocusPowerRegenCheck () { DATA.player.settings.aura_focus_power_regen = this.checked }
@@ -2450,7 +2465,7 @@ const gameClass = () => {
 				let asbonusHTML = ""
 				let skillbonus = 0
 				for (var bonus in TABLES.activeSkillBonusPerLevel[skill_type]) {
-					asbonusHTML += iText("activebonus_"+bonus, TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level) + "<br>"
+					asbonusHTML += iText("activebonus_"+bonus, null, toDecimal(TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level * 100,2)) + "<br>"
 					if (bonus === "dmg_p") {
 						skillbonus += TABLES.activeSkillBonusPerLevel[skill_type][bonus] * skill_level
 					}

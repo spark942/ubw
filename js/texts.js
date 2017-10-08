@@ -66,9 +66,9 @@ const TEXTS = {
 	/*actives*/
 	reqpassive : "Requires <span class=\"passiveskillname\">{0}</span> passive skill <span class=\"skilllevel\">level {1}</span>",
 	reqactive : "Requires <span class=\"activeskillname\">{0}</span> active skill <span class=\"skilllevel\">level {1}</span> ",
-	activebonus_dmg_p : "Increases skill damage by <span class=\"bonuspercent\"><span class=\"as-bonus\">{0}</span>%</span>",
-	activebonus_defpen_p : "Increases defense penetration by <span class=\"bonuspercent\"><span class=\"as-bonus\">{0}</span>%</span>",
-	activebonus_mobtimer_p : "Increases the chance to add 1 sec to the monster timer by <span class=\"bonuspercent\"><span class=\"as-bonus\">{0}</span>%</span>",
+	activebonus_dmg_p : "Increases skill damage by <span class=\"bonuspercent\"><span class=\"as-bonus\">{1}</span>%</span>",
+	activebonus_defpen_p : "Increases defense penetration by <span class=\"bonuspercent\"><span class=\"as-bonus\">{1}</span>%</span>",
+	activebonus_mobtimer_p : "Increases the chance to add 1 sec to the monster timer by <span class=\"bonuspercent\"><span class=\"as-bonus\">{1}</span>%</span>",
 	skill_power : "<span class=\"power\">{0} Power</span>",
 	skill_hit : "<div class=\"skillhits\">{0} Type <span class=\"as-hit\">{1}-hit</span> Skill</div>",
 	astype_slash : "Slash",

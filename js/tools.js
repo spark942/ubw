@@ -80,11 +80,12 @@ const iText = (code, value, value2, value3) => {
 	if (TEXTS.hasOwnProperty(value)) {
 		value = iText(value)
 	} else if (code.endsWith("_p")) {
-		value = percent(value, 2)
+		value = percent(value, 4)
+
 	}
-	var render = value ? TEXTS[code].replace("{0}", isNumeric(value) ? numberPrint(toDecimal(value,2)) : value) : TEXTS[code]
-	render = value2 ? render.replace("{1}", isNumeric(value2) ? numberPrint(toDecimal(value2,2)) : value2) : render
-	render = value3 ? render.replace("{2}", isNumeric(value3) ? numberPrint(toDecimal(value3,2)) : value3) : render
+	var render = value ? TEXTS[code].replace("{0}", isNumeric(value) ? numberPrint(toDecimal(value,2)) : value.toString()) : TEXTS[code]
+	render = value2 ? render.replace("{1}", isNumeric(value2) ? numberPrint(toDecimal(value2,2)) : value2.toString()) : render
+	render = value3 ? render.replace("{2}", isNumeric(value3) ? numberPrint(toDecimal(value3,2)) : value3.toString()) : render
 	return render
 }
 
