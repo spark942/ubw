@@ -1045,9 +1045,9 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/325)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/82) * (1 + monsterModel[6] || 0)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/500) * (1 + monsterModel[6] || 0)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/500) * (1 + monsterModel[6] || 0)),
 			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
 			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
 			timer  	: monsterModel[5],
@@ -1074,7 +1074,7 @@ const gameClass = () => {
 			mobtimerduration = mobtimerduration || 1
 
 			//var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
-			var computedDMG = dmg * (100 / (80 + (Math.sqrt(mData.level) * (1 + mData.rank))) * (1 - defpen))
+			var computedDMG = dmg * (100 / (80 + (Math.sqrt(mData.level) * (1 + mData.rank) * (1 + mData.defpct ))) * (1 - defpen))
 			computedDMG = computedDMG / (1 + Math.pow(mData.rank, 2))
 			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)
@@ -1088,10 +1088,10 @@ const gameClass = () => {
 
 			/* SHOW FLOATING NUMBER */
 			damageMonster(computedDMG)
-			if (computedDMG === 0 || stunned === false) {
-				return false
-			} else {
+			if (computedDMG !== 0 || stunned === true) {
 				return true
+			} else {
+				return false
 			}
 		}
 
