@@ -1073,7 +1073,8 @@ const gameClass = () => {
 			mobtimer = mobtimer || 0
 			mobtimerduration = mobtimerduration || 1
 
-			var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
+			//var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
+			var computedDMG = dmg * (100 / (80 + (Math.sqrt(mData.level) * (1 + mData.rank))) * (1 - defpen))
 			computedDMG = computedDMG / (1 + Math.pow(mData.rank, 2))
 			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)

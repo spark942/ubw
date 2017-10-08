@@ -227,11 +227,14 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-size: 15px;
 	border-style: solid;
 	border-color: black;
-	border-width: 1px 1px 0 1px;
+	border-width: 1px;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	margin-right: 2px;
 	cursor: pointer;
+}
+.town-section.selected {
+	border-bottom-color: transparent;
 }
 #town-nav-market,
 #town-nav-blacksmith {
