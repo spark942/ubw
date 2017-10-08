@@ -8,6 +8,8 @@ const TEXTS = {
 	monster_rank_2 : "★★",
 	monster_rank_3 : "★★★",
 	monster_rank_4 : "★★★★",
+	monster_rank_5 : "★★★★★",
+	monster_rank_6 : "★★★★★★",
 	/* counts*/
 	power_regen_focus : "(+{0})",
 	/*weapontypes*/
@@ -60,6 +62,7 @@ const TEXTS = {
 	inventory        : "Extend the inventory by <span class=\"bonusflat\">{0}</span> slots",
 	autosell_grade  : "Enable auto-sell for <span class=\"effecttext\">{0}</span> quality",
 	weapontype		: "Can use <span class=\"effecttext\">{0}</span> type weapons",
+	mobtimer_duration		: "Increase the duration of stun effect by <span class=\"bonusflat\">{0}</span> second",
 	/*actives*/
 	reqpassive : "Requires <span class=\"passiveskillname\">{0}</span> passive skill <span class=\"skilllevel\">level {1}</span>",
 	reqactive : "Requires <span class=\"activeskillname\">{0}</span> active skill <span class=\"skilllevel\">level {1}</span> ",

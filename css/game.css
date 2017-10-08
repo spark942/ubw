@@ -147,7 +147,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	text-align: right;
 	margin-right: 16px;
 	font-family: 'Cutive Mono', monospace;
-	letter-spacing: -2px;
+	letter-spacing: -3px;
 }
 #monsterrank-container {
 	display: inline-block;
