@@ -170,6 +170,10 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-size: 20px;
 	white-space:nowrap;
 }
+.mobtimerextended {
+	color: rgba(46, 204, 113,1.0);
+	font-size: 15px !important;
+}
 #bscreen-title #bscreen-t-monster #routename,
 #bscreen-title #bscreen-t-town #townname {
 	width: calc(100% - 60px);

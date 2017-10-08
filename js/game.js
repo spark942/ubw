@@ -25,7 +25,7 @@ const gameClass = () => {
 		ITEM_DROPRATE: [5,10,20,40,80,160,320,640,1280,2560,5120,10240],
 		ITEM_QUALITY_MIN: [5,10,30,80,200,500,1000],
 		ITEM_QUALITY_MAX: [9,29,79,199,499,999,1999],
-		MONSTERDEF_PER_RANK : [0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45],
+		MONSTERDEF_PER_RANK : [0.05,0.08,0.11,0.14,0.16,0.18,0.20],
 		MONSTERS_ID: {
 			asia: null,
 			europe: null,
@@ -60,6 +60,16 @@ const gameClass = () => {
 			per_awaken_stage : 0.1,
 		},
 		regions: ["asia","europe"],
+		region_stage_offset: {
+			asia: 0,
+			europe: 0,
+			valhalla: 50000,
+		},
+		region_max_stage: {
+			asia: 250000,
+			europe: 250000,
+			valhalla: 250000,
+		},
 		towns: [],
 		passivesPerClass: {},
 		activesPerClass: {},
@@ -334,6 +344,10 @@ const gameClass = () => {
 		}
 	}
 
+	const getEffectiveStage = () => {
+		return DATA.player.currentStage + TABLES.region_stage_offset[DATA.player.currentRegion]
+	}
+
 	const getWeaponTypeByWeaponClass = (weaponClass) => {
 		weaponClass = weaponClass || TABLES.defaultWeapon.class
 		for (var wType in WEAPONSYPES) {
@@ -387,18 +401,6 @@ const gameClass = () => {
 				}
 			}
 		}
-	}
-
-	const updateWieldingSetup = (wieldingsetup, wsslot, weapon) => {
-		/* check if in town */
-
-		/* check if this weapon is right type on this slot */
-
-		/* take out weapon from inventory */
-
-		/* takeout equipped weapon from slot */
-
-		/* add wepaons to slot and inventory */
 	}
 
 	const getSkillLevelByExp = (skill_exp, curve) => {
@@ -702,6 +704,9 @@ const gameClass = () => {
 		let dmg_f = getPassiveBonusValue("dmg_f")
 		let dmg_p = getPassiveBonusValue("dmg_p") + DATA.player.awaken_stage * 0.33
 		let skill_dmg_p = getActiveSkillBonusPerLevel(skill_id, "dmg_p")
+		let skill_def_pen = getActiveSkillBonusPerLevel(skill_id, "defpen_p")
+		let skill_stun = getActiveSkillBonusPerLevel(skill_id, "mobtimer_p")
+		let skill_stun_duration = 1 + getPassiveBonusValue("mobtimer_duration")
 		let rawActive = {
 			delay0:  ACTIVES[skill_id-1][16],
 			hit1:  ACTIVES[skill_id-1][17], delay1:  ACTIVES[skill_id-1][18],
@@ -788,6 +793,9 @@ const gameClass = () => {
 			dmg_bonus_per_hit: dmg_f,
 			dmg_bonus_percent: dmg_p,
 			skill_bonus_percent: skill_dmg_p,
+			skill_def_pen:       skill_def_pen,
+			skill_stun:          skill_stun,
+			skill_stun_duration: skill_stun_duration,
 			skill: ca
 		}
 	}
@@ -1031,6 +1039,8 @@ const gameClass = () => {
 			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/45)),
 			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
 			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
+			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
+			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
 			timer  	: monsterModel[5],
 			loot    : [
 				monsterModel[7],
@@ -1049,9 +1059,22 @@ const gameClass = () => {
 			timestamp: 	null,
 		}
 
-		const takeDamage = (dmg) => {
-			mData.hp -= dmg
+		const takeDamage = (dmg, defpen, mobtimer, mobtimerduration) => {
+			defpen = defpen || 0
+			mobtimer = mobtimer || 0
+			mobtimerduration = mobtimerduration || 1
+
+			var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
+			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)
+
+			if (mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
+				mData.timestamp += mobtimerduration * 1000 / (1 + mData.rank)
+				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000)
+			}
+
+			/* SHOW FLOATING NUMBER */
+			damageMonster(computedDMG)
 		}
 
 		return {
@@ -1097,7 +1120,7 @@ const gameClass = () => {
 			} else { /*special monster*/
 				mob_id = sdata[3]
 			}
-			DATA.player.currentMonster = createMonster(mob_id, stage)
+			DATA.player.currentMonster = createMonster(mob_id, getEffectiveStage())
 		} else if (sdata[1] === 1) { /*town*/
 
 			elebyID("bscreen-t-town").classList.remove("hidden")
@@ -1235,12 +1258,13 @@ const gameClass = () => {
 					/* if buff, base 2 because 100% from base damage and 100% from basic focus buff */
 					let finaldmg = DATA.player.settings.aura_focus_dmg === true ? 
 						(2 + getPassiveBonusValue("focus_dmg_p")) * DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] : DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit]
-					DATA.player.currentMonster.takeDamage(finaldmg)
+					let defensePenetration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_def_pen || 0
+					let monsterTimerDelayChance = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun || 0
+					let monsterTimerDelayDuration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun_duration || 0
+					DATA.player.currentMonster.takeDamage(finaldmg, defensePenetration, monsterTimerDelayChance, monsterTimerDelayDuration)
 					if (DATA.player.settings.aura_focus_combostreak === true) {
 						finaldmg = finaldmg * (1 + getComboStreakBonus())
 					}
-					/* SHOW FLOATING NUMBER */
-					damageMonster(finaldmg)
 					/* EXP SKILLS */
 					updateActive(
 						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
@@ -1342,7 +1366,7 @@ const gameClass = () => {
 						let laaat = {
 							type: mobloots[i] === 1 ? "c" : mobloots[i] < 10000 ? "f" : "w",
 							item_id:mobloots[i],
-							stage: DATA.player.currentStage /* TODO: stage bonus based on world */
+							stage: getEffectiveStage()
 						}
 						addItemInventory(laaat, "loot")
 					}
@@ -1355,7 +1379,7 @@ const gameClass = () => {
 					}
 				}
 				
-				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.MAXSTAGE)
+				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.region_max_stage[DATA.player.currentRegion])
 				if (DATA.player.currentStage < 1) {
 					DATA.player.currentStage = 1
 				}

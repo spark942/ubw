@@ -185,6 +185,20 @@ function damageMonster(number, duration) {
 	setTimeout(function(){ newDamage.remove() }, 900);
 }
 
+function stunMonster(number, duration) {
+	let newDamage = elebyID("floatingtexttest").cloneNode(true)
+	newDamage.classList.add("mobtimerextended")
+	newDamage.innerHTML = "+" + numberPrint(toDecimal(number,2)) + "s"
+	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,100000000)).toString()
+	//newDamage.style.marginTop = Math.floor(rngmm(20,30)).toString() + "px"
+	//newDamage.style.marginLeft = "-" + Math.floor(rngmm(60,245)).toString() + "px"
+	newDamage.style.marginTop = Math.floor(rngmm(8,10)).toString() + "px"
+	newDamage.style.marginLeft = "-" + Math.floor(rngmm(34,37)).toString() + "px"
+	elebyID("bscreen-t-monster").appendChild(newDamage)
+	newDamage.classList.add("show")
+	setTimeout(function(){ newDamage.remove() }, 900);
+}
+
 function charExpGained(number, duration) {
 	duration = duration || 900
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
