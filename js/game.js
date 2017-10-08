@@ -1068,13 +1068,18 @@ const gameClass = () => {
 			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)
 
-			if (mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
+			if (computedDMG > 0 && mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
 				mData.timestamp += mobtimerduration * 1000 / (1 + mData.rank)
 				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000)
 			}
 
 			/* SHOW FLOATING NUMBER */
 			damageMonster(computedDMG)
+			if (computedDMG === 0) {
+				return false
+			} else {
+				return true
+			}
 		}
 
 		return {
@@ -1261,19 +1266,23 @@ const gameClass = () => {
 					let defensePenetration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_def_pen || 0
 					let monsterTimerDelayChance = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun || 0
 					let monsterTimerDelayDuration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun_duration || 0
-					DATA.player.currentMonster.takeDamage(finaldmg, defensePenetration, monsterTimerDelayChance, monsterTimerDelayDuration)
+					
 					if (DATA.player.settings.aura_focus_combostreak === true) {
 						finaldmg = finaldmg * (1 + getComboStreakBonus())
 					}
+					let canExp = DATA.player.currentMonster.takeDamage(finaldmg, defensePenetration, monsterTimerDelayChance, monsterTimerDelayDuration)
 					/* EXP SKILLS */
-					updateActive(
-						DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
-						)
-					updatePassive(
-						DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
-						toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
-						)
+					if (canExp === true) {
+						updateActive(
+							DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
+							toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+							)
+						updatePassive(
+							DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
+							toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+							)
+					}
+					
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
 					
 					/* Increase combostreak if activated */
