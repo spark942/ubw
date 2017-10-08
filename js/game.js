@@ -1626,6 +1626,7 @@ const gameClass = () => {
 					}
 				}
 			}
+		} else if (DATA.player.currentTownTab === "market") {
 
 		}
 	}
@@ -2742,7 +2743,7 @@ const gameClass = () => {
 			elebySelector(selector+" .progress").id = selector.replace(/^#+/, "")+"-progress"
 		}
 		let domProgress 	 = elebyID(selector.replace(/^#+/, "")+"-progress")
-		let width = Math.round(progress / max * 100 * 100) / 100
+		let width = Math.min(100, Math.round(progress / max * 100 * 100) / 100)
 
 		if (domProgress.style.width !== width + '%') {
 			domProgress.style.width = width + '%'
