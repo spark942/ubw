@@ -59,11 +59,20 @@ const gameClass = () => {
 			per_activeskill_level : 0.01,
 			per_awaken_stage : 0.1,
 		},
+		regions_per_world : {
+			earth: ["asia", "europe"],
+			asgard: ["valhalla"],
+		},
 		regions: ["asia","europe"],
 		region_stage_offset: {
 			asia: 0,
 			europe: 0,
 			valhalla: 50000,
+		},
+		region_stage_multiplier: {
+			asia: 0,
+			europe: 30,
+			valhalla: 500,
 		},
 		region_max_stage: {
 			asia: 250000,
@@ -345,7 +354,7 @@ const gameClass = () => {
 	}
 
 	const getEffectiveStage = () => {
-		return DATA.player.currentStage + TABLES.region_stage_offset[DATA.player.currentRegion]
+		return (DATA.player.currentStage + TABLES.region_stage_offset[DATA.player.currentRegion]) * (1 + TABLES.region_stage_multiplier[DATA.player.currentRegion])
 	}
 
 	const getWeaponTypeByWeaponClass = (weaponClass) => {
@@ -467,7 +476,7 @@ const gameClass = () => {
 	}
 	/* every Awakening Stage reduce the exp */
 	const getCharacterExpRatio = () => {
-		return Math.max(toDecimal(1 / (Math.pow(1.03, DATA.player.awaken_stage)) ,6), 0.000001)
+		return Math.max(toDecimal(1 / (Math.pow(1.04, DATA.player.awaken_stage)) ,9), 0.000000001)
 	}
 
 	const getPassiveModelByID = (passiveID) => {
@@ -620,7 +629,7 @@ const gameClass = () => {
 		if (iObj === null) { return false }
 		let newIObject = JSON.parse(JSON.stringify(iObj))
 		if (iObj.type === "w") {
-			newIObject.dmg = iObj.base_dmg * (1 + stage/10) * (1 + quality/300)
+			newIObject.dmg = iObj.base_dmg * (1 + stage/(10 + Math.log(stage)*3)) * (1 + quality/300)
 		}
 		if (quality === null) {
 			quality = toDecimal(rngmm(TABLES.ITEM_QUALITY_MIN[iObj.grade-1], TABLES.ITEM_QUALITY_MAX[iObj.grade-1]))
@@ -628,7 +637,7 @@ const gameClass = () => {
 		newIObject.stage = stage
 		newIObject.quality = quality
 		newIObject.aspd = aspd
-		newIObject.sell =  toDecimal(iObj.cost * (1 + stage/100) * (1 + quality/500), 0)
+		newIObject.sell =  toDecimal(iObj.cost * (1 + stage/(10 + Math.log(stage)*30)) * (1 + quality/500), 0)
 		if (newIObject.hasOwnProperty("id") === false) {
 			newIObject.id = DATA.player.lastitemid + 1
 			DATA.player.lastitemid = newIObject.id
@@ -1036,11 +1045,11 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/45)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/325)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
 			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
-			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/30)),
+			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
 			timer  	: monsterModel[5],
 			loot    : [
 				monsterModel[7],
@@ -1065,17 +1074,22 @@ const gameClass = () => {
 			mobtimerduration = mobtimerduration || 1
 
 			var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
+			computedDMG = computedDMG / (1 + Math.pow(mData.rank, 2))
 			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)
 
-			if (computedDMG > 0 && mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
+			let stunned = false
+			console.log(mobtimer)
+			if (mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
 				mData.timestamp += mobtimerduration * 1000 / (1 + mData.rank)
 				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000)
+				stunned = true
+				console.log("eh")
 			}
 
 			/* SHOW FLOATING NUMBER */
 			damageMonster(computedDMG)
-			if (computedDMG === 0) {
+			if (computedDMG === 0 || stunned === false) {
 				return false
 			} else {
 				return true
@@ -1359,6 +1373,7 @@ const gameClass = () => {
 				if (DATA.player.settings.droponfail === true) {
 					DATA.player.currentStage--
 					DATA.player.settings.autoadvance = false
+					elebyID("auto-advance").checked = DATA.player.settings.autoadvance
 				}
 				updateStage(DATA.player.currentStage)
 				saveData()
