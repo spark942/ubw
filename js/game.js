@@ -71,7 +71,7 @@ const gameClass = () => {
 		},
 		region_stage_multiplier: {
 			asia: 0,
-			europe: 30,
+			europe: 0,
 			valhalla: 500,
 		},
 		region_max_stage: {
@@ -1046,8 +1046,8 @@ const gameClass = () => {
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
 			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/82) * (1 + monsterModel[6] || 0)),
-			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/500) * (1 + monsterModel[6] || 0)),
-			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/500) * (1 + monsterModel[6] || 0)),
+			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/100) * (1 + monsterModel[6] || 0)),
+			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/100) * (1 + monsterModel[6] || 0)),
 			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
 			def     : toDecimal((monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]) * monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/50)),
 			timer  	: monsterModel[5],
