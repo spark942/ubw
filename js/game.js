@@ -1045,7 +1045,7 @@ const gameClass = () => {
 			id 			: monsterModel[0],
 			level  	: stage,
 			rank  	: monsterModel[6] || 0,
-			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/82) * (1 + monsterModel[6] || 0)),
+			exp  		: toDecimal(monsterModel[3] * Math.pow(stage, 1+Math.pow(stage,0.18)/42) * (1 + monsterModel[6] || 0)),
 			maxhp  	: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/250) * (1 + monsterModel[6] || 0)),
 			hp  		: toDecimal(monsterModel[4] * Math.pow(stage, 1+Math.pow(stage,0.18)/250) * (1 + monsterModel[6] || 0)),
 			defpct  : toDecimal(monsterModel[6] !== null ? TABLES.MONSTERDEF_PER_RANK[monsterModel[6]] : TABLES.MONSTERDEF_PER_RANK[0]),
@@ -1431,32 +1431,42 @@ const gameClass = () => {
 		}
 	}
 
+	const getAuraStrengthenCost = () => {
+		return TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))
+	}
+
+	const getAuraConcentrationCost = () => {
+		return TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec + Math.ceil(Math.pow(TABLES.AURA.FOCUS_POWER_REGEN.base / getPassiveBonusValue("combo_regen_sec"), 2))
+	}
+
+	const getAuraBattleTranceCost = () => {
+		return TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec
+	}
+
 	const auraLoop = () => {
 		/* auras */
-		let focusPowerRegenCost = TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec + Math.ceil(Math.pow(TABLES.AURA.FOCUS_POWER_REGEN.base / getPassiveBonusValue("combo_regen_sec"), 2))
-
 		if (DATA.player.currentMonster !== null) {
 			if (DATA.player.settings.aura_focus_dmg === true
-				&& (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p")) >= 0)) {
-				DATA.player.focus -= TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))
-			} else if (DATA.player.focus - TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p")) < 0) {
+				&& (DATA.player.focus - getAuraStrengthenCost() >= 0)) {
+				DATA.player.focus -= getAuraStrengthenCost()
+			} else if (DATA.player.focus - getAuraStrengthenCost() < 0) {
 				DATA.player.settings.aura_focus_dmg = false
 				elebyID("aura-focus-dmg").checked = false
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
-				&& (DATA.player.focus - focusPowerRegenCost >= 0)
+				&& (DATA.player.focus - getAuraConcentrationCost() >= 0)
 				&& DATA.player.currentPower < getPassiveBonusValue("combo_power")) {
-				DATA.player.focus -= focusPowerRegenCost
+				DATA.player.focus -= getAuraConcentrationCost()
 				/* Regen power */
 				DATA.player.currentPower += TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") 
-			} else if (DATA.player.focus - focusPowerRegenCost < 0) {
+			} else if (DATA.player.focus - getAuraConcentrationCost() < 0) {
 				DATA.player.settings.aura_focus_power_regen = false
 				elebyID("aura-focus-power-regen").checked = false
 			}
 			if (DATA.player.settings.aura_focus_combostreak === true
-				&& (DATA.player.focus - TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec >= 0)) {
-				DATA.player.focus -= TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec
-			} else if (DATA.player.focus - TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec < 0) {
+				&& (DATA.player.focus - getAuraBattleTranceCost() >= 0)) {
+				DATA.player.focus -= getAuraBattleTranceCost()
+			} else if (DATA.player.focus - getAuraBattleTranceCost() < 0) {
 				DATA.player.settings.aura_focus_combostreak = false
 				elebyID("aura-focus-combostreak").checked = false
 			}
@@ -1471,11 +1481,11 @@ const gameClass = () => {
 		DATA.player.currentPower = toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
-		updateTextByID("aura-focus-dmg-cost", numberPrint(TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))))
+		updateTextByID("aura-focus-dmg-cost", numberPrint(getAuraStrengthenCost()))
 		updateTextByID("aura-focus-dmg-value", numberPrint(percent(1 + getPassiveBonusValue("focus_dmg_p"))))
-		updateTextByID("aura-focus-power-regen-cost", numberPrint(focusPowerRegenCost))
+		updateTextByID("aura-focus-power-regen-cost", numberPrint(getAuraConcentrationCost()))
 		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
-		updateTextByID("aura-focus-combostreak-cost", numberPrint(TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec))
+		updateTextByID("aura-focus-combostreak-cost", numberPrint(getAuraBattleTranceCost()))
 		updateTextByID("aura-focus-combostreak-value", numberPrint(percent(TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit)))
 	}
 
