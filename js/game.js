@@ -1505,6 +1505,7 @@ const gameClass = () => {
 				DATA.player.settings.aura_focus_dmg = false
 				elebyID("aura-focus-dmg").checked = false
 				auraFocusDmgCheck()
+				elebyID("aura-focus-dmg").onchange()
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
 				&& (DATA.player.focus - getAuraConcentrationCost() >= 0)
@@ -1515,7 +1516,7 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraConcentrationCost() < 0) {
 				DATA.player.settings.aura_focus_power_regen = false
 				elebyID("aura-focus-power-regen").checked = false
-				auraFocusPowerRegenCheck()
+				elebyID("aura-focus-power-regen").onchange()
 			}
 			if (DATA.player.settings.aura_focus_combostreak === true
 				&& (DATA.player.focus - getAuraBattleTranceCost() >= 0)) {
@@ -1523,7 +1524,7 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraBattleTranceCost() < 0) {
 				DATA.player.settings.aura_focus_combostreak = false
 				elebyID("aura-focus-combostreak").checked = false
-				auraFocusCombostreakCheck()
+				elebyID("aura-focus-combostreak").onchange()
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
