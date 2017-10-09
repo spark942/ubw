@@ -119,6 +119,8 @@ const gameClass = () => {
 				aura_focus_dmg 				 : false,
 				aura_focus_power_regen : false,
 				aura_focus_combostreak : false,
+				townSell : false,
+				townSalvage : false,
 			},
 			lastonline: null,
 			focus: 10000,
@@ -132,6 +134,11 @@ const gameClass = () => {
 			comboPowerUsed: 0,
 			currentComboStreak: 0,
 			exp_char    : 1,
+			aura_exp    : {
+				focus_dmg:         0,
+				focus_power_regen: 0,
+				focus_combostreak: 0,
+			},
 			awaken_stage: 0,
 			max_stage    : {
 				all : 1,
@@ -159,6 +166,11 @@ const gameClass = () => {
 				viewcombo: 1
 			},
 			inventory  		 : [],
+			weapondust     : {
+				epic      : 0,
+				legendary : 0,
+				mythical  : 0,
+			},
 			lastitemid     : 1,
 			battle 				 : {
 				combo : null,
@@ -265,6 +277,12 @@ const gameClass = () => {
 		}
 		function showGate() {
 			updateAttributeByID("game-container", "class", "")
+
+			elebyID("town-sell").checked = false
+			elebyID("town-salvage").checked = false
+
+			DATA.player.settings.townSell = false
+			DATA.player.settings.townSalvage = false
 		}
 		elebyID("town-enter").onclick = showTown
 		elebyID("town-gate").onclick = showGate
@@ -1188,6 +1206,8 @@ const gameClass = () => {
 			DATA.player.currentStage		= JSON.parse(localStorage.getItem('currentStage'))
 		if (localStorage.getItem('exp_char'))
 			DATA.player.exp_char 				= toDecimal(localStorage.getItem('exp_char'))
+		if (localStorage.getItem('aura_exp'))
+			DATA.player.aura_exp 				= toDecimal(localStorage.getItem('aura_exp'))
 		if (JSON.parse(localStorage.getItem('ekk')))
 			DATA.player.ekk 						= JSON.parse(localStorage.getItem('ekk'))
 		if (JSON.parse(localStorage.getItem('equipments')))
@@ -1202,6 +1222,8 @@ const gameClass = () => {
 			DATA.player.activescombo 		= JSON.parse(localStorage.getItem('activescombo'))
 		if (JSON.parse(localStorage.getItem('inventory')))
 			DATA.player.inventory 			= JSON.parse(localStorage.getItem('inventory'))
+		if (JSON.parse(localStorage.getItem('weapondust')))
+			DATA.player.weapondust 			= JSON.parse(localStorage.getItem('weapondust'))
 		if (JSON.parse(localStorage.getItem('lastitemid')))
 			DATA.player.lastitemid 			= JSON.parse(localStorage.getItem('lastitemid'))
 		if (JSON.parse(localStorage.getItem('lastonline')))
@@ -1224,6 +1246,7 @@ const gameClass = () => {
 		localStorage.setItem('currentRegion',	JSON.stringify(DATA.player.currentRegion))
 		localStorage.setItem('currentStage',	JSON.stringify(DATA.player.currentStage))
 		localStorage.setItem('exp_char', 			DATA.player.exp_char)
+		localStorage.setItem('aura_exp', 			JSON.stringify(DATA.player.aura_exp))
 		localStorage.setItem('ekk', 					JSON.stringify(DATA.player.ekk))
 		localStorage.setItem('equipments', 		JSON.stringify(DATA.player.equipments))
 		localStorage.setItem('wieldingsetups',JSON.stringify(DATA.player.wieldingsetups))
@@ -1231,6 +1254,7 @@ const gameClass = () => {
 		localStorage.setItem('actives', 			JSON.stringify(DATA.player.actives))
 		localStorage.setItem('activescombo', 	JSON.stringify(DATA.player.activescombo))
 		localStorage.setItem('inventory', 		JSON.stringify(DATA.player.inventory))
+		localStorage.setItem('weapondust', 		JSON.stringify(DATA.player.weapondust))
 		localStorage.setItem('lastitemid', 		JSON.stringify(DATA.player.lastitemid))
 		localStorage.setItem('lastonline', 		JSON.stringify(DATA.player.lastonline))
 		localStorage.setItem('max_stage', 		JSON.stringify(DATA.player.max_stage))
@@ -1452,6 +1476,7 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraStrengthenCost() < 0) {
 				DATA.player.settings.aura_focus_dmg = false
 				elebyID("aura-focus-dmg").checked = false
+				auraFocusDmgCheck()
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
 				&& (DATA.player.focus - getAuraConcentrationCost() >= 0)
@@ -1462,6 +1487,7 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraConcentrationCost() < 0) {
 				DATA.player.settings.aura_focus_power_regen = false
 				elebyID("aura-focus-power-regen").checked = false
+				auraFocusPowerRegenCheck()
 			}
 			if (DATA.player.settings.aura_focus_combostreak === true
 				&& (DATA.player.focus - getAuraBattleTranceCost() >= 0)) {
@@ -1469,6 +1495,7 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraBattleTranceCost() < 0) {
 				DATA.player.settings.aura_focus_combostreak = false
 				elebyID("aura-focus-combostreak").checked = false
+				auraFocusCombostreakCheck()
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
@@ -1565,6 +1592,7 @@ const gameClass = () => {
 			elebyID("town-market").classList.add("hidden")
 			elebyID("town-blacksmith").classList.add("hidden")
 			elebyID("town-"+sectionName).classList.remove("hidden")
+			DATA.player.currentTownTab = sectionName
 		}
 		elebyID("town-nav-portal").onclick = swapTownSection
 		elebyID("town-nav-market").onclick = swapTownSection
@@ -1584,6 +1612,15 @@ const gameClass = () => {
 
 	const townRender = () => {
 		if (DATA.player.currentStageIsTown === false) {
+			if (elebyID("town-sell").checked === true) {
+				elebyID("town-sell").checked = false
+				elebyID("town-sell").onchange()
+			}
+			if (elebyID("town-salvage").checked === true) {
+				elebyID("town-salvage").checked = false
+				elebyID("town-salvage").onchange()
+			}
+			
 			return false
 		}
 
@@ -1653,6 +1690,12 @@ const gameClass = () => {
 			}
 		} else if (DATA.player.currentTownTab === "market") {
 			
+		} else if (DATA.player.currentTownTab === "blacksmith") {
+			updateTextByID("epic-dust-count", numberPrint(DATA.player.weapondust.epic))
+			updateTextByID("legendary-dust-count", numberPrint(DATA.player.weapondust.legendary))
+			updateTextByID("mythical-dust-count", numberPrint(DATA.player.weapondust.mythical))
+		} else {
+
 		}
 	}
 
@@ -1949,8 +1992,6 @@ const gameClass = () => {
 			if (!isNumeric(thisID)) { continue }
 			if (WIELDINGTYPES[wsid]["weapontype"+slot].indexOf(getWeaponTypeByWeaponClass(DATA.player.inventory[i].class)) !== -1) {
 				if (isEquipped(thisID) === false || isEquipped(thisID) !== wsid+"-weapon"+slot) {
-					console.log(isEquipped(thisID))
-					//console.log(DATA.player.inventory[i])
 					let selectableItem = ELEMENTMODELS.wsitem.cloneNode(true)
 					selectableItem.id = "ws-item-"+thisIDplusUniqueID
 					selectContainer.appendChild(selectableItem)
@@ -1967,7 +2008,6 @@ const gameClass = () => {
 					elebyID("ws-item-"+thisIDplusUniqueID).style.order = toDecimal(thisDPS)
 					let isEquippedPrefix = isEquipped(thisID) ? "[E] " : ""
 					updateTextByID("ws-item-name-"+thisIDplusUniqueID, isEquippedPrefix+DATA.player.inventory[i].name)
-					console.log(isEquippedPrefix+DATA.player.inventory[i].name)
 					updateTextByID("ws-item-dps-"+thisIDplusUniqueID, iText("wswsdpsaspd",numberPrint(thisDPS),numberPrint(toDecimal(DATA.player.inventory[i].aspd,2))))
 				}
 			}
@@ -2174,17 +2214,60 @@ const gameClass = () => {
 	function consumeItem() {
 		let item_id = parseInt(this.getAttribute("data-itemid"))
 		let stage_val = parseInt(this.getAttribute("data-stage"))
-		if (item_id >= 1000 && item_id <= 10000) {
+		let inv_id = parseInt(this.getAttribute("data-id"))
+
+		let consumed = false
+		let thisItemObject = getItemFromInventoryByID(inv_id)
+
+		if (isEquipped(thisItemObject.id) !== false) {
+			return false
+		}
+
+		/* town sell */
+		if (DATA.player.currentStageIsTown === true
+			&& DATA.player.settings.townSell === true) {
+			DATA.player.ekk += toDecimal(thisItemObject.sell * (1 + DATA.player.awaken_stage * 0.2))
+			consumed = true
+		}
+		/* town salvage */
+		else if (DATA.player.currentStageIsTown === true
+			&& DATA.player.settings.townSalvage === true
+			&& thisItemObject.type === "w"
+			&& thisItemObject.grade >= 5) {
+			if (thisItemObject.grade === 5) {
+				DATA.player.weapondust.epic += toDecimal(log10(thisItemObject.stage) * thisItemObject.quality)
+			} else if (thisItemObject.grade === 6) {
+				DATA.player.weapondust.legendary += toDecimal(log10(thisItemObject.stage) * thisItemObject.quality)
+			} else if (thisItemObject.grade === 7) {
+				DATA.player.weapondust.mythical += toDecimal(log10(thisItemObject.stage) * thisItemObject.quality)
+			}
+			consumed = true
+		}
+		/* eat consumable */
+		else if (
+			DATA.player.settings.townSell === false
+			&& DATA.player.settings.townSalvage === false
+			&& item_id >= 1000 && item_id <= 10000) {
 			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
+			/* grimoire*/
+			if (ITEMS[item_id][6].startsWith("grim") && ITEMS[item_id][8] !== null) {
+
+			}
+			consumed = true
+		}
+
+		/* remove from inventory if consumed */
+		if (consumed === true) {
 			let removeID = []
 			for (var i = 0; i < DATA.player.inventory.length; i++) {
-				if (DATA.player.inventory[i].id === parseInt(this.getAttribute("data-id"))){
+				if (DATA.player.inventory[i].id === inv_id){
 					removeID.push(i)
 					break
 				}
 			}
 			removeFromArray(DATA.player.inventory, removeID)
 			this.remove()
+			saveData()
 		}
 	}
 
@@ -2249,6 +2332,23 @@ const gameClass = () => {
 			updateStage(DATA.player.currentStage)
 		}
 
+
+		function townSellCheck () {
+			DATA.player.settings.townSell = this.checked
+			DATA.player.settings.townSalvage = false
+			elebyID("town-salvage").checked = false
+		}
+		function townSalvageCheck () {
+			DATA.player.settings.townSalvage = this.checked
+			DATA.player.settings.townSell = false
+			elebyID("town-sell").checked = false
+		}
+		elebyID("town-sell").checked = false
+		elebyID("town-salvage").checked = false
+
+		elebyID("town-sell").onchange = townSellCheck
+		elebyID("town-salvage").onchange = townSalvageCheck
+
 		/* aura */
 		function auraFocusDmgCheck () { DATA.player.settings.aura_focus_dmg = this.checked }
 		function auraFocusPowerRegenCheck () { DATA.player.settings.aura_focus_power_regen = this.checked }
@@ -2280,6 +2380,7 @@ const gameClass = () => {
 		elebyID("reverse-advance").checked = DATA.player.settings.reverseadvance
 		elebyID("drop-on-fail").checked = DATA.player.settings.droponfail
 		elebyID("auto-awaken").checked = DATA.player.settings.autoawaken
+
 		elebyID("town-stop").onchange = townstopCheck
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
@@ -2744,20 +2845,38 @@ const gameClass = () => {
 
 	const inventoryRender = () => {
 		if (GAMEVAR.initialized === false) { return false}
-		townRender()
 
-		statsRender()
+		if (GAMEVAR.renderInitialized === false
+			|| DATA.player.currentStageIsTown === true) {
+			townRender()
+		}
+		if (GAMEVAR.renderInitialized === false
+			|| elebyID("g-in-equipments").getAttribute("class").toString().includes("hidden") === false) {
+			statsRender()
+		}
 		/* wielding setups */
-		wieldingSetupRender()
+		if (GAMEVAR.renderInitialized === false
+			|| elebyID("g-in-wieldingsetups").getAttribute("class").toString().includes("hidden") === false) {
+			wieldingSetupRender()
+		}
 		/* passive skills */
-		passiveInventoryRender()
+		if (GAMEVAR.renderInitialized === false
+			|| elebyID("g-in-passives").getAttribute("class").toString().includes("hidden") === false) {
+			passiveInventoryRender()
+		}
 		/* active skills */
-		activeInventoryRender()
+		if (GAMEVAR.renderInitialized === false
+			|| elebyID("g-in-actives").getAttribute("class").toString().includes("hidden") === false) {
+			activeInventoryRender()
+		}
 		/* combo inventory */
 		//comboInventoryRender()
 		/* item inventory */
-		itemsInventoryRender()
-
+		if (GAMEVAR.renderInitialized === false
+			|| elebyID("g-in-inventory").getAttribute("class").toString().includes("hidden") === false) {
+			itemsInventoryRender()
+		}
+		
 		if (GAMEVAR.renderInitialized === false) { 
 			GAMEVAR.renderInitialized = true
 			elebyID("game-loading").classList.add("hidden")

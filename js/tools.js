@@ -22,6 +22,9 @@ const rngmm = (min, max) => {
 	return Math.random() * (max - min) + min
 }
 
+const log10 = (val) => {
+  return Math.log(val) / Math.LN10;
+}
 /*DOM*/
 const elebyID = (id) => {
 	return document.getElementById(id)

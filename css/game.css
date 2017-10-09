@@ -236,10 +236,6 @@ div.progressbar div.progress::-webkit-progress-value {
 .town-section.selected {
 	border-bottom-color: transparent;
 }
-#town-nav-market,
-#town-nav-blacksmith {
-	cursor: not-allowed;
-}
 #town-body {
 	width: calc(100% - 73px);
 	background-color: rgba(255,255,255,0.5);
@@ -301,6 +297,91 @@ div.progressbar div.progress::-webkit-progress-value {
 	right: 0;
 	font-size: 10px;
 }
+/* Town market + blacksmith */
+#town-market,
+#town-blacksmith {
+	width: 100%;
+	height: 100%;
+}
+#town-market-sell,
+#town-blacksmith-salvage {
+	width: calc(100% - 20px);
+	margin: 5px;
+	margin-bottom: 0;
+	background-color: rgba(0,0,0,0.2);
+	padding: 5px;
+	text-align: center;
+	vertical-align: middle;
+}
+#town-blacksmith-salvage {
+	height: 50px;
+}
+#town-sell,
+#town-salvage {
+	display: none;
+}
+.dblclk-active {
+	display: none;
+	font-size: 10px;
+	color: #fff;
+}
+#town-market #town-sell:checked + label,
+#town-blacksmith #town-salvage:checked + label {
+	color: #00e676;
+}
+#town-market #town-sell:checked + label > .dblclk-active {
+	display: inline;
+	color: rgba(231, 76, 60,1.0);
+}
+#town-blacksmith #town-salvage:checked + label > .dblclk-active {
+	display: block;
+	color: rgba(231, 76, 60,1.0);
+}
+#town-market #sell-label,
+#town-blacksmith #salvage-label {
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.salvage-description {
+	font-size: 10px;
+	color: rgba(236, 240, 241,1.0)
+}
+#town-blacksmith #town-dusts,
+#town-blacksmith #town-blacksmith-crafting {
+	padding: 5px;
+	width: calc(100% - 10px);
+	font-size: 12px;
+}
+#town-blacksmith #town-dusts .town-dust {
+	width: 100%;
+	position: relative;
+}
+#town-blacksmith #town-dusts .town-dust .dust-count {
+	position: absolute;
+	right: 0;
+}
+
+/* Town Market sub menu */
+#town-market-actions {
+	padding-left: 5px;
+}
+#town-market-actions > div {
+	display: inline-block;
+	font-size: 13px;
+	width: calc(33% - 5px);
+	background-color: rgba(0,0,0,0.2);
+	text-align: center;
+	font-weight: bold;
+	padding: 3px 0;
+	margin-top: 5px;
+	cursor: pointer;
+	height: 30px;
+	vertical-align: middle;
+	position: relative;
+}
+
 
 /* Battle Screen */
 #bscreen-title  {
@@ -1358,25 +1439,29 @@ input[type="radio"]:checked + label:after {
 .ws-item[data-grade="4"],
 #inventory-items .inv-item[data-grade="4"] .item-name,
 #inventory-items .inv-item[data-grade="4"] .item-quality,
-#inventory-items .inv-item[data-grade="4"] .item-grade {
+#inventory-items .inv-item[data-grade="4"] .item-grade,
+.grade-rare {
 	color: rgba(41, 128, 185,1.0)
 }
 .ws-item[data-grade="5"],
 #inventory-items .inv-item[data-grade="5"] .item-name,
 #inventory-items .inv-item[data-grade="5"] .item-quality,
-#inventory-items .inv-item[data-grade="5"] .item-grade {
+#inventory-items .inv-item[data-grade="5"] .item-grade,
+.grade-epic {
 	color: rgba(142, 68, 173,1.0);
 }
 .ws-item[data-grade="6"],
 #inventory-items .inv-item[data-grade="6"] .item-name,
 #inventory-items .inv-item[data-grade="6"] .item-quality,
-#inventory-items .inv-item[data-grade="6"] .item-grade {
+#inventory-items .inv-item[data-grade="6"] .item-grade,
+.grade-legendary {
 	color: rgba(192, 57, 43,1.0)
 }
 .ws-item[data-grade="7"],
 #inventory-items .inv-item[data-grade="7"] .item-name,
 #inventory-items .inv-item[data-grade="7"] .item-quality,
-#inventory-items .inv-item[data-grade="7"] .item-grade {
+#inventory-items .inv-item[data-grade="7"] .item-grade,
+.grade-mythical {
 	color: rgba(243, 156, 18,1.0)
 }
 #inventory-items .item-name {

@@ -153,7 +153,6 @@
 						<input id="autosell-5" class="autosell" type="checkbox" name="autosell-5"><label for="autosell-5">Epic</label><br>
 						items below<br>
 						Lv. <input id="autosell-level" type="number" name="autosell" value="100" min="1" max="999999"><br>
-
 					</section>
 				</div>
 				<div class="g-town">
@@ -185,10 +184,30 @@
 							</div>
 						</div>
 						<div id="town-market">
-							Market to do
+							<div id="town-market-sell">
+								<input id="town-sell" type="checkbox" name="town-sell">
+								<label id="sell-label" for="town-sell">SELL ITEMS <span class="dblclk-active">(Double-click on Item)</span></label>
+							</div>
+							<div id="town-market-actions">
+								<div id="town-market-action-grimoire">Grimoire Shop</div>
+								<div id="town-market-action-food">Food (soon)</div>
+								<div id="town-market-action-grimoire">Crystal (soon)</div>
+							</div>
+							
 						</div>
 						<div id="town-blacksmith">
-							Blacksmith to do
+							<div id="town-blacksmith-salvage">
+								<input id="town-salvage" type="checkbox" name="town-salvage">
+								<label id="salvage-label" for="town-salvage">SALVAGE Weapons<div class="dblclk-active">(Double-click on Weapon)</div><div class="salvage-description">Can only Salvage<br><span class="grade-epic">Epic</span>, <span class="grade-legendary">Legendary</span> &amp; <span class="grade-mythical">Mythical</span> Weapons</div></label>
+							</div>
+							<div id="town-dusts">
+								<div class="town-dust">Epic Dust <span id="epic-dust-count" class="dust-count grade-epic">0</span></div>
+								<div class="town-dust">Legendary Dust <span id="legendary-dust-count" class="dust-count grade-legendary">0</span></div>
+								<div class="town-dust">Mythical Dust <span id="mythical-dust-count" class="dust-count grade-mythical">0</span></div>
+							</div>
+							<div id="town-blacksmith-crafting">
+								Crafting (soon)
+							</div>
 						</div>
 					</div>
 				</div>
