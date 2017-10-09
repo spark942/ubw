@@ -91,9 +91,9 @@ const gameClass = () => {
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
-			slash: {dmg_p: 0.05},
+			slash: {dmg_p: 0.08},
 			thrust: {dmg_p: 0.03, defpen_p: 0.005},
-			blunt: {dmg_p: 0.04, mobtimer_p: 0.002},
+			blunt: {dmg_p: 0.04, mobtimer_p: 0.003},
 		},
 		defaultActiveSkillType: "slash",
 		defaultWeapon : {
