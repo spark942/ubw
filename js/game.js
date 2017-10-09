@@ -1027,6 +1027,9 @@ const gameClass = () => {
 		}
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
+		if (DATA.player.currentStageIsTown === true) {
+			saveData()
+		}
 		return true
 	}
 
@@ -1599,6 +1602,16 @@ const gameClass = () => {
 					DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
 				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
 					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))
+					/* grimoire*/
+					if (ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") && ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
+						if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
+							DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
+						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
+							DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
+						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
+							DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
+						}
+					}
 				}
 			}
 		};
@@ -1709,6 +1722,22 @@ const gameClass = () => {
 			}
 		}
 
+		function buyItem() {
+			let itemid = parseInt(this.getAttribute("data-itemid"))
+			let itemModel = getItemModelByID(parseInt(this.getAttribute("data-itemid")))
+			if (DATA.player.ekk - itemModel.cost >= 0) {
+				if (addItemInventory({
+					type: "f",
+					item_id:itemid,
+					stage: 1,
+					quality:-500
+				}) === true) {
+					DATA.player.ekk -= itemModel.cost
+					saveData()
+				}
+			}
+		}
+
 		/* body */
 
 		if (DATA.player.currentTownTab === "portal") {
@@ -1750,7 +1779,26 @@ const gameClass = () => {
 			}
 		} else if (DATA.player.currentTownTab === "market") {
 			if (DATA.player.currentTownMarketTab === "grimoire") {
-				
+				let marketGrimoireShopHTML = ""
+				for (var i = 0; i < TABLES.townsGrimoirePerRegion[DATA.player.currentRegion].length; i++) {
+					let grimoireModel = getItemModelByID(TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i])
+					let grimoireHTML = iText(
+						"market_grimoire", 
+						"class_grade_"+grimoireModel.grade, /*grade*/
+						grimoireModel.name, /*name*/
+						grimoireModel.cost, /*cost*/
+						"market-grimoire-"+TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i],/*item_id*/
+						ITEMS[TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i]][8]) 
+
+					marketGrimoireShopHTML += grimoireHTML.replace("data-itemid=\"\"", "data-itemid=\""+TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i]+"\"")
+				}
+				if (elebyID("town-market-grimoire").innerHTML !== marketGrimoireShopHTML) {
+					updateTextByID("town-market-grimoire", marketGrimoireShopHTML)
+					for (var i = 0; i < TABLES.townsGrimoirePerRegion[DATA.player.currentRegion].length; i++) {
+						let grimoireModel = getItemModelByID(TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i])
+						elebyID("market-grimoire-"+TABLES.townsGrimoirePerRegion[DATA.player.currentRegion][i]).onclick = buyItem
+					}
+				}
 			} else if (DATA.player.currentTownMarketTab === "food") {
 				// TO DO
 			} else if (DATA.player.currentTownMarketTab === "crystal") {
@@ -2299,8 +2347,12 @@ const gameClass = () => {
 		/* town sell */
 		if (DATA.player.currentStageIsTown === true
 			&& DATA.player.settings.townSell === true) {
-			DATA.player.ekk += toDecimal(thisItemObject.sell * (1 + DATA.player.awaken_stage * 0.2))
-			consumed = true
+			if (thisItemObject.class.includes("Grim") === true) {
+				consumed = false
+			} else {
+				DATA.player.ekk += toDecimal(thisItemObject.sell * (1 + DATA.player.awaken_stage * 0.25))
+				consumed = true
+			}
 		}
 		/* town salvage */
 		else if (DATA.player.currentStageIsTown === true
@@ -2324,7 +2376,13 @@ const gameClass = () => {
 			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
 			/* grimoire*/
 			if (ITEMS[item_id][6].startsWith("grim") && ITEMS[item_id][8] !== null) {
-
+				if (ITEMS[item_id][6] === "grim_aura_strengthen") {
+					DATA.player.aura_exp.focus_dmg += ITEMS[item_id][8]
+				} else if (ITEMS[item_id][6] === "grim_aura_concentration") {
+					DATA.player.aura_exp.focus_power_regen += ITEMS[item_id][8]
+				} else if (ITEMS[item_id][6] === "grim_aura_battletrance") {
+					DATA.player.aura_exp.focus_combostreak += ITEMS[item_id][8]
+				}
 			}
 			consumed = true
 		}
@@ -2904,7 +2962,13 @@ const gameClass = () => {
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
 			if (DATA.player.inventory[i].focus !== null) {
-				updateTextByID("item-effect-"+tiID, iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))))))
+				let itemEffects = iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage)))))
+				if (ITEMS[DATA.player.inventory[i].item_id][6] !== null && ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim")) {
+					itemEffects += "<br>" + iText("item_food_"+ITEMS[DATA.player.inventory[i].item_id][6], ITEMS[DATA.player.inventory[i].item_id][8])
+					itemEffects += "<br>" + iText("item_food_grimoire_notice")
+				}
+				itemEffects += "<br>" + iText("item_food_notice") 
+				updateTextByID("item-effect-"+tiID, itemEffects)
 			}
 			updateTextByID("item-stage-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].stage)))
 			updateTextByID("item-grade-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].quality)))

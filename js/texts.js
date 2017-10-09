@@ -2,7 +2,7 @@ const TEXTS = {
 	/* Town */
 	destination_route : "<div id=\"gotoroute-{2}\" class=\"destroute\" data-route=\"\"><span class=\"destination-route\">Town #{0}</span><span class=\"destination-price\">Cost {1} Ekk</span></div>",
 	destination_world : "Cost {0} Ekk",
-	market_grimoire : "<div class=\"{0}\">{1} <span class=\"destination-price\">Cost {2} Ekk</span></div>",
+	market_grimoire : "<div id=\"{3}\" class=\"grimoire-item {0}\" data-itemid=\"\">{1} <span class=\"market-item-price\">Cost {2} Ekk</span><span class=\"market-item-bonusvalue\">+{4} EXP</span></div>",
 	market_food : "Food: {0}",
 	market_Crystal : "",
 	/* battle */
@@ -98,5 +98,10 @@ const TEXTS = {
 	comboskill_stat_dmg_withfocus : 		"{0} <span class=\"orangetext\">(+{1})</span>",
 	/* Item */
 	item_lv : "Lv.{0}",
-	item_food_focus : "Gives {0} Focus after comsuming<br><span class=\"item-note\">Double click to consume</span>"
+	item_food_focus : "Gives {0} Focus after comsuming",
+	item_food_grim_aura_strengthen : "Gives {0} EXP to Aura: Strengthen",
+	item_food_grim_aura_concentration : "Gives {0} EXP to Aura: Concentration",
+	item_food_grim_aura_battletrance : "Gives {0} EXP to Aura: Battle Trance",
+	item_food_grimoire_notice : "This item can't be sold",
+	item_food_notice : "<span class=\"item-note\">Double click to consume</span>"
 }

@@ -143,7 +143,7 @@ const isNumeric = (number) => {
 function numberPrint(x, separator) {
 	separator = separator || ","
 	if (x > 1e15) {
-		x = numberShort(x)
+		return numberShort(x)
 	} else {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 	}

@@ -362,6 +362,28 @@ div.progressbar div.progress::-webkit-progress-value {
 #town-market.crystal #town-market-crystal {
 	display: block;
 }
+.grimoire-item {
+	position: relative;
+	width: 100%;
+	font-size: 12px;
+	margin-bottom: 5px;
+	height: 24px;
+	padding: 2px 0;
+	cursor: pointer;
+}
+.grimoire-item:hover {
+	background-color: rgba(255,255,255,0.8)
+}
+.market-item-price,
+.market-item-bonusvalue {
+	position: absolute;
+	bottom: 3px;
+	right: 0;
+	font-size: 9px;
+}
+.market-item-bonusvalue {
+	left: 0;
+}
 .salvage-description {
 	font-size: 10px;
 	color: rgba(236, 240, 241,1.0)
@@ -1510,11 +1532,16 @@ input[type="radio"]:checked + label:after {
 #inventory-items .item-name {
 	line-height: 24px;
 	font-size: 16px;
+	white-space: nowrap;
+	background-color: rgba(0,0,0,0.6);
+	padding-right: 3px;
+	border-radius: 3px;
 }
 #inventory-items .item-category {
 	width: 100%;
 	text-align: right;
 	position: relative;
+
 }
 #inventory-items .item-category .item-type {
 	position: absolute;
