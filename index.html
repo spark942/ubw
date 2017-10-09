@@ -100,6 +100,13 @@
 							<div class="aura-description">
 								<span>Strengthen</span><span class="auracost"><span id="aura-focus-dmg-cost">0</span> focus per second</span><br>
 								<span class="aura-text">Increase damage by <span id="aura-focus-dmg-value">0</span>%. Focus consumption in battle only</span>
+								<div class="aura-bonus-per-level">
+									Lv.<span id="aura-focus-dmg-level" class="aura-level">1</span>&nbsp; Bonus:<span class="aura-focus-dmg-level-bonus">?</span>
+								</div>
+								<div id="aura-focus-dmg-exp" class="aura-exp">
+									<div class="progressbar"><div class="progress blue"></div></div>
+									<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+								</div>
 							</div>
 						</div>
 						<div class="aura-container">
@@ -109,6 +116,13 @@
 							<div class="aura-description">
 								<span>Concentration</span><span class="auracost"><span id="aura-focus-power-regen-cost">0</span> focus per second</span><br>
 								<span class="aura-text">Increase power regeneration by <span id="aura-focus-power-regen-value">0</span> per second</span>
+								<div class="aura-bonus-per-level">
+									Lv.<span id="aura-focus-power-regen-level" class="aura-level">1</span>&nbsp; Bonus:<span class="aura-focus-power-regen-level-bonus">?</span>
+								</div>
+								<div id="aura-focus-power-regen-exp" class="aura-exp">
+									<div class="progressbar"><div class="progress blue"></div></div>
+									<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+								</div>
 							</div>
 						</div>
 						<div class="aura-container">
@@ -119,6 +133,13 @@
 							<div class="aura-description">
 								<span>Battle Trance</span><span class="auracost"><span id="aura-focus-combostreak-cost">0</span> focus per second</span><br>
 								<span class="aura-text">Increase damage by <span id="aura-focus-combostreak-value">0</span>% every hit until the combo ends</span>
+								<div class="aura-bonus-per-level">
+									Lv.<span id="aura-focus-combostreak-level" class="aura-level">1</span>&nbsp; Bonus:<span class="aura-focus-combostreak-level-bonus">?</span>
+								</div>
+								<div id="aura-focus-combostreak-exp" class="aura-exp">
+									<div class="progressbar"><div class="progress blue"></div></div>
+									<div class="expnumber"><span class="currentexp">0</span> / <span class="maxexp">0</span></div>
+								</div>
 							</div>
 						</div>
 					</section>
@@ -191,9 +212,13 @@
 							<div id="town-market-actions">
 								<div id="town-market-action-grimoire">Grimoire Shop</div>
 								<div id="town-market-action-food">Food (soon)</div>
-								<div id="town-market-action-grimoire">Crystal (soon)</div>
+								<div id="town-market-action-crystal">Crystal (soon)</div>
 							</div>
-							
+							<div id="town-market-body">
+								<div id="town-market-grimoire">Buy Grimoire</div>
+								<div id="town-market-food">Buy Food</div>
+								<div id="town-market-crystal">Buy Crystal</div>
+							</div>
 						</div>
 						<div id="town-blacksmith">
 							<div id="town-blacksmith-salvage">

@@ -36,6 +36,7 @@ const gameClass = () => {
 			FOCUS_DMG: {
 				name: "Strengthen",
 				base : 1,
+				base_bonus_per_level: 0.02,
 				curbonus : 0,
 				cost_type: "focus",
 				cost_per_sec: 3,
@@ -43,6 +44,7 @@ const gameClass = () => {
 			FOCUS_POWER_REGEN: {
 				name: "Concentration",
 				base : 30,
+				base_bonus_per_level: 1,
 				curbonus : 0,
 				cost_type: "focus",
 				cost_per_sec: 2,
@@ -50,6 +52,7 @@ const gameClass = () => {
 			FOCUS_COMBO_STREAK: {
 				name: "Wombo Combo",
 				base : 0.03,
+				base_bonus_per_level: 0.001,
 				bonusperhit : 0.03,
 				cost_type: "focus",
 				cost_per_sec: 10,
@@ -80,6 +83,11 @@ const gameClass = () => {
 			valhalla: 250000,
 		},
 		towns: [],
+		townsGrimoirePerRegion: {
+			asia: 	[1021,1022,1024,1025,1027,1028,1030, 1041,1042,1044,1045,1047,1048,1050, 1061,1062,1064,1065,1067,1068,1070],
+			europe: [1021,1023,1024,1026,1027,1029,1030, 1041,1043,1044,1046,1047,1049,1050, 1061,1063,1064,1066,1067,1069,1070],
+			valhalla: [1024,1027,1030,1031, 1044,1047,1050,1051, 1064,1067,1070,1071],
+		},
 		passivesPerClass: {},
 		activesPerClass: {},
 		activeSkillBonusPerLevel: {
@@ -127,6 +135,7 @@ const gameClass = () => {
 			currentRegion: "asia",
 			currentTownTab: "portal",
 			currentTownPortalTab: "route",
+			currentTownMarketTab: null,
 			currentStage: 1,
 			currentStageIsTown: false,
 			currentMonster: null,
@@ -1018,6 +1027,7 @@ const gameClass = () => {
 		}
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
+		return true
 	}
 
 	const removeItemInventory = (id) => {
@@ -1207,7 +1217,7 @@ const gameClass = () => {
 		if (localStorage.getItem('exp_char'))
 			DATA.player.exp_char 				= toDecimal(localStorage.getItem('exp_char'))
 		if (localStorage.getItem('aura_exp'))
-			DATA.player.aura_exp 				= toDecimal(localStorage.getItem('aura_exp'))
+			DATA.player.aura_exp 				= JSON.parse(localStorage.getItem('aura_exp'))
 		if (JSON.parse(localStorage.getItem('ekk')))
 			DATA.player.ekk 						= JSON.parse(localStorage.getItem('ekk'))
 		if (JSON.parse(localStorage.getItem('equipments')))
@@ -1262,10 +1272,6 @@ const gameClass = () => {
 		localStorage.setItem('lts', 					JSON.stringify(DATA.player.lts))
 	}
 
-	const getComboStreakBonus = () => {
-		return toDecimal(TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit * DATA.player.currentComboStreak,2)
-	}
-
 	const battling = () => {
 		if (DATA.player.battle.combo !== null) {
 			//console.log("battling")
@@ -1299,7 +1305,7 @@ const gameClass = () => {
 					/* DAMAGE THE MONSTER*/
 					/* if buff, base 2 because 100% from base damage and 100% from basic focus buff */
 					let finaldmg = DATA.player.settings.aura_focus_dmg === true ? 
-						(2 + getPassiveBonusValue("focus_dmg_p")) * DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] : DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit]
+						(1 + getAuraStrengthenBonus()) * DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit] : DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["hit"+DATA.player.battle.current_hit]
 					let defensePenetration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_def_pen || 0
 					let monsterTimerDelayChance = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun || 0
 					let monsterTimerDelayDuration = DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_stun_duration || 0
@@ -1455,16 +1461,35 @@ const gameClass = () => {
 		}
 	}
 
+	const getAuraStrengthenBonus = () => {
+		return (1 + getPassiveBonusValue("focus_dmg_p")) 
+		* (TABLES.AURA.FOCUS_DMG.base + TABLES.AURA.FOCUS_DMG.base_bonus_per_level * getSkillLevelByExp(DATA.player.aura_exp.focus_dmg,2))
+	}
 	const getAuraStrengthenCost = () => {
-		return TABLES.AURA.FOCUS_DMG.cost_per_sec + Math.ceil(getPassiveBonusValue("focus_dmg_p"))
+		return TABLES.AURA.FOCUS_DMG.cost_per_sec 
+		+ getSkillLevelByExp(DATA.player.aura_exp.focus_dmg,2) - 1
+		+ Math.ceil(getPassiveBonusValue("focus_dmg_p"))
 	}
-
+	const getAuraConcentrationBonus = () => {
+		let regen = TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")
+		let levelratiobonus = 1 + (TABLES.AURA.FOCUS_POWER_REGEN.base_bonus_per_level/TABLES.AURA.FOCUS_POWER_REGEN.base) * getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen,2)
+		return levelratiobonus * regen
+	}
 	const getAuraConcentrationCost = () => {
-		return TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec + Math.ceil(Math.pow(TABLES.AURA.FOCUS_POWER_REGEN.base / getPassiveBonusValue("combo_regen_sec"), 2))
+		return TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec 
+		+ getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen,2) - 1
+		+ Math.ceil(Math.pow((TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")) / getPassiveBonusValue("combo_regen_sec"), 2))
 	}
-
+	const getComboStreakBonus = () => {
+		let combobonus = 1 + DATA.player.currentComboStreak
+		let bonusratio = TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.base_bonus_per_level * getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak,2)
+		return toDecimal(combobonus * bonusratio,2)
+	}
+	const getAuraBattleTranceBonus = () => {
+		return TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.base_bonus_per_level * getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak,2)
+	}
 	const getAuraBattleTranceCost = () => {
-		return TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec
+		return TABLES.AURA.FOCUS_COMBO_STREAK.cost_per_sec + getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak,2) - 1
 	}
 
 	const auraLoop = () => {
@@ -1483,7 +1508,7 @@ const gameClass = () => {
 				&& DATA.player.currentPower < getPassiveBonusValue("combo_power")) {
 				DATA.player.focus -= getAuraConcentrationCost()
 				/* Regen power */
-				DATA.player.currentPower += TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") 
+				DATA.player.currentPower += getAuraConcentrationBonus()/getPassiveBonusValue("combo_regen_sec") 
 			} else if (DATA.player.focus - getAuraConcentrationCost() < 0) {
 				DATA.player.settings.aura_focus_power_regen = false
 				elebyID("aura-focus-power-regen").checked = false
@@ -1509,11 +1534,25 @@ const gameClass = () => {
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
 		updateTextByID("aura-focus-dmg-cost", numberPrint(getAuraStrengthenCost()))
-		updateTextByID("aura-focus-dmg-value", numberPrint(percent(1 + getPassiveBonusValue("focus_dmg_p"))))
+		updateTextByID("aura-focus-dmg-value", numberPrint(percent(getAuraStrengthenBonus())))
+		updateTextByID("aura-focus-dmg-level", getSkillLevelByExp(DATA.player.aura_exp.focus_dmg, 2))
+		updateTextBySelector("#aura-focus-dmg-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_dmg, 2)))
+		updateTextBySelector("#aura-focus-dmg-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_dmg, 2)))
+		updateProgressBar("#aura-focus-dmg-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_dmg, 2), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_dmg, 2))
+
 		updateTextByID("aura-focus-power-regen-cost", numberPrint(getAuraConcentrationCost()))
-		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec"), 2)))
+		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(getAuraConcentrationBonus()/getPassiveBonusValue("combo_regen_sec"), 2)))
+		updateTextByID("aura-focus-power-regen-level", getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen, 2))
+		updateTextBySelector("#aura-focus-power-regen-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2)))
+		updateTextBySelector("#aura-focus-power-regen-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2)))
+		updateProgressBar("#aura-focus-power-regen-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2))
+
 		updateTextByID("aura-focus-combostreak-cost", numberPrint(getAuraBattleTranceCost()))
-		updateTextByID("aura-focus-combostreak-value", numberPrint(percent(TABLES.AURA.FOCUS_COMBO_STREAK.bonusperhit)))
+		updateTextByID("aura-focus-combostreak-value", numberPrintWithDecimal(percent(getAuraBattleTranceBonus())))
+		updateTextByID("aura-focus-combostreak-level", getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak, 2))
+		updateTextBySelector("#aura-focus-combostreak-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_combostreak, 2)))
+		updateTextBySelector("#aura-focus-combostreak-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_combostreak, 2)))
+		updateProgressBar("#aura-focus-combostreak-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_combostreak, 2), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_combostreak, 2))
 	}
 
 	/* Keep this loop at 1 per second */
@@ -1598,6 +1637,7 @@ const gameClass = () => {
 		elebyID("town-nav-market").onclick = swapTownSection
 		elebyID("town-nav-blacksmith").onclick = swapTownSection
 
+		/* Portal TAB */
 		function showRegionalDestinations() {
 			DATA.player.currentTownPortalTab = "route"
 			updateAttributeByID("town-portal", "class", "route")
@@ -1608,6 +1648,26 @@ const gameClass = () => {
 		}
 		elebyID("town-portal-region-routes").onclick = showRegionalDestinations
 		elebyID("town-portal-worlds").onclick = showWorldsDestinations
+
+		/* Market TAB*/
+		function showMarketGrimoire() {
+			DATA.player.currentTownMarketTab = "grimoire"
+			updateAttributeByID("town-market", "class", "grimoire")
+		}
+		function showMarketFood() {
+			DATA.player.currentTownMarketTab = "food"
+			updateAttributeByID("town-market", "class", "food")
+		}
+		function showMarketCrystal() {
+			DATA.player.currentTownMarketTab = "crystal"
+			updateAttributeByID("town-market", "class", "crystal")
+		}
+		elebyID("town-market-action-grimoire").onclick = showMarketGrimoire
+		elebyID("town-market-action-food").onclick = showMarketFood
+		elebyID("town-market-action-crystal").onclick = showMarketCrystal
+
+		/* Blacksmith TAB*/
+		// TO DO
 	}
 
 	const townRender = () => {
@@ -1689,7 +1749,13 @@ const gameClass = () => {
 				}
 			}
 		} else if (DATA.player.currentTownTab === "market") {
-			
+			if (DATA.player.currentTownMarketTab === "grimoire") {
+				
+			} else if (DATA.player.currentTownMarketTab === "food") {
+				// TO DO
+			} else if (DATA.player.currentTownMarketTab === "crystal") {
+				// TO DO	
+			}
 		} else if (DATA.player.currentTownTab === "blacksmith") {
 			updateTextByID("epic-dust-count", numberPrint(DATA.player.weapondust.epic))
 			updateTextByID("legendary-dust-count", numberPrint(DATA.player.weapondust.legendary))
@@ -1762,12 +1828,12 @@ const gameClass = () => {
 		elebyID("maxpower-count").innerHTML = numberPrint(getPassiveBonusValue("combo_power"))
 		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec"), 1))
 		elebyID("powerregen-count-focus").innerHTML = DATA.player.settings.aura_focus_power_regen === true ? 
-			iText("power_regen_focus",numberPrint(toDecimal(TABLES.AURA.FOCUS_POWER_REGEN.base/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
+			iText("power_regen_focus",numberPrint(toDecimal(getAuraConcentrationBonus()/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
 
 		elebyID("curfocus").innerHTML = numberPrint(DATA.player.focus)
 
 		/* use this loop instead of aura because more fps */
-		updateTextByID("aura-focus-combostreak-streak", numberPrint(percent(getComboStreakBonus())))
+		updateTextByID("aura-focus-combostreak-streak", numberPrintWithDecimal(toDecimal(getComboStreakBonus()*100 ,2)))
 
 		updateAttributeByID("bsettings-player", "data-awakenstage", DATA.player.awaken_stage)
 		updateTextByID("awakenstage-value", DATA.player.awaken_stage)
@@ -2209,6 +2275,13 @@ const gameClass = () => {
 				}
 			}
 		}
+	}
+
+	function buyItem() {
+		/* don't buy if inventory full*/
+
+		/* force disable auto consume items */
+
 	}
 
 	function consumeItem() {
@@ -2721,7 +2794,7 @@ const gameClass = () => {
 				
 				if (DATA.player.settings.aura_focus_dmg === true) {
 					let damagebonusfromfocus = 0
-					damagebonusfromfocus = toDecimal((1 + getPassiveBonusValue("focus_dmg_p")) * skilldata.skill.hit)
+					damagebonusfromfocus = toDecimal((getAuraStrengthenBonus()) * skilldata.skill.hit)
 					updateTextByID("comboskill-damage-"+i,iText("comboskill_stat_dmg_withfocus",toDecimal(skilldata.skill.hit),damagebonusfromfocus))
 				} else {
 					updateTextByID("comboskill-damage-"+i,iText("comboskill_stat_dmg",toDecimal(skilldata.skill.hit)))

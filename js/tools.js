@@ -72,10 +72,12 @@ const updateAttributeBySelector = (elementSelector, attribute, value) => {
 
 /* substition */
 
-const iText = (code, value, value2, value3) => {
+const iText = (code, value, value2, value3, value4, value5) => {
 	value = value || null
 	value2 = value2 || null
 	value3 = value3 || null
+	value4 = value4 || null
+	value5 = value5 || null
 	if (TEXTS.hasOwnProperty(code) === false) {
 		console.log("TEXTS has no property "+code)
 		return ""
@@ -84,11 +86,12 @@ const iText = (code, value, value2, value3) => {
 		value = iText(value)
 	} else if (code.endsWith("_p")) {
 		value = percent(value, 4)
-
 	}
 	var render = value ? TEXTS[code].replace("{0}", isNumeric(value) ? numberPrint(toDecimal(value,2)) : value.toString()) : TEXTS[code]
 	render = value2 ? render.replace("{1}", isNumeric(value2) ? numberPrint(toDecimal(value2,2)) : value2.toString()) : render
 	render = value3 ? render.replace("{2}", isNumeric(value3) ? numberPrint(toDecimal(value3,2)) : value3.toString()) : render
+	render = value4 ? render.replace("{3}", isNumeric(value4) ? numberPrint(toDecimal(value4,2)) : value4.toString()) : render
+	render = value5 ? render.replace("{4}", isNumeric(value5) ? numberPrint(toDecimal(value5,2)) : value5.toString()) : render
 	return render
 }
 
@@ -139,7 +142,17 @@ const isNumeric = (number) => {
 
 function numberPrint(x, separator) {
 	separator = separator || ","
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+	if (x > 1e15) {
+		x = numberShort(x)
+	} else {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+	}
+}
+function numberPrintWithDecimal(x, separator) {
+	separator = separator || ","
+	var parts = x.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  return parts.join(".");
 }
 
 function numberShort(x) {

@@ -2,6 +2,9 @@ const TEXTS = {
 	/* Town */
 	destination_route : "<div id=\"gotoroute-{2}\" class=\"destroute\" data-route=\"\"><span class=\"destination-route\">Town #{0}</span><span class=\"destination-price\">Cost {1} Ekk</span></div>",
 	destination_world : "Cost {0} Ekk",
+	market_grimoire : "<div class=\"{0}\">{1} <span class=\"destination-price\">Cost {2} Ekk</span></div>",
+	market_food : "Food: {0}",
+	market_Crystal : "",
 	/* battle */
 	monster_rank_0 : "",
 	monster_rank_1 : "★",
@@ -28,6 +31,14 @@ const TEXTS = {
 	europe: "Europe",
 	asia  : "Asia",
 	special: "Unique",
+	/*grades*/
+	class_grade_1 : "grade-cheap",
+	class_grade_2 : "grade-common",
+	class_grade_3 : "grade-uncommon",
+	class_grade_4 : "grade-rare",
+	class_grade_5 : "grade-epic",
+	class_grade_6 : "grade-legendary",
+	class_grade_7 : "grade-mythical",
 	/*grades*/
 	grade_1 : "Cheap",
 	grade_2 : "Common",
