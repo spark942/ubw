@@ -1701,7 +1701,7 @@ const gameClass = () => {
 
 		function goToRoute() {
 			let route =	parseInt(this.getAttribute("data-route"))
-			let price = toDecimal(Math.abs(route - DATA.player.currentStage)*1000)
+			let price = toDecimal(Math.abs(route - DATA.player.currentStage)*500)
 
 			if (DATA.player.ekk - price >= 0) {
 				DATA.player.currentStage = route
@@ -1721,6 +1721,11 @@ const gameClass = () => {
 				DATA.player.currentRegion = region
 				DATA.player.ekk -= price
 				updateStage(DATA.player.currentStage)
+				if (elebyID("game-container").getAttribute("class").toString().includes(DATA.player.currentRegion) === false) {
+					if (elebyID("game-container").getAttribute("class").toString().includes("intown")) {
+						updateAttributeByID("game-container", "class", "intown "+DATA.player.currentRegion)
+					}
+				}
 			}
 		}
 
@@ -1750,7 +1755,7 @@ const gameClass = () => {
 					if (DATA.player.max_stage[DATA.player.currentRegion] < TABLES.towns[i][0]) { continue }
 					let button = iText(
 						"destination_route", 
-						TABLES.towns[i][0], numberPrint(toDecimal(Math.abs(TABLES.towns[i][0] - DATA.player.currentStage)*1000)), 
+						TABLES.towns[i][0], numberPrint(toDecimal(Math.abs(TABLES.towns[i][0] - DATA.player.currentStage)*500)), 
 						TABLES.towns[i][0]+"-button")
 					portalDestionationsHTML += button.replace("data-route=\"\"", "data-route=\""+TABLES.towns[i][0]+"\"")
 					
