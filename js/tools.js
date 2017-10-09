@@ -103,7 +103,7 @@ const percent = (number, decimal) => {
 	number = number || 0
 	decimal = decimal || 0
 	if (number === 0) { return 0 }
-	return toDecimal(Math.floor(number * 100),decimal)
+	return toDecimal(Math.floor(number * 100 * Math.pow(10, decimal)) / Math.pow(10, decimal),decimal)
 }
 
 const toDecimal = (number, decimal) => {

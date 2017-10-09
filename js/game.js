@@ -401,7 +401,7 @@ const gameClass = () => {
 			wcb = WIELDINGTYPES[wieldingType].weaponcomborotation
 		}
 		let rotation = []
-		while (rotation.length < 100) {
+		while (rotation.length < 200) {
 			for (var i = 0; i < wcb.length; i++) {
 				rotation.push(wcb[i])
 			};
@@ -1486,7 +1486,7 @@ const gameClass = () => {
 	const getComboStreakBonus = () => {
 		let combobonus = 1 + DATA.player.currentComboStreak
 		let bonusratio = TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.base_bonus_per_level * getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak,2)
-		return toDecimal(combobonus * bonusratio,2)
+		return toDecimal(combobonus * bonusratio,4)
 	}
 	const getAuraBattleTranceBonus = () => {
 		return TABLES.AURA.FOCUS_COMBO_STREAK.base + TABLES.AURA.FOCUS_COMBO_STREAK.base_bonus_per_level * getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak,2)
@@ -1549,9 +1549,8 @@ const gameClass = () => {
 		updateTextBySelector("#aura-focus-power-regen-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2)))
 		updateTextBySelector("#aura-focus-power-regen-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2)))
 		updateProgressBar("#aura-focus-power-regen-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2))
-
 		updateTextByID("aura-focus-combostreak-cost", numberPrint(getAuraBattleTranceCost()))
-		updateTextByID("aura-focus-combostreak-value", numberPrintWithDecimal(percent(getAuraBattleTranceBonus())))
+		updateTextByID("aura-focus-combostreak-value", numberPrintWithDecimal(percent(getAuraBattleTranceBonus(), 4)))
 		updateTextByID("aura-focus-combostreak-level", getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak, 2))
 		updateTextBySelector("#aura-focus-combostreak-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_combostreak, 2)))
 		updateTextBySelector("#aura-focus-combostreak-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_combostreak, 2)))
@@ -1888,7 +1887,7 @@ const gameClass = () => {
 		elebyID("curfocus").innerHTML = numberPrint(DATA.player.focus)
 
 		/* use this loop instead of aura because more fps */
-		updateTextByID("aura-focus-combostreak-streak", numberPrintWithDecimal(toDecimal(getComboStreakBonus()*100 ,2)))
+		updateTextByID("aura-focus-combostreak-streak", numberPrintWithDecimal(percent(getComboStreakBonus(),2)))
 
 		updateAttributeByID("bsettings-player", "data-awakenstage", DATA.player.awaken_stage)
 		updateTextByID("awakenstage-value", DATA.player.awaken_stage)
@@ -2579,7 +2578,7 @@ const gameClass = () => {
 
 		/* BATTLE */
 		let dmgbonus_passive = getPassiveBonusValue("dmg_p")
-		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive)))
+		updateTextByID("dmgbonus-total", numberPrint(percent(dmgbonus_passive + DATA.player.awaken_stage * 0.33)))
 		updateTextByID("dmgbonus-pskill", numberPrint(percent(dmgbonus_passive)))
 		updateTextByID("dmgbonus-astage", numberPrint(percent(DATA.player.awaken_stage * 0.33)))
 
