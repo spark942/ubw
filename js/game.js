@@ -1504,7 +1504,6 @@ const gameClass = () => {
 			} else if (DATA.player.focus - getAuraStrengthenCost() < 0) {
 				DATA.player.settings.aura_focus_dmg = false
 				elebyID("aura-focus-dmg").checked = false
-				auraFocusDmgCheck()
 				elebyID("aura-focus-dmg").onchange()
 			}
 			if (DATA.player.settings.aura_focus_power_regen === true
