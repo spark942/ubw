@@ -1603,7 +1603,9 @@ const gameClass = () => {
 				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
 					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))
 					/* grimoire*/
-					if (ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") && ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
+					if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
+						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
+						&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
 						if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
 							DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
 						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
