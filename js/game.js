@@ -2377,7 +2377,9 @@ const gameClass = () => {
 			&& item_id >= 1000 && item_id <= 10000) {
 			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
 			/* grimoire*/
-			if (ITEMS[item_id][6].startsWith("grim") && ITEMS[item_id][8] !== null) {
+			if (ITEMS[item_id][6] !== null
+				&& ITEMS[item_id][6].startsWith("grim") 
+				&& ITEMS[item_id][8] !== null) {
 				if (ITEMS[item_id][6] === "grim_aura_strengthen") {
 					DATA.player.aura_exp.focus_dmg += ITEMS[item_id][8]
 				} else if (ITEMS[item_id][6] === "grim_aura_concentration") {
