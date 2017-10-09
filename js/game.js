@@ -1481,7 +1481,7 @@ const gameClass = () => {
 	const getAuraConcentrationCost = () => {
 		return TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec 
 		+ toDecimal((getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen,2) - 1
-		+ Math.ceil(Math.pow((TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")) / getPassiveBonusValue("combo_regen_sec"), 2))) / TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec)
+		+ Math.ceil(Math.pow((TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")) / getPassiveBonusValue("combo_regen_sec"), 2))) / TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec / 2)
 	}
 	const getComboStreakBonus = () => {
 		let combobonus = 1 + DATA.player.currentComboStreak
