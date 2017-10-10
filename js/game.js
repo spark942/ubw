@@ -1029,10 +1029,10 @@ const gameClass = () => {
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
 		let forceSave = updatedItem.grade >= 5 ? true : false
-		if (forceSave === true) {
-			saveData(forceSave)
-		} else if (DATA.player.currentStageIsTown === true) {
+		if (DATA.player.currentStageIsTown === true && updatedItem.grade <= 5) {
 			saveData()
+		} else if (forceSave === true) {
+			saveData(forceSave)
 		}
 		return true
 	}
