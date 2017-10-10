@@ -13,7 +13,8 @@ const gameClass = () => {
 	const GAMEVAR = {
 		initialized:false,
 		renderInitialized:false,
-		inventoryspace: 20
+		inventoryspace: 20,
+		saveCooldown: 30000,
 	}
 	const TABLES = {
 		EXP_CHAR:   [],
@@ -1027,8 +1028,9 @@ const gameClass = () => {
 		}
 		//console.log(updatedItem)
 		DATA.player.inventory.push(updatedItem)
+		let forceSave = updatedItem.grade >= 5 ? true : false
 		if (DATA.player.currentStageIsTown === true) {
-			saveData()
+			saveData(forceSave)
 		}
 		return true
 	}
@@ -1170,6 +1172,13 @@ const gameClass = () => {
 				mob_id = sdata[3]
 			}
 			DATA.player.currentMonster = createMonster(mob_id, getEffectiveStage())
+
+			if (DATA.player.settings.townSell === true) {
+				DATA.player.settings.townSell = false
+			}
+			if (DATA.player.settings.townSalvage === true) {
+				DATA.player.settings.townSalvage = false
+			}
 		} else if (sdata[1] === 1) { /*town*/
 
 			elebyID("bscreen-t-town").classList.remove("hidden")
@@ -1251,7 +1260,15 @@ const gameClass = () => {
 			console.log(DATA)
 	}
 
-	const saveData = () => {
+	const saveData = (force) => {
+		force = force || false
+		if (DATA.player.lastonline > Date.now() - GAMEVAR.saveCooldown && force === false) {
+			localStorage.setItem('currentStage',	JSON.stringify(DATA.player.currentStage))
+			localStorage.setItem('exp_char', 			DATA.player.exp_char)
+			return false
+		} else {
+			console.log("saving")
+		}
 		DATA.player.lastonline = Date.now()
 		localStorage.setItem('settings',	JSON.stringify(DATA.player.settings))
 		localStorage.setItem('lastonline',	JSON.stringify(DATA.player.lastonline))
@@ -2345,7 +2362,7 @@ const gameClass = () => {
 
 		let consumed = false
 		let thisItemObject = getItemFromInventoryByID(inv_id)
-
+		console.log("nomnom")
 		if (isEquipped(thisItemObject.id) !== false) {
 			return false
 		}
@@ -2377,7 +2394,7 @@ const gameClass = () => {
 		/* eat consumable */
 		else if (
 			DATA.player.settings.townSell === false
-			&& DATA.player.settings.townSalvage === false
+			&& DATA.player.settings.townSalvage === false	
 			&& item_id >= 1000 && item_id <= 10000) {
 			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
 			/* grimoire*/
