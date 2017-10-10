@@ -1501,12 +1501,12 @@ const gameClass = () => {
 	}
 	const getAuraConcentrationBonus = () => {
 		let regen = TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")
-		let levelratiobonus = 1 + (TABLES.AURA.FOCUS_POWER_REGEN.base_bonus_per_level/TABLES.AURA.FOCUS_POWER_REGEN.base) * getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen,2)
+		let levelratiobonus = 1 + (TABLES.AURA.FOCUS_POWER_REGEN.base_bonus_per_level/TABLES.AURA.FOCUS_POWER_REGEN.base) * getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen, 5)
 		return levelratiobonus * regen
 	}
 	const getAuraConcentrationCost = () => {
 		return TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec 
-		+ toDecimal((getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen,2) - 1
+		+ toDecimal((getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen, 5) - 1
 		+ Math.ceil(Math.pow((TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")) / getPassiveBonusValue("combo_regen_sec"), 2))) / TABLES.AURA.FOCUS_POWER_REGEN.cost_per_sec / 2)
 	}
 	const getComboStreakBonus = () => {
@@ -1571,10 +1571,10 @@ const gameClass = () => {
 
 		updateTextByID("aura-focus-power-regen-cost", numberPrint(getAuraConcentrationCost()))
 		updateTextByID("aura-focus-power-regen-value", numberPrint(toDecimal(getAuraConcentrationBonus()/getPassiveBonusValue("combo_regen_sec"), 2)))
-		updateTextByID("aura-focus-power-regen-level", getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen, 2))
-		updateTextBySelector("#aura-focus-power-regen-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2)))
-		updateTextBySelector("#aura-focus-power-regen-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2)))
-		updateProgressBar("#aura-focus-power-regen-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 2), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 2))
+		updateTextByID("aura-focus-power-regen-level", getSkillLevelByExp(DATA.player.aura_exp.focus_power_regen, 5))
+		updateTextBySelector("#aura-focus-power-regen-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 5)))
+		updateTextBySelector("#aura-focus-power-regen-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 5)))
+		updateProgressBar("#aura-focus-power-regen-exp", getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_power_regen, 5), getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_power_regen, 5))
 		updateTextByID("aura-focus-combostreak-cost", numberPrint(getAuraBattleTranceCost()))
 		updateTextByID("aura-focus-combostreak-value", numberPrintWithDecimal(percent(getAuraBattleTranceBonus(), 4)))
 		updateTextByID("aura-focus-combostreak-level", getSkillLevelByExp(DATA.player.aura_exp.focus_combostreak, 2))
