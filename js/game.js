@@ -241,7 +241,7 @@ const gameClass = () => {
 	}
 
 	const setConstant = () => {
-		for (var i = 0; i < 100; i++) {
+		for (var i = 0; i < 123; i++) {
 			let fib1 = fibonacci(i+1)
 			let fib8 = fibonacci(i+8)
 			TABLES['EXP_CHAR'].push( Math.floor( Math.sqrt( fib8 )*8 ) )
@@ -250,6 +250,13 @@ const gameClass = () => {
 			TABLES['EXP_SKILL3'].push( Math.floor( Math.sqrt( fib1 )*25 ) )
 			TABLES['EXP_SKILL4'].push( Math.floor( Math.sqrt( fib1 )*80 ) )
 			TABLES['EXP_SKILL5'].push( Math.floor( Math.sqrt( fib1 )*5500 ) )
+		}
+		for (var i = 0; i < 877; i++) {
+			TABLES['EXP_SKILL'].push(Math.floor(TABLES['EXP_SKILL'][TABLES['EXP_SKILL'].length - 1] * 1.1))
+			TABLES['EXP_SKILL2'].push(Math.floor(TABLES['EXP_SKILL2'][TABLES['EXP_SKILL2'].length - 1] * 1.1))
+			TABLES['EXP_SKILL3'].push(Math.floor(TABLES['EXP_SKILL3'][TABLES['EXP_SKILL3'].length - 1] * 1.1))
+			TABLES['EXP_SKILL4'].push(Math.floor(TABLES['EXP_SKILL4'][TABLES['EXP_SKILL4'].length - 1] * 1.1))
+			TABLES['EXP_SKILL5'].push(Math.floor(TABLES['EXP_SKILL5'][TABLES['EXP_SKILL5'].length - 1] * 1.1))
 		}
 
 		/* load monsters id per region and elite_rank */
@@ -1546,7 +1553,7 @@ const gameClass = () => {
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
-			DATA.player.focus += 2 + parseInt(getPassiveBonusValue("focus_idle_regen"))
+			DATA.player.focus += (2 + parseInt(getPassiveBonusValue("focus_idle_regen"))) * (1 + DATA.player.awaken_stage)
 		}
 		if (DATA.player.focus < 0) {
 			DATA.player.focus = 0
@@ -1556,7 +1563,7 @@ const gameClass = () => {
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
 		updateTextByID("aura-focus-dmg-cost", numberPrint(getAuraStrengthenCost()))
-		updateTextByID("aura-focus-dmg-value", numberPrint(percent(getAuraStrengthenBonus())))
+		updateTextByID("aura-focus-dmg-value", numberPrint(percent(getAuraStrengthenBonus(),1)))
 		updateTextByID("aura-focus-dmg-level", getSkillLevelByExp(DATA.player.aura_exp.focus_dmg, 2))
 		updateTextBySelector("#aura-focus-dmg-exp .currentexp", numberPrint(getSkillCurrentExpOfLevel(DATA.player.aura_exp.focus_dmg, 2)))
 		updateTextBySelector("#aura-focus-dmg-exp .maxexp", numberPrint(getSkillCurrentLevelTotalExp(DATA.player.aura_exp.focus_dmg, 2)))
