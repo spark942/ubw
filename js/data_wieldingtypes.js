@@ -67,7 +67,8 @@ const WEAPONSYPES = {
 		"Asura",
 		"Damascus",
 		"Knife",
-		"Dagger"]},
+		"Dagger",
+		"Icepick"]},
 	Axes: {Weapons:[
 		"BattleAxe"]},
 	TwohandedAxes: {Weapons:[
