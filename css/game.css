@@ -1551,14 +1551,14 @@ input[type="radio"]:checked + label:after {
 	border-color: rgba(189, 195, 199,1.0);
 }
 #inventory-items .inv-item[data-type="w"] {
-	border-color: rgba(52, 152, 219,1.0);
+	border-color: rgba(10,255,10,1.0);
 }
 #inventory-items .inv-item[data-type="f"] .item-type:after {
 	content: "Consummable";
 	color: rgba(189, 195, 199,1.0);
 }
 #inventory-items .inv-item[data-type="w"] .item-type {
-	color: rgba(52, 152, 219,1.0);
+	color: rgba(10,255,10,1.0);
 }
 #inventory-items .inv-item[data-type="f"] .item-weapontype {
 	display: none;
