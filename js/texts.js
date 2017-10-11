@@ -27,6 +27,13 @@ const TEXTS = {
 	Axelikeswords			: "Axe-like Sword",
 	HookSwords				: "Hook Sword",
 	Daggers					: "Dagger",
+	Axes					: "One-handed Axe",
+	TwohandedAxes			: "Two-handed Axe",
+	Spears					: "Spear",
+	Polearms				: "Polearm",
+	Maces					: "One-handed Mace",
+	TwohandedMaces			: "Two-handed Mace",
+	Shields					: "Shield",
 	/*stages*/
 	europe: "Europe",
 	asia  : "Asia",
