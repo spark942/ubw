@@ -63,7 +63,24 @@ const WEAPONSYPES = {
 		"Pugio",
 		"Stiletto",
 		"Dirk",
-		"Maingauche"]},
+		"Maingauche",
+		"Asura",
+		"Damascus",
+		"Knife",
+		"Dagger"]},
+	Axes: {Weapons:[
+		"BattleAxe"]},
+	TwohandedAxes: {Weapons:[
+		"Greataxe"]},
+	Spears: {Weapons:[
+		"Spear"]},
+	Polearms: {Weapons:[
+		"Poleaxe"]},
+	Maces: {Weapons:[
+		"Mace",
+		"Hammer"]},
+	TwohandedMaces: {Weapons:[
+		"BigMace"]},
 	Shields: {Weapons:[
 		"Buckler"]},
 }
@@ -88,12 +105,12 @@ const WIELDINGTYPES = {
 	},
 	SimpleCurvedSword: {
 		requirement: 1,
-		weapontype1: ["Curvedshortswords", "Curvedonehandedswords"],
+		weapontype1: ["Curvedshortswords", "Curvedonehandedswords", "Axelikeswords"],
 		weaponcomborotation: [1],
 	},
 	SimpleCurvedSwordAndShield: {
 		awaken     : 2,
-		weapontype1: ["Curvedshortswords", "Curvedonehandedswords"],
+		weapontype1: ["Curvedshortswords", "Curvedonehandedswords", "Axelikeswords"],
 		weapontype2: ["Shields"],
 		weaponcomborotation: [1,2],
 	},
@@ -115,6 +132,27 @@ const WIELDINGTYPES = {
 	TwohandedCurvedSword: {
 		requirement: 40,
 		weapontype1: ["Curvedtwohandedswords"],
+		weaponcomborotation: [1],
+	},
+	Lancer: {
+		requirement: 50,
+		weapontype1: ["Spears"],
+		weaponcomborotation: [1],
+	},
+	ShaolinFist: {
+		awaken     : 10,
+		weapontype1: ["HandFist","Daggers"],
+		weapontype2: ["HandFist","Daggers"],
+		weaponcomborotation: [1,2],
+	},
+	ShaolinSpear: {
+		awaken     : 60,
+		weapontype1: ["Spears"],
+		weaponcomborotation: [1],
+	},
+	ShaolinMaster: {
+		awaken     : 500,
+		weapontype1: ["HookSwords"],
 		weaponcomborotation: [1],
 	},
 	God: {
