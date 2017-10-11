@@ -264,7 +264,126 @@
 	background-color: rgba(46, 204, 113,1.0);
 	background-image: url("../img/actives/spinning-sword.png");
 }
-.active-53 {
-	background-color: rgba(243, 156, 18,0.8);
+.active-47, .active-48, .active-49, .active-50, 
+.active-51, .active-52, .active-55 {
+	background-color: rgba(46, 204, 113,1.0);
+}
+
+
+.active-53, .active-54 {
+	background-color: rgba(243, 156, 18,0.7);
 	background-image: url("../img/actives/knock-down.png");
+}
+.active-54 {
+	background-color: rgba(243, 156, 18,1);
+}
+/* dagger */
+.active-61, .active-62 {
+	background-color: rgb(234, 209, 220,0.9);
+	background-image: url("../img/actives/knife-thrust.png");
+}
+.active-63 {
+	background-color: rgb(234, 209, 220,0.9);
+	background-image: url("../img/actives/split-cross.png");
+}
+.active-64 {
+	background-color: rgb(234, 209, 220,1);
+	background-image: url("../img/actives/knife-thrust.png");
+}
+.active-65 {
+	background-color: rgb(234, 209, 220,0.9);
+	background-image: url("../img/actives/thrown-knife.png");
+}
+.active-66 {
+	background-color: rgb(234, 209, 220,0.9);
+	background-image: url("../img/actives/thrown-daggers.png");
+}
+.active-67 {
+	background-color: rgb(224, 192, 206,0.9);
+	background-image: url("../img/actives/thrown-knife.png");
+}
+.active-68 {
+	background-color: rgb(224, 192, 206,0.9);
+	background-image: url("../img/actives/thrown-daggers.png");
+}
+.active-70 {
+	background-color: rgb(224, 175, 196,1);
+	background-image: url("../img/actives/split-cross.png");
+}
+.active-69, .active-71, .active-72, .active-73,
+.active-74, .active-75, .active-76, .active-77, 
+.active-78, .active-79, .active-80 {
+	background-color: rgb(224, 175, 196,1);
+} 
+
+/* 2h sword */
+.active-81, .active-82, .active-83, .active-84, 
+.active-85, .active-86, .active-87, .active-88, 
+.active-89, .active-90, .active-91, .active-92, 
+.active-93, .active-94, .active-95, .active-96, 
+.active-97, .active-98, .active-99, .active-100 {
+	background-color: rgb(164, 194, 244);
+}
+
+/* 2h curved sword*/
+.active-101, .active-102, .active-103, .active-104, 
+.active-105, .active-106, .active-107, .active-108, 
+.active-109, .active-110, .active-111, .active-112, 
+.active-113, .active-114, .active-115, .active-116, 
+.active-117, .active-118, .active-119, .active-120 {
+	background-color: rgb(147, 196, 125);
+}
+
+/* 1h axe */
+.active-121, .active-122, .active-123, .active-124, 
+.active-125, .active-126, .active-127, .active-128, 
+.active-129, .active-130, .active-131, .active-132, 
+.active-133, .active-134, .active-135, .active-136, 
+.active-137, .active-138, .active-139, .active-140 {
+	background-color: rgb(230, 184, 175);
+}
+
+/* spear */
+.active-141, .active-142, .active-143, .active-144, 
+.active-145, .active-146, .active-147, .active-148, 
+.active-149, .active-150, .active-151, .active-152, 
+.active-153, .active-154, .active-155, .active-156, 
+.active-157, .active-158, .active-159, .active-160 {
+	background-color: rgb(255, 242, 204);
+}
+
+/* 2h axe */
+.active-161, .active-162, .active-163, .active-164, 
+.active-165, .active-166, .active-167, .active-168, 
+.active-169, .active-170, .active-171, .active-172, 
+.active-173, .active-174, .active-175, .active-176, 
+.active-177, .active-178, .active-179, .active-180 {
+	background-color: rgb(221, 126, 107);
+}
+
+/* mace */
+.active-181, .active-182, .active-183, .active-184, 
+.active-185, .active-186, .active-187, .active-188, 
+.active-189, .active-190, .active-191, .active-192, 
+.active-193, .active-194, .active-195, .active-196, 
+.active-197, .active-198, .active-199, .active-200 {
+	background-color: rgb(162, 196, 201);
+}
+
+/* polearm */
+.active-201, .active-202, .active-203, .active-204, 
+.active-205, .active-206, .active-207, .active-208, 
+.active-209, .active-210, .active-211, .active-212, 
+.active-213, .active-214, .active-215, .active-216, 
+.active-217, .active-218, .active-219, .active-220 {
+	background-color: rgb(255, 229, 153);
+}
+
+/* hookoo */
+.active-221, .active-222, .active-223, .active-224, 
+.active-225, .active-226, .active-227, .active-228, 
+.active-229, .active-230, .active-231, .active-232, 
+.active-233, .active-234, .active-235, .active-236, 
+.active-237, .active-238, .active-239, .active-240 {
+	
 }
