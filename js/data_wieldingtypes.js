@@ -118,6 +118,7 @@ const WIELDINGTYPES = {
 	SimpleDagger: {
 		requirement: 5,
 		weapontype1: ["Daggers"],
+		weaponcomborotation: [1],
 	},
 	DualDagger: {
 		awaken     : 1,
