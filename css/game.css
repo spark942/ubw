@@ -1418,7 +1418,7 @@ input[type="radio"]:checked + label:after {
 	width: 40px;
 }
 #comboedit #comboskill-lists .combolist-skill .combolist-skill-info {
-	width: 276px;
+	width: 270px;
 	padding: 3px;
 	position: relative;
 }
