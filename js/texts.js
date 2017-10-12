@@ -2,6 +2,7 @@ const TEXTS = {
 	/* Town */
 	destination_route : "<div id=\"gotoroute-{2}\" class=\"destroute\" data-route=\"\"><span class=\"destination-route\">Town #{0}</span><span class=\"destination-price\">Cost {1} Ekk</span></div>",
 	destination_world : "Cost {0} Ekk",
+	destination_newworld : "Cost {0} Ekk<br> {1} Focus",
 	market_grimoire : "<div id=\"{3}\" class=\"grimoire-item {0}\" data-itemid=\"\">{1} <span class=\"market-item-price\">Cost {2} Ekk</span><span class=\"market-item-bonusvalue\">+{4} EXP</span></div>",
 	market_food : "Food: {0}",
 	market_Crystal : "",

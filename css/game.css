@@ -281,6 +281,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	font-size: 12px;
 	position: relative;
 	padding: 5px 0;
+	height: 20px;
 	cursor: pointer;
 }
 .destroute:hover,
@@ -296,6 +297,7 @@ div.progressbar div.progress::-webkit-progress-value {
 	position: absolute;
 	right: 0;
 	font-size: 10px;
+	text-align: right;
 }
 /* Town market + blacksmith */
 #town-market,

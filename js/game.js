@@ -31,6 +31,7 @@ const gameClass = () => {
 		MONSTERS_ID: {
 			asia: null,
 			europe: null,
+			asgard: null,
 			special: null
 		},
 		MAXSTAGE: 250000,
@@ -45,8 +46,8 @@ const gameClass = () => {
 			},
 			FOCUS_POWER_REGEN: {
 				name: "Concentration",
-				base : 30,
-				base_bonus_per_level: 1,
+				base : 5,
+				base_bonus_per_level: 0.02,
 				curbonus : 0,
 				cost_type: "focus",
 				cost_per_sec: 2,
@@ -54,41 +55,56 @@ const gameClass = () => {
 			FOCUS_COMBO_STREAK: {
 				name: "Wombo Combo",
 				base : 0.03,
-				base_bonus_per_level: 0.001,
+				base_bonus_per_level: 0.0005,
 				bonusperhit : 0.03,
 				cost_type: "focus",
-				cost_per_sec: 10,
+				cost_per_sec: 100,
 			},
 		},
 		EXP_BONUS: {
 			per_activeskill_level : 0.01,
 			per_awaken_stage : 0.1,
 		},
-		regions_per_world : {
-			earth: ["asia", "europe"],
-			asgard: ["valhalla"],
+		regions_data : {
+			asia : {
+				world: "earth",
+				offset: 0,
+				multiplier: 0,
+				max_stage: 250000,
+				price: 100000000,
+			},
+			europe : {
+				world: "earth",
+				offset: 0,
+				multiplier: 0,
+				max_stage: 250000,
+				price: 100000000,
+			},
+			asgard : {
+				world: "ninerealms",
+				offset: 200000,
+				multiplier: 50,
+				max_stage: 100002,
+				price: 1000000000,
+			},
+			valhalla : {
+				world: "ninerealms",
+				offset: 5000000,
+				multiplier: 800,
+				max_stage: 1002,
+				price: 10000000000,
+			},
 		},
-		regions: ["asia","europe"],
-		region_stage_offset: {
-			asia: 0,
-			europe: 0,
-			valhalla: 50000,
+		regions_world_cost : { /* if teleport to different world */
+			earth  : { ekk: 		1000000000, focus:    5000000},
+			ninerealms : { ekk:  1000000000000, focus: 	20000000000},
 		},
-		region_stage_multiplier: {
-			asia: 0,
-			europe: 0,
-			valhalla: 500,
-		},
-		region_max_stage: {
-			asia: 250000,
-			europe: 250000,
-			valhalla: 250000,
-		},
+		regions: ["asia","europe","asgard"],
 		towns: [],
 		townsGrimoirePerRegion: {
 			asia: 	[1021,1022,1024,1025,1027,1028,1030, 1041,1042,1044,1045,1047,1048,1050, 1061,1062,1064,1065,1067,1068,1070],
 			europe: [1021,1023,1024,1026,1027,1029,1030, 1041,1043,1044,1046,1047,1049,1050, 1061,1063,1064,1066,1067,1069,1070],
-			valhalla: [1024,1027,1030,1031, 1044,1047,1050,1051, 1064,1067,1070,1071],
+			asgard: [1024,1027,1030,1031, 1044,1047,1050,1051, 1064,1067,1070,1071],
 		},
 		passivesPerClass: {},
 		activesPerClass: {},
@@ -156,7 +172,8 @@ const gameClass = () => {
 				/* earth */
 				asia : 1,
 				europe : 0,
-				/* asgard */
+				/* ninerealms */
+				asgard : 0,
 				valhalla : 0,
 			},
 			ekk         : 1000,
@@ -227,6 +244,7 @@ const gameClass = () => {
 
 
 		loadData()
+		fillPlayerObject()
 		if (DATA.player.lts.creationdate === null) {
 			DATA.player.lts.creationdate = Date.now()
 		}
@@ -287,6 +305,11 @@ const gameClass = () => {
 	const setVariable = () => {
 		/*Stage*/
 		/*Player*/
+	}
+
+	const fillPlayerObject = () => {
+		if (DATA.player.max_stage.hasOwnProperty("asgard") === false) { DATA.player.max_stage.asgard = 0 }
+		if (DATA.player.max_stage.hasOwnProperty("valhalla") === false) { DATA.player.max_stage.valhalla = 0 }
 	}
 
 	const setElement = () => {
@@ -392,7 +415,7 @@ const gameClass = () => {
 	}
 
 	const getEffectiveStage = () => {
-		return (DATA.player.currentStage + TABLES.region_stage_offset[DATA.player.currentRegion]) * (1 + TABLES.region_stage_multiplier[DATA.player.currentRegion])
+		return (DATA.player.currentStage + TABLES.regions_data[DATA.player.currentRegion].offset) * (1 + TABLES.regions_data[DATA.player.currentRegion].multiplier)
 	}
 
 	const getWeaponTypeByWeaponClass = (weaponClass) => {
@@ -499,22 +522,22 @@ const gameClass = () => {
 	const getCharacterBonusExp = () => {
 		let activeskill_bonus = TABLES.EXP_BONUS.per_activeskill_level * getTotalActiveSkillLevel()
 		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 30
-		let route_asgard = Math.sqrt(DATA.player.max_stage.valhalla) / 30
+		let route_ninerealms = Math.sqrt(DATA.player.max_stage.asgard) / 30
 
 		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 20
 
 		return {
 			askill: toDecimal(activeskill_bonus, 2),
 			route_earth: toDecimal(route_earth, 2),
-			route_asgard: toDecimal(route_asgard, 2),
-			route_worlds: toDecimal(route_earth + route_asgard, 2),
+			route_ninerealms: toDecimal(route_ninerealms, 2),
+			route_worlds: toDecimal(route_earth + route_ninerealms, 2),
 			killcount   : toDecimal(killcount_bonus, 2),
-			total : toDecimal(activeskill_bonus + route_earth + route_asgard + killcount_bonus,2)
+			total : toDecimal(activeskill_bonus + route_earth + route_ninerealms + killcount_bonus,2)
 		}
 	}
 	/* every Awakening Stage reduce the exp */
 	const getCharacterExpRatio = () => {
-		return Math.max(toDecimal(1 / (Math.pow(1.04, DATA.player.awaken_stage)) ,9), 0.000000001)
+		return Math.max(1 / (Math.pow(1.04, DATA.player.awaken_stage < 9000 ? DATA.player.awaken_stage : 9000)), 1e-324)
 	}
 
 	const getPassiveModelByID = (passiveID) => {
@@ -1467,7 +1490,7 @@ const gameClass = () => {
 					}
 				}
 				
-				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.region_max_stage[DATA.player.currentRegion])
+				DATA.player.currentStage = Math.min(DATA.player.currentStage, TABLES.regions_data[DATA.player.currentRegion].max_stage)
 				if (DATA.player.currentStage < 1) {
 					DATA.player.currentStage = 1
 				}
@@ -1502,8 +1525,8 @@ const gameClass = () => {
 	}
 	const getAuraStrengthenCost = () => {
 		return TABLES.AURA.FOCUS_DMG.cost_per_sec 
-		+ getSkillLevelByExp(DATA.player.aura_exp.focus_dmg,2) - 1
-		+ Math.ceil(getPassiveBonusValue("focus_dmg_p"))
+		+ (getSkillLevelByExp(DATA.player.aura_exp.focus_dmg,2) - 1
+				+ Math.ceil(getPassiveBonusValue("focus_dmg_p"))) * 5
 	}
 	const getAuraConcentrationBonus = () => {
 		let regen = TABLES.AURA.FOCUS_POWER_REGEN.base + getPassiveBonusValue("combo_regen")
@@ -1565,7 +1588,7 @@ const gameClass = () => {
 			DATA.player.focus = 0
 		}
 
-		DATA.player.currentPower = toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
+		DATA.player.currentPower = toDecimal((getPassiveBonusValue("combo_regen") + (DATA.player.awaken_stage * 0.05))/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
 		updateTextByID("aura-focus-dmg-cost", numberPrint(getAuraStrengthenCost()))
@@ -1745,12 +1768,20 @@ const gameClass = () => {
 		function goToRegion() {
 			let region =	this.getAttribute("data-region")
 			let price = parseInt(this.getAttribute("data-price"))
+			let pfocus = 0
+			if (this.getAttribute("data-focus")) {
+				pfocus = parseInt(this.getAttribute("data-focus"))
+			}
 			console.log(region)
 			if (region === DATA.player.currentRegion) { return false }
 			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
+				if (pfocus > 0 && DATA.player.focus < pfocus) { return false }
 				DATA.player.currentStage = 15
 				DATA.player.currentRegion = region
 				DATA.player.ekk -= price
+				if (pfocus > 0) {
+					DATA.player.focus -= pfocus
+				}
 				updateStage(DATA.player.currentStage)
 				if (elebyID("game-container").getAttribute("class").toString().includes(DATA.player.currentRegion) === false) {
 					if (elebyID("game-container").getAttribute("class").toString().includes("intown")) {
@@ -1806,8 +1837,21 @@ const gameClass = () => {
 						updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_world", "0"))
 						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", 0)
 					} else {
-						updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_world", 100000000))
-						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", 100000000)
+						let priceToTP = 0
+						if (TABLES.regions_data[DATA.player.currentRegion].world === TABLES.regions_data[TABLES.regions[i]].world) {
+							priceToTP = TABLES.regions_data[TABLES.regions[i]].price
+
+							updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_world", priceToTP))
+							updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", priceToTP)
+						} else {
+							let focusToTP = 0
+							priceToTP = TABLES.regions_data[TABLES.regions[i]].price + TABLES.regions_world_cost[TABLES.regions_data[TABLES.regions[i]].world].ekk
+							focusToTP = TABLES.regions_world_cost[TABLES.regions_data[TABLES.regions[i]].world].focus
+
+							updateTextByID("dest-"+TABLES.regions[i]+"-price", iText("destination_newworld", priceToTP, focusToTP))
+							updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-price", priceToTP)
+							updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-focus", focusToTP)
+						}
 					}
 					if (typeof elebyID("gotoworld-"+TABLES.regions[i]).onclick !== "function") {
 						updateAttributeByID("gotoworld-"+TABLES.regions[i], "data-region", TABLES.regions[i])
@@ -1912,7 +1956,7 @@ const gameClass = () => {
 
 		elebyID("curpower-count").innerHTML = numberPrint(toDecimal(DATA.player.currentPower,2))
 		elebyID("maxpower-count").innerHTML = numberPrint(getPassiveBonusValue("combo_power"))
-		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal((getPassiveBonusValue("combo_regen") + DATA.player.awaken_stage)/getPassiveBonusValue("combo_regen_sec"), 1))
+		elebyID("powerregen-count").innerHTML = numberPrint(toDecimal((getPassiveBonusValue("combo_regen") + (DATA.player.awaken_stage * 0.05))/getPassiveBonusValue("combo_regen_sec"), 1))
 		elebyID("powerregen-count-focus").innerHTML = DATA.player.settings.aura_focus_power_regen === true ? 
 			iText("power_regen_focus",numberPrint(toDecimal(getAuraConcentrationBonus()/getPassiveBonusValue("combo_regen_sec") , 2))) : " "
 
@@ -2647,13 +2691,14 @@ const gameClass = () => {
 		updateTextByID("charexpbonus-askill", numberPrint(percent(expbonus.askill)))
 		updateTextByID("charexpbonus-maxroute", numberPrint(percent(expbonus.route_worlds)))
 		updateTextByID("charexpbonus-world-earth-maxroute", numberPrint(percent(expbonus.route_earth)))
-		updateTextByID("charexpbonus-world-asgard-maxroute", numberPrint(percent(expbonus.route_asgard)))
+		updateTextByID("charexpbonus-world-ninerealms-maxroute", numberPrint(percent(expbonus.route_ninerealms)))
 
 		updateTextByID("charexpbonus-killcount", numberPrint(percent(expbonus.killcount)))
 
 
 		let expratio = getCharacterExpRatio()
-		updateTextByID("charexpratio-total", "x"+expratio)
+		console.log(expratio)
+		updateTextByID("charexpratio-total", "x"+numberShort(expratio))
 
 		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
 
@@ -2680,8 +2725,8 @@ const gameClass = () => {
 		updateTextByID("maxstage-earth", numberPrint(Math.max(DATA.player.max_stage.asia, DATA.player.max_stage.europe)))
 		updateTextByID("maxstage-asia", numberPrint(DATA.player.max_stage.asia))
 		updateTextByID("maxstage-europe", numberPrint(DATA.player.max_stage.europe))
-		updateTextByID("maxstage-asgard", numberPrint(Math.max(DATA.player.max_stage.valhalla, DATA.player.max_stage.valhalla)))
-		updateTextByID("maxstage-valhalla", numberPrint(DATA.player.max_stage.valhalla))
+		updateTextByID("maxstage-ninerealms", numberPrint(Math.max(DATA.player.max_stage.asgard, DATA.player.max_stage.asgard)))
+		updateTextByID("maxstage-asgard", numberPrint(DATA.player.max_stage.asgard))
 	}
 
 	const wieldingSetupRender = () => {

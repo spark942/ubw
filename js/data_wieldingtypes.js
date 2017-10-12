@@ -153,7 +153,7 @@ const WIELDINGTYPES = {
 		weaponcomborotation: [1],
 	},
 	ShaolinMaster: {
-		awaken     : 500,
+		awaken     : 300,
 		weapontype1: ["HookSwords"],
 		weaponcomborotation: [1],
 	},
