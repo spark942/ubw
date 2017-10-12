@@ -2697,7 +2697,6 @@ const gameClass = () => {
 
 
 		let expratio = getCharacterExpRatio()
-		console.log(expratio)
 		updateTextByID("charexpratio-total", "x"+numberShort(expratio))
 
 		updateTextByID("item-inventory-size", numberPrint(getPassiveBonusValue("inventory_base") + getPassiveBonusValue("inventory")))
