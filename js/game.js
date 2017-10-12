@@ -15,6 +15,7 @@ const gameClass = () => {
 		renderInitialized:false,
 		inventoryspace: 20,
 		saveCooldown: 30000,
+		refreshingActiveskill: false,
 	}
 	const TABLES = {
 		EXP_CHAR:   [],
@@ -163,6 +164,8 @@ const gameClass = () => {
 			wieldingsetups : {},
 			passives  		 : {},
 			actives   		 : {},
+			activesView    : "Hand",
+			activesViewSkills : [],
 			activescombo   : {
 				combosetup1: null,
 				combo1: [],
@@ -1249,6 +1252,8 @@ const gameClass = () => {
 			DATA.player.passives 				= JSON.parse(localStorage.getItem('passives'))
 		if (JSON.parse(localStorage.getItem('actives')))
 			DATA.player.actives 				= JSON.parse(localStorage.getItem('actives'))
+		if (JSON.parse(localStorage.getItem('activesView')))
+			DATA.player.activesView 				= JSON.parse(localStorage.getItem('activesView'))
 		if (JSON.parse(localStorage.getItem('activescombo')))
 			DATA.player.activescombo 		= JSON.parse(localStorage.getItem('activescombo'))
 		if (JSON.parse(localStorage.getItem('inventory')))
@@ -1276,7 +1281,7 @@ const gameClass = () => {
 			localStorage.setItem('exp_char', 			DATA.player.exp_char)
 			return false
 		} else {
-			console.log("saving")
+			//console.log("saving")
 		}
 		DATA.player.lastonline = Date.now()
 		localStorage.setItem('settings',	JSON.stringify(DATA.player.settings))
@@ -1291,6 +1296,7 @@ const gameClass = () => {
 		localStorage.setItem('wieldingsetups',JSON.stringify(DATA.player.wieldingsetups))
 		localStorage.setItem('passives', 			JSON.stringify(DATA.player.passives))
 		localStorage.setItem('actives', 			JSON.stringify(DATA.player.actives))
+		localStorage.setItem('activesView', 	JSON.stringify(DATA.player.activesView))
 		localStorage.setItem('activescombo', 	JSON.stringify(DATA.player.activescombo))
 		localStorage.setItem('inventory', 		JSON.stringify(DATA.player.inventory))
 		localStorage.setItem('weapondust', 		JSON.stringify(DATA.player.weapondust))
@@ -2228,12 +2234,62 @@ const gameClass = () => {
 	}
 
 	const initActivesRender = () => {
+
+		let activeskillsSetupHTML = ""
+		for (var wt in WIELDINGTYPES) {
+			if (DATA.player.wieldingsetups.hasOwnProperty(wt) !== false && DATA.player.wieldingsetups[wt].unlocked === true) {
+				if (DATA.player.activesView === null && wt === TABLES.defaultWeapon.class) {
+					activeskillsSetupHTML += iText("activeskillsetupselect", "wieldingsetup_"+wt, wt, "selected=\"selected\"")
+				} else if (DATA.player.activesView === wt) {
+					activeskillsSetupHTML += iText("activeskillsetupselect", "wieldingsetup_"+wt, wt, "selected=\"selected\"")
+				} else {
+					activeskillsSetupHTML += iText("activeskillsetupselect", "wieldingsetup_"+wt, wt, " ")
+				}
+			}
+		}
+		updateTextByID("activeskills-setupselection",activeskillsSetupHTML)
+		function setSetup() {
+			if (DATA.player.activesView !== this.value) {
+				DATA.player.activesView = this.value
+				elebyID("activeskills-list").innerHTML = ""
+				setActivesOfCurrentSetup()
+				refreshActiveskillsRender()
+			}
+		}
+		elebyID("activeskills-setupselection").onchange = setSetup
+
+
 		let domActiveSkillModel 	 = elebyID("as-skill-id")
 		ELEMENTMODELS.activeskill = domActiveSkillModel.cloneNode(true)
 		domActiveSkillModel.className += " hidden"
+		setActivesOfCurrentSetup()
+		refreshActiveskillsRender()
+	}
+
+	const setActivesOfCurrentSetup = () => {
+		let setupActives = []
+
+		for (var i = 0; i < ACTIVES.length; i++) {
+			let thisasID 	= ACTIVES[i][0]
+			let setupsArr = getActiveSkillSetups(thisasID)
+			if (setupsArr.length) {
+				for (var iSetup = 0; iSetup < setupsArr.length; iSetup++) {
+					if (WIELDINGTYPES[setupsArr[iSetup]].hasOwnProperty("hidden")) { continue }
+					else if (DATA.player.activesView === setupsArr[iSetup]) {
+						setupActives.push(thisasID)
+					}
+				}
+			}
+		}
+		DATA.player.activesViewSkills = setupActives
+	}
+
+	const refreshActiveskillsRender = () => {
+		GAMEVAR.refreshingActiveskill = true
 		/* active skills */
 		let domActiveSkillContainer 	 = elebyID("activeskills-list")
 		for (var i = 0; i < ACTIVES.length; i++) {
+			if (DATA.player.activesViewSkills.indexOf(ACTIVES[i][0]) === -1) { continue }
 			let domps 	 = elebySelector("#activeskills-list #as-skill-"+ACTIVES[i][0])
 			if (domps === null) {
 				let thisAS 		= ELEMENTMODELS.activeskill.cloneNode(true)
@@ -2311,6 +2367,8 @@ const gameClass = () => {
 				}
 			}
 		}
+
+		GAMEVAR.refreshingActiveskill = false
 	}
 
 	const initCombolistRender = () => {
@@ -2716,7 +2774,9 @@ const gameClass = () => {
 	}
 
 	const activeInventoryRender = () => {
+		if (GAMEVAR.refreshingActiveskill === true) { return false }
 		for (var adata in DATA.player.actives) { 
+			if (DATA.player.activesViewSkills.indexOf(parseInt(adata)) === -1) { continue }
 			/* do stuff */ 
 			if (ELEMENTS.activeskills[adata].getAttribute("data-unlocked") !== DATA.player.actives[adata].unlocked.toString()) {
 				ELEMENTS.activeskills[adata].setAttribute("data-unlocked", DATA.player.actives[adata].unlocked.toString())

@@ -87,6 +87,8 @@ const TEXTS = {
 	weapontype		: "Can use <span class=\"effecttext\">{0}</span> type weapons",
 	mobtimer_duration		: "Increase the duration of stun effect by <span class=\"bonusflat\">{0}</span> second",
 	/*actives*/
+	activeskillsetupselect : "<option value=\"{1}\" {2}>{0}</option>",
+	activeskillsetupselected : "selected=\"selected\"",
 	reqpassive : "Requires <span class=\"passiveskillname\">{0}</span> passive skill <span class=\"skilllevel\">level {1}</span>",
 	reqactive : "Requires <span class=\"activeskillname\">{0}</span> active skill <span class=\"skilllevel\">level {1}</span> ",
 	activebonus_dmg_p : "Increases skill damage by <span class=\"bonuspercent\"><span class=\"as-bonus\">{1}</span>%</span>",
