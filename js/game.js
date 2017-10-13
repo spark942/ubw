@@ -524,8 +524,14 @@ const gameClass = () => {
 	}
 	const getCharacterBonusExp = () => {
 		let activeskill_bonus = TABLES.EXP_BONUS.per_activeskill_level * getTotalActiveSkillLevel()
-		let route_earth = Math.sqrt(DATA.player.max_stage.asia + DATA.player.max_stage.europe) / 30
-		let route_ninerealms = Math.sqrt(DATA.player.max_stage.asgard) / 30
+
+		let route_asia_effective_max_stage = DATA.player.max_stage.asia * (1 + TABLES.regions_data.asia.multiplier) + (DATA.player.max_stage.asia > 0 ? TABLES.regions_data.asia.offset : 0)
+		let route_europe_effective_max_stage = DATA.player.max_stage.europe * (1 + TABLES.regions_data.europe.multiplier) + (DATA.player.max_stage.europe > 0 ? TABLES.regions_data.europe.offset : 0)
+		let route_earth = Math.sqrt(route_asia_effective_max_stage + route_europe_effective_max_stage) / 30
+
+		let route_asgard_effective_max_stage = DATA.player.max_stage.asgard * (1 + TABLES.regions_data.asgard.multiplier) + (DATA.player.max_stage.asgard > 0 ? TABLES.regions_data.asgard.offset : 0)
+		let route_valhalla_effective_max_stage = DATA.player.max_stage.valhalla * (1 + TABLES.regions_data.valhalla.multiplier) + (DATA.player.max_stage.valhalla > 0 ? TABLES.regions_data.valhalla.offset : 0)
+		let route_ninerealms = Math.sqrt(route_asgard_effective_max_stage + route_valhalla_effective_max_stage) / 30
 
 		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 20
 
