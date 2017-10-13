@@ -579,10 +579,6 @@ const gameClass = () => {
 					DATA.player.passives[PASSIVES[i][0]].exp = 0
 				}
 			}
-			if (DATA.player.passives[PASSIVES[i][0]].hasOwnProperty("exp") === true && DATA.player.passives[PASSIVES[i][0]].exp === 0) {
-				DATA.player.passives[PASSIVES[i][0]].exp += 100000
-				/* TEMPORARY BONUS */
-			}
 			if (TABLES.passivesPerClass.hasOwnProperty(PASSIVES[i][3]) === false) {
 				TABLES.passivesPerClass[PASSIVES[i][3]] = []
 				TABLES.passivesPerClass[PASSIVES[i][3]].push(PASSIVES[i][0])
