@@ -97,7 +97,7 @@ const gameClass = () => {
 		},
 		regions_world_cost : { /* if teleport to different world */
 			earth  : { ekk: 		1000000000, focus:    5000000},
-			ninerealms : { ekk:  1000000000000, focus: 	20000000000},
+			ninerealms : { ekk:  1000000000000, focus: 	200000000000000},
 		},
 		regions: ["asia","europe","asgard"],
 		towns: [],
@@ -785,7 +785,7 @@ const gameClass = () => {
 
 	const getWeaponSkillCalculated = (weaponkind_id, weapon_dmg, weapon_aspd, skill_id) => {
 		let weapon_passive_id = getWeaponPassiveIDByClass(weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : TABLES.defaultWeapon.class)
-		let passive_bonus = PASSIVES[weapon_passive_id-1][5] * getSkillLevelByExp(DATA.player.passives[weapon_passive_id].exp)
+		let passive_bonus = PASSIVES[weapon_passive_id-1][5] * getSkillLevelByExp(DATA.player.passives[weapon_passive_id].exp) / 100
 		let dmg_f = getPassiveBonusValue("dmg_f")
 		let dmg_p = getPassiveBonusValue("dmg_p") + DATA.player.awaken_stage * 0.33
 		let skill_dmg_p = getActiveSkillBonusPerLevel(skill_id, "dmg_p")
