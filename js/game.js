@@ -575,7 +575,7 @@ const gameClass = () => {
 					DATA.player.passives[PASSIVES[i][0]].exp = 0
 				}
 			} else {
-				if (PASSIVES[i][5] !== null) {
+				if (PASSIVES[i][5] !== null && DATA.player.passives[PASSIVES[i][0]].hasOwnProperty("exp") === false) {
 					DATA.player.passives[PASSIVES[i][0]].exp = 0
 				}
 			}
