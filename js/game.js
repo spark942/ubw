@@ -574,6 +574,10 @@ const gameClass = () => {
 				if (PASSIVES[i][5] !== null) {
 					DATA.player.passives[PASSIVES[i][0]].exp = 0
 				}
+			} else {
+				if (PASSIVES[i][5] !== null) {
+					DATA.player.passives[PASSIVES[i][0]].exp = 0
+				}
 			}
 			if (TABLES.passivesPerClass.hasOwnProperty(PASSIVES[i][3]) === false) {
 				TABLES.passivesPerClass[PASSIVES[i][3]] = []
@@ -939,6 +943,7 @@ const gameClass = () => {
 					DATA.player.actives[ACTIVES[i][0]].curve = skill_typeArr[1]
 				} else {
 					DATA.player.actives[ACTIVES[i][0]].type = ACTIVES[i][3]
+					DATA.player.actives[ACTIVES[i][0]].curve = ""
 				}
 				DATA.player.actives[ACTIVES[i][0]].power = ACTIVES[i][6] || 1
 			}
