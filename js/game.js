@@ -776,6 +776,7 @@ const gameClass = () => {
 
 	const getWeaponSkillCalculated = (weaponkind_id, weapon_dmg, weapon_aspd, skill_id) => {
 		let weapon_passive_id = getWeaponPassiveIDByClass(weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : TABLES.defaultWeapon.class)
+		let passive_bonus = PASSIVES[weapon_passive_id-1][5] * getSkillLevelByExp(DATA.player.passives[weapon_passive_id].exp)
 		let dmg_f = getPassiveBonusValue("dmg_f")
 		let dmg_p = getPassiveBonusValue("dmg_p") + DATA.player.awaken_stage * 0.33
 		let skill_dmg_p = getActiveSkillBonusPerLevel(skill_id, "dmg_p")
@@ -819,39 +820,39 @@ const gameClass = () => {
 			delay0:  weapon_aspd * rawActive.delay0,
 		}
 		if (rawActive.hit1 !== null && rawActive.delay1 !== null) {
-			ca.hit1 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit1 * (1 + dmg_p + skill_dmg_p) + dmg_f
+			ca.hit1 = (1 + passive_bonus) * weapon_dmg * rawActive.hit1 * (1 + dmg_p + skill_dmg_p) + dmg_f
 			ca.delay1 = weapon_aspd * rawActive.delay1
 			ca.power = ACTIVES[skill_id-1][6]
 		}
-		if (rawActive.hit2 !== null && rawActive.delay2 !== null) {ca.hit2 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit2 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay2 = weapon_aspd * rawActive.delay2}
-		if (rawActive.hit3 !== null && rawActive.delay3 !== null) {ca.hit3 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit3 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay3 = weapon_aspd * rawActive.delay3}
-		if (rawActive.hit4 !== null && rawActive.delay4 !== null) {ca.hit4 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit4 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay4 = weapon_aspd * rawActive.delay4}
-		if (rawActive.hit5 !== null && rawActive.delay5 !== null) {ca.hit5 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit5 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay5 = weapon_aspd * rawActive.delay5}
-		if (rawActive.hit6 !== null && rawActive.delay6 !== null) {ca.hit6 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit6 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay6 = weapon_aspd * rawActive.delay6}
-		if (rawActive.hit7 !== null && rawActive.delay7 !== null) {ca.hit7 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit7 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay7 = weapon_aspd * rawActive.delay7}
-		if (rawActive.hit8 !== null && rawActive.delay8 !== null) {ca.hit8 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit8 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay8 = weapon_aspd * rawActive.delay8}
-		if (rawActive.hit9 !== null && rawActive.delay9 !== null) {ca.hit9 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit9 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay9 = weapon_aspd * rawActive.delay9}
-		if (rawActive.hit10 !== null && rawActive.delay10 !== null) {ca.hit10 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit10 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay10 = weapon_aspd * rawActive.delay10}
-		if (rawActive.hit11 !== null && rawActive.delay11 !== null) {ca.hit11 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit11 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay11 = weapon_aspd * rawActive.delay11}
-		if (rawActive.hit12 !== null && rawActive.delay12 !== null) {ca.hit12 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit12 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay12 = weapon_aspd * rawActive.delay12}
-		if (rawActive.hit13 !== null && rawActive.delay13 !== null) {ca.hit13 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit13 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay13 = weapon_aspd * rawActive.delay13}
-		if (rawActive.hit14 !== null && rawActive.delay14 !== null) {ca.hit14 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit14 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay14 = weapon_aspd * rawActive.delay14}
-		if (rawActive.hit15 !== null && rawActive.delay15 !== null) {ca.hit15 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit15 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay15 = weapon_aspd * rawActive.delay15}
-		if (rawActive.hit16 !== null && rawActive.delay16 !== null) {ca.hit16 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit16 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay16 = weapon_aspd * rawActive.delay16}
-		if (rawActive.hit17 !== null && rawActive.delay17 !== null) {ca.hit17 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit17 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay17 = weapon_aspd * rawActive.delay17}
-		if (rawActive.hit18 !== null && rawActive.delay18 !== null) {ca.hit18 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit18 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay18 = weapon_aspd * rawActive.delay18}
-		if (rawActive.hit19 !== null && rawActive.delay19 !== null) {ca.hit19 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit19 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay19 = weapon_aspd * rawActive.delay19}
-		if (rawActive.hit20 !== null && rawActive.delay20 !== null) {ca.hit20 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit20 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay20 = weapon_aspd * rawActive.delay20}
-		if (rawActive.hit21 !== null && rawActive.delay21 !== null) {ca.hit21 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit21 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay21 = weapon_aspd * rawActive.delay21}
-		if (rawActive.hit22 !== null && rawActive.delay22 !== null) {ca.hit22 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit22 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay22 = weapon_aspd * rawActive.delay22}
-		if (rawActive.hit23 !== null && rawActive.delay23 !== null) {ca.hit23 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit23 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay23 = weapon_aspd * rawActive.delay23}
-		if (rawActive.hit24 !== null && rawActive.delay24 !== null) {ca.hit24 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit24 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay24 = weapon_aspd * rawActive.delay24}
-		if (rawActive.hit25 !== null && rawActive.delay25 !== null) {ca.hit25 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit25 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay25 = weapon_aspd * rawActive.delay25}
-		if (rawActive.hit26 !== null && rawActive.delay26 !== null) {ca.hit26 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit26 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay26 = weapon_aspd * rawActive.delay26}
-		if (rawActive.hit27 !== null && rawActive.delay27 !== null) {ca.hit27 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit27 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay27 = weapon_aspd * rawActive.delay27}
-		if (rawActive.hit28 !== null && rawActive.delay28 !== null) {ca.hit28 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit28 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay28 = weapon_aspd * rawActive.delay28}
-		if (rawActive.hit29 !== null && rawActive.delay29 !== null) {ca.hit29 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit29 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay29 = weapon_aspd * rawActive.delay29}
-		if (rawActive.hit30 !== null && rawActive.delay30 !== null) {ca.hit30 = (1 + PASSIVES[weapon_passive_id-1][5]) * weapon_dmg * rawActive.hit30 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay30 = weapon_aspd * rawActive.delay30}
+		if (rawActive.hit2 !== null && rawActive.delay2 !== null) {ca.hit2 = (1 + passive_bonus) * weapon_dmg * rawActive.hit2 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay2 = weapon_aspd * rawActive.delay2}
+		if (rawActive.hit3 !== null && rawActive.delay3 !== null) {ca.hit3 = (1 + passive_bonus) * weapon_dmg * rawActive.hit3 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay3 = weapon_aspd * rawActive.delay3}
+		if (rawActive.hit4 !== null && rawActive.delay4 !== null) {ca.hit4 = (1 + passive_bonus) * weapon_dmg * rawActive.hit4 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay4 = weapon_aspd * rawActive.delay4}
+		if (rawActive.hit5 !== null && rawActive.delay5 !== null) {ca.hit5 = (1 + passive_bonus) * weapon_dmg * rawActive.hit5 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay5 = weapon_aspd * rawActive.delay5}
+		if (rawActive.hit6 !== null && rawActive.delay6 !== null) {ca.hit6 = (1 + passive_bonus) * weapon_dmg * rawActive.hit6 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay6 = weapon_aspd * rawActive.delay6}
+		if (rawActive.hit7 !== null && rawActive.delay7 !== null) {ca.hit7 = (1 + passive_bonus) * weapon_dmg * rawActive.hit7 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay7 = weapon_aspd * rawActive.delay7}
+		if (rawActive.hit8 !== null && rawActive.delay8 !== null) {ca.hit8 = (1 + passive_bonus) * weapon_dmg * rawActive.hit8 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay8 = weapon_aspd * rawActive.delay8}
+		if (rawActive.hit9 !== null && rawActive.delay9 !== null) {ca.hit9 = (1 + passive_bonus) * weapon_dmg * rawActive.hit9 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay9 = weapon_aspd * rawActive.delay9}
+		if (rawActive.hit10 !== null && rawActive.delay10 !== null) {ca.hit10 = (1 + passive_bonus) * weapon_dmg * rawActive.hit10 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay10 = weapon_aspd * rawActive.delay10}
+		if (rawActive.hit11 !== null && rawActive.delay11 !== null) {ca.hit11 = (1 + passive_bonus) * weapon_dmg * rawActive.hit11 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay11 = weapon_aspd * rawActive.delay11}
+		if (rawActive.hit12 !== null && rawActive.delay12 !== null) {ca.hit12 = (1 + passive_bonus) * weapon_dmg * rawActive.hit12 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay12 = weapon_aspd * rawActive.delay12}
+		if (rawActive.hit13 !== null && rawActive.delay13 !== null) {ca.hit13 = (1 + passive_bonus) * weapon_dmg * rawActive.hit13 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay13 = weapon_aspd * rawActive.delay13}
+		if (rawActive.hit14 !== null && rawActive.delay14 !== null) {ca.hit14 = (1 + passive_bonus) * weapon_dmg * rawActive.hit14 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay14 = weapon_aspd * rawActive.delay14}
+		if (rawActive.hit15 !== null && rawActive.delay15 !== null) {ca.hit15 = (1 + passive_bonus) * weapon_dmg * rawActive.hit15 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay15 = weapon_aspd * rawActive.delay15}
+		if (rawActive.hit16 !== null && rawActive.delay16 !== null) {ca.hit16 = (1 + passive_bonus) * weapon_dmg * rawActive.hit16 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay16 = weapon_aspd * rawActive.delay16}
+		if (rawActive.hit17 !== null && rawActive.delay17 !== null) {ca.hit17 = (1 + passive_bonus) * weapon_dmg * rawActive.hit17 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay17 = weapon_aspd * rawActive.delay17}
+		if (rawActive.hit18 !== null && rawActive.delay18 !== null) {ca.hit18 = (1 + passive_bonus) * weapon_dmg * rawActive.hit18 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay18 = weapon_aspd * rawActive.delay18}
+		if (rawActive.hit19 !== null && rawActive.delay19 !== null) {ca.hit19 = (1 + passive_bonus) * weapon_dmg * rawActive.hit19 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay19 = weapon_aspd * rawActive.delay19}
+		if (rawActive.hit20 !== null && rawActive.delay20 !== null) {ca.hit20 = (1 + passive_bonus) * weapon_dmg * rawActive.hit20 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay20 = weapon_aspd * rawActive.delay20}
+		if (rawActive.hit21 !== null && rawActive.delay21 !== null) {ca.hit21 = (1 + passive_bonus) * weapon_dmg * rawActive.hit21 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay21 = weapon_aspd * rawActive.delay21}
+		if (rawActive.hit22 !== null && rawActive.delay22 !== null) {ca.hit22 = (1 + passive_bonus) * weapon_dmg * rawActive.hit22 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay22 = weapon_aspd * rawActive.delay22}
+		if (rawActive.hit23 !== null && rawActive.delay23 !== null) {ca.hit23 = (1 + passive_bonus) * weapon_dmg * rawActive.hit23 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay23 = weapon_aspd * rawActive.delay23}
+		if (rawActive.hit24 !== null && rawActive.delay24 !== null) {ca.hit24 = (1 + passive_bonus) * weapon_dmg * rawActive.hit24 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay24 = weapon_aspd * rawActive.delay24}
+		if (rawActive.hit25 !== null && rawActive.delay25 !== null) {ca.hit25 = (1 + passive_bonus) * weapon_dmg * rawActive.hit25 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay25 = weapon_aspd * rawActive.delay25}
+		if (rawActive.hit26 !== null && rawActive.delay26 !== null) {ca.hit26 = (1 + passive_bonus) * weapon_dmg * rawActive.hit26 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay26 = weapon_aspd * rawActive.delay26}
+		if (rawActive.hit27 !== null && rawActive.delay27 !== null) {ca.hit27 = (1 + passive_bonus) * weapon_dmg * rawActive.hit27 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay27 = weapon_aspd * rawActive.delay27}
+		if (rawActive.hit28 !== null && rawActive.delay28 !== null) {ca.hit28 = (1 + passive_bonus) * weapon_dmg * rawActive.hit28 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay28 = weapon_aspd * rawActive.delay28}
+		if (rawActive.hit29 !== null && rawActive.delay29 !== null) {ca.hit29 = (1 + passive_bonus) * weapon_dmg * rawActive.hit29 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay29 = weapon_aspd * rawActive.delay29}
+		if (rawActive.hit30 !== null && rawActive.delay30 !== null) {ca.hit30 = (1 + passive_bonus) * weapon_dmg * rawActive.hit30 * (1 + dmg_p + skill_dmg_p) + dmg_f; ca.delay30 = weapon_aspd * rawActive.delay30}
 
 		ca.delay = sumProperty(ca, "delay")
 		ca.hit = sumProperty(ca, "hit")
