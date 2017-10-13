@@ -581,6 +581,7 @@ const gameClass = () => {
 			}
 			if (DATA.player.passives[PASSIVES[i][0]].hasOwnProperty("exp") === true && DATA.player.passives[PASSIVES[i][0]].exp === 0) {
 				DATA.player.passives[PASSIVES[i][0]].exp += 100000
+				/* TEMPORARY BONUS */
 			}
 			if (TABLES.passivesPerClass.hasOwnProperty(PASSIVES[i][3]) === false) {
 				TABLES.passivesPerClass[PASSIVES[i][3]] = []
@@ -1389,8 +1390,9 @@ const gameClass = () => {
 							)
 						updatePassive(
 							DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
-							toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+							toDecimal(10 * Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
 							)
+						/* TEMPORARY BONUS */
 					}
 					
 					DATA.player.battle.timestamp_next_hit = now + DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill["delay"+DATA.player.battle.current_hit] * 1000
