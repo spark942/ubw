@@ -662,10 +662,10 @@ div.progressbar div.progress::-webkit-progress-value {
 #adventure-settings,
 #xxx-settings,
 #inventory-settings {
-	font-size: 11px;
+	font-size: 10px;
 	line-height: 19px;
 	display: inline-block;
-	width: 160px;
+	width: 140px;
 	vertical-align: top;
 }
 #adventure-settings label {
@@ -675,11 +675,16 @@ div.progressbar div.progress::-webkit-progress-value {
 	vertical-align: bottom;
 }
 #xxx-settings {
-	width: 50px;
+	width: 77px;
 }
 #inventory-settings {
 	width: 120px;
 	text-align: center;
+}
+.g-battlesettings .header {
+	width: calc(100% -5px);
+	padding-left: 5px;
+	font-weight: bold;
 }
 #inventory-settings #autosell-level {
 	width: 70px;

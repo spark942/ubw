@@ -136,6 +136,7 @@ const gameClass = () => {
 				droponfail: true,
 				autoawaken: false,
 				townstop   : true,
+				uianimation: true,
 				autosell_level : 100,
 				autosell_1 : false,
 				autosell_2 : false,
@@ -308,6 +309,8 @@ const gameClass = () => {
 	}
 
 	const fillPlayerObject = () => {
+		if (DATA.player.settings.hasOwnProperty("uianimation") === false) { DATA.player.settings.uianimation = true }
+
 		if (DATA.player.max_stage.hasOwnProperty("asgard") === false) { DATA.player.max_stage.asgard = 0 }
 		if (DATA.player.max_stage.hasOwnProperty("valhalla") === false) { DATA.player.max_stage.valhalla = 0 }
 	}
@@ -1157,12 +1160,12 @@ const gameClass = () => {
 			let stunned = false
 			if (mobtimer > 0 && rngmm(0, 1000) < Math.floor(mobtimer * 1000)) {
 				mData.timestamp += mobtimerduration * 1000 / (1 + mData.rank)
-				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000)
+				stunMonster(mobtimerduration * 1000 / (1 + mData.rank) / 1000, undefined, DATA.player.settings.uianimation)
 				stunned = true
 			}
 
 			/* SHOW FLOATING NUMBER */
-			damageMonster(computedDMG)
+			damageMonster(computedDMG, undefined, DATA.player.settings.uianimation)
 			if (computedDMG !== 0 || stunned === true) {
 				return true
 			} else {
@@ -1475,7 +1478,7 @@ const gameClass = () => {
 			} else if (DATA.player.currentMonster.hp() <= 0) {
 				let char_exp_gained = (DATA.player.currentMonster.exp() * (1 + getCharacterBonusExp().total)) * getCharacterExpRatio() 
 				DATA.player.exp_char += toDecimal(char_exp_gained)
-				charExpGained(char_exp_gained, 400)
+				charExpGained(char_exp_gained, 400, DATA.player.settings.uianimation)
 				DATA.player.lts.killedenemies++
 				/* LOOT */
 				let mobloots = DATA.player.currentMonster.loot()
@@ -1933,7 +1936,8 @@ const gameClass = () => {
 		}
 
 		/* display skillbar */
-		if (DATA.player.battle.combo_ts_start !== null
+		if (DATA.player.settings.uianimation === true
+			&& DATA.player.battle.combo_ts_start !== null
 			&& DATA.player.battle.combo_ts_end !== null) {
 			let combomax = (DATA.player.battle.combo_ts_end - DATA.player.battle.combo_ts_start) * 10
 			let curprog = Date.now() - DATA.player.battle.combo_ts_start
@@ -2650,17 +2654,22 @@ const gameClass = () => {
 		function autoawakenCheck () {
 			DATA.player.settings.autoawaken = this.checked
 		}
+		function uianimationCheck () {
+			DATA.player.settings.uianimation = this.checked
+		}
 		elebyID("town-stop").checked = DATA.player.settings.townstop
 		elebyID("auto-advance").checked = DATA.player.settings.autoadvance
 		elebyID("reverse-advance").checked = DATA.player.settings.reverseadvance
 		elebyID("drop-on-fail").checked = DATA.player.settings.droponfail
 		elebyID("auto-awaken").checked = DATA.player.settings.autoawaken
+		elebyID("ui-animation").checked = DATA.player.settings.uianimation
 
 		elebyID("town-stop").onchange = townstopCheck
 		elebyID("auto-advance").onchange = autoadvanceCheck
 		elebyID("reverse-advance").onchange = reverseadvanceCheck
 		elebyID("drop-on-fail").onchange = droponfailCheck
 		elebyID("auto-awaken").onchange = autoawakenCheck
+		elebyID("ui-animation").onchange = uianimationCheck
 
 		/* PLAYER : Awakening*/
 		

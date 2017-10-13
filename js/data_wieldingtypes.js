@@ -50,7 +50,8 @@ const WEAPONSYPES = {
 		"LongKatana",
 		"GreatLongsword",
 		"Nodachi",
-		"Zweihander"]},
+		"Zweihander",
+		"CeremonialSword"]},
 	Axelikeswords: {Weapons:[
 		"Golok",
 		"Kopis",

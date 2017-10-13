@@ -213,7 +213,11 @@ function removeFromArray(array, indexes) {
 
 /* temporary floating text */
 
-function damageMonster(number, duration) {
+function damageMonster(number, duration, isEnabled) {
+	duration = duration || 900
+	isEnabled = isEnabled || false
+	if (isEnabled === false) { return false }
+
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.innerHTML = numberPrint(toDecimal(number))
 	newDamage.id = "tempfloatingdmg-" + Math.floor(rngmm(1000000,100000000)).toString()
@@ -223,10 +227,14 @@ function damageMonster(number, duration) {
 	newDamage.style.marginLeft = "-" + Math.floor(rngmm(144,147)).toString() + "px"
 	elebyID("bscreen-t-monster").appendChild(newDamage)
 	newDamage.classList.add("show")
-	setTimeout(function(){ newDamage.remove() }, 900);
+	setTimeout(function(){ newDamage.remove() }, duration);
 }
 
-function stunMonster(number, duration) {
+function stunMonster(number, duration, isEnabled) {
+	duration = duration || 900
+	isEnabled = isEnabled || false
+	if (isEnabled === false) { return false }
+
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.classList.add("mobtimerextended")
 	newDamage.innerHTML = "+" + numberPrint(toDecimal(number,2)) + "s"
@@ -237,10 +245,13 @@ function stunMonster(number, duration) {
 	newDamage.style.marginLeft = "-" + Math.floor(rngmm(34,37)).toString() + "px"
 	elebyID("bscreen-t-monster").appendChild(newDamage)
 	newDamage.classList.add("show")
-	setTimeout(function(){ newDamage.remove() }, 900);
+	setTimeout(function(){ newDamage.remove() }, duration);
 }
 
-function charExpGained(number, duration) {
+function charExpGained(number, duration, isEnabled) {
+	isEnabled = isEnabled || false
+	if (isEnabled === false) { return false }
+
 	duration = duration || 900
 	let newDamage = elebyID("floatingtexttest").cloneNode(true)
 	newDamage.classList.add("char-exp-gained")
