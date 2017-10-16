@@ -717,32 +717,31 @@ const gameClass = () => {
 		let newIObject = JSON.parse(JSON.stringify(iObj))
 		if (iObj.type === "w") {
 			newIObject.dmg = iObj.base_dmg * (1 + stage/(10 + Math.log(stage)*3)) * (1 + quality/300)
-
-			if (bonusObj.hasOwnProperty("bonus_dmg_p") === true) {
+			if (bonusObj.hasOwnProperty("bonus_dmg_p") === true && bonusObj.bonus_dmg_p !== null) {
 				newIObject.bonus_dmg_p = bonusObj.bonus_dmg_p
-			} else if (bonusObj.hasOwnProperty("bonus_dmg_p") === false
-				&& iObj.hasOwnProperty("bonus_dmg_p") === true) {
+			} else if ( ((bonusObj.hasOwnProperty("bonus_dmg_p") === true && bonusObj.bonus_dmg_p === null) || (bonusObj.hasOwnProperty("bonus_dmg_p") === false))
+				&& iObj.hasOwnProperty("bonus_dmg_p") > 0) {
 				newIObject.bonus_dmg_p = iObj.bonus_dmg_p
 			}
 
-			if (bonusObj.hasOwnProperty("bonus_defpen_p") === true) {
+			if (bonusObj.hasOwnProperty("bonus_defpen_p") === true && bonusObj.bonus_defpen_p !== null) {
 				newIObject.bonus_defpen_p = bonusObj.bonus_defpen_p
-			} else if (bonusObj.hasOwnProperty("bonus_defpen_p") === false
-				&& iObj.hasOwnProperty("bonus_defpen_p") === true) {
+			} else if ( ((bonusObj.hasOwnProperty("bonus_defpen_p") === true && bonusObj.bonus_defpen_p === null) || (bonusObj.hasOwnProperty("bonus_defpen_p") === false))
+				&& iObj.hasOwnProperty("bonus_defpen_p") > 0) {
 				newIObject.bonus_defpen_p = iObj.bonus_defpen_p
 			}
 
-			if (bonusObj.hasOwnProperty("bonus_stunrate_p") === true) {
+			if (bonusObj.hasOwnProperty("bonus_stunrate_p") === true && bonusObj.bonus_stunrate_p !== null) {
 				newIObject.bonus_stunrate_p = bonusObj.bonus_stunrate_p
-			} else if (bonusObj.hasOwnProperty("bonus_stunrate_p") === false
-				&& iObj.hasOwnProperty("bonus_stunrate_p") === true) {
+			} else if ( ((bonusObj.hasOwnProperty("bonus_stunrate_p") === true && bonusObj.bonus_stunrate_p === null) || (bonusObj.hasOwnProperty("bonus_stunrate_p") === false))
+				&& iObj.hasOwnProperty("bonus_stunrate_p") > 0) {
 				newIObject.bonus_stunrate_p = iObj.bonus_stunrate_p
 			}
 
-			if (bonusObj.hasOwnProperty("bonus_stunduration_f") === true) {
+			if (bonusObj.hasOwnProperty("bonus_stunduration_f") === true && bonusObj.bonus_stunduration_f !== null) {
 				newIObject.bonus_stunduration_f = bonusObj.bonus_stunduration_f
-			} else if (bonusObj.hasOwnProperty("bonus_stunduration_f") === false
-				&& iObj.hasOwnProperty("bonus_stunduration_f") === true) {
+			} else if ( ((bonusObj.hasOwnProperty("bonus_stunduration_f") === true && bonusObj.bonus_stunduration_f === null) || (bonusObj.hasOwnProperty("bonus_stunduration_f") === false))
+				&& iObj.hasOwnProperty("bonus_stunduration_f") > 0) {
 				newIObject.bonus_stunduration_f = iObj.bonus_stunduration_f
 			}
 		}
