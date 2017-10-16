@@ -186,6 +186,52 @@ const WIELDINGTYPES = {
 		weapontype1: ["Curvedtwohandedswords"],
 		weaponcomborotation: [1],
 	},
+	Barbarian: {
+		requirement: 20,
+		weapontype1: ["Axes"],
+		weaponcomborotation: [1],
+	},
+	Centurion: {
+		awaken: 3,
+		weapontype1: ["Axes"],
+		weapontype1: ["Shields"],
+		weaponcomborotation: [1,1,2],
+	},
+	Berserker: {
+		requirement: 50,
+		weapontype1: ["TwohandedAxes"],
+		weaponcomborotation: [1],
+	},
+	Berserker2: {
+		awaken: 50,
+		weapontype1: ["TwohandedAxes"],
+		weapontype2: ["TwohandedAxes"],
+		weaponcomborotation: [1,2],
+	},
+	Paladin: {
+		requirement: 70,
+		weapontype1: ["Straightonehandedswords","Maces"],
+		weapontype2: ["Shields"],
+		weaponcomborotation: [1,2],
+	},
+	Crusader: {
+		awaken: 20,
+		weapontype1: ["Twohandedgreatswords","TwohandedMaces"],
+		weapontype2: ["Shields"],
+		weaponcomborotation: [1,1,1,2],
+	},
+	HolyKnight: {
+		awaken: 50,
+		weapontype1: ["Straightonehandedswords","Maces"],
+		weapontype2: ["Straightonehandedswords","Maces","Shields"],
+		weaponcomborotation: [1,1,1,2],
+	},
+	Templar: {
+		awaken: 100,
+		weapontype1: ["Twohandedgreatswords","TwohandedMaces"],
+		weapontype2: ["Twohandedgreatswords","TwohandedMaces","Shields"],
+		weaponcomborotation: [1,1,1,2],
+	},
 	Lancer: {
 		requirement: 50,
 		weapontype1: ["Spears"],
