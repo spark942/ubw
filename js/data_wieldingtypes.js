@@ -194,7 +194,7 @@ const WIELDINGTYPES = {
 	Centurion: {
 		awaken: 3,
 		weapontype1: ["Axes"],
-		weapontype1: ["Shields"],
+		weapontype2: ["Shields"],
 		weaponcomborotation: [1,1,2],
 	},
 	Berserker: {
