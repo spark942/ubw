@@ -1595,6 +1595,9 @@ input[type="radio"]:checked + label:after {
 #inventory-items .inv-item[data-type="w"] .aspd-value {
 	color: #fff;
 }
+.bonusdmgordps {
+	color: rgba(10,255,10,1.0);
+}
 #inventory-items .inv-item .item-effect {
 	width: 100%;
 }
@@ -1602,7 +1605,7 @@ input[type="radio"]:checked + label:after {
 	height: 139px;
 }
 #inventory-items .inv-item[data-type="w"] .item-effect {
-	height: 94px;
+	height: 84px;
 }
 #inventory-items .inv-item .item-note {
 	color: rgba(189, 195, 199,1.0)

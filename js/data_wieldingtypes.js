@@ -1,22 +1,22 @@
 const WEAPONSYPES = {
 	BareHands: 			{Weapons:["Hand"]},
-	HandFist: 			{Weapons:[
+	HandFist: 			{Weapons:[ /*11k*/
 		"Gauntlet",	/*Europe*/
 		"Katar", 	/*Asia India*/
 		"Knuckles", /*Europe*/ /*Brass Knuckles*/
 		"Mubuchae", /*Asia Korea*/ /*Korean fighting fan*/
 		"Tekko"		/*Asia Japan*/
 		]},
-	Straightshortswords: 	{Weapons:[
+	Straightshortswords: 	{Weapons:[ /*12k*/
 		"Cinquedea",	/*Europe*/
 		"Ninjato",		/*Asia Japan*/
 		"Gladius",		/*Europe Mediterranean*/
 		]},
-	Curvedshortswords: {Weapons:[
+	Curvedshortswords: {Weapons:[ /*13k*/
 		"Wakizashi",	/*Asia Japan*/
 		"Shikomizue",	/*Asia Japan*/
 		"Talibong"]},	/*Asia Southeast*/
-	Curvedonehandedswords: {Weapons:[
+	Curvedonehandedswords: {Weapons:[ /*14k*/
 		"Cutlass",		/*Europe*/
 		"Dao",			/*Asia China*/
 		"Falchion",		/*Europe*/
@@ -27,7 +27,7 @@ const WEAPONSYPES = {
 		"Schweizersabel",
 		"Scimitar",
 		"Shamshir"]},
-	Straightonehandedswords: {Weapons:[
+	Straightonehandedswords: {Weapons:[ /*15k*/
 		"Backsword",
 		"Epee",
 		"Estoc",
@@ -36,31 +36,31 @@ const WEAPONSYPES = {
 		"Khanda",
 		"Longsword",
 		"Rapier",
-		"Tsurugi"
+		"Tsurugi" /*Japanese*/
 		]},
-	Curvedtwohandedswords: {Weapons:[
-		"Katana",
+	Curvedtwohandedswords: {Weapons:[ /*16k*/
+		"Katana", /*Japanese*/
 		"Miaodao",]},
-	Twohandedgreatswords: {Weapons:[
+	Twohandedgreatswords: {Weapons:[ /*17k*/
 		"Changdao",
 		"Claymore",
 		"Espadon",
 		"Executionerssword",
 		"Flambard",
-		"LongKatana",
+		"LongKatana", /*Japanese*/
 		"GreatLongsword",
-		"Nodachi",
+		"Nodachi", /*Japanese*/
 		"Zweihander",
 		"CeremonialSword"]},
-	Axelikeswords: {Weapons:[
+	Axelikeswords: {Weapons:[ /*18k*/
 		"Golok",
 		"Kopis",
 		"Kukri",
 		"Machete",
 		"Yatagan"]},
-	HookSwords: {Weapons:[
+	HookSwords: {Weapons:[ /*19k*/
 		"Shuanggou"]},
-	Daggers: {Weapons:[
+	Daggers: {Weapons:[ /*20k*/
 		"Pugio",
 		"Stiletto",
 		"Dirk",
@@ -70,21 +70,70 @@ const WEAPONSYPES = {
 		"Knife",
 		"Dagger",
 		"Icepick"]},
-	Axes: {Weapons:[
-		"BattleAxe"]},
-	TwohandedAxes: {Weapons:[
+	Shields: {Weapons:[ /*21k*/
+		"Shield",
+		"Buckler",
+		"CrossShield",
+		"Guard",
+		"Aegis",
+		]},
+	Axes: {Weapons:[ /*22k*/
+		"Bardiche",
+		"BattleAxe",
+		"Broadaxe",
+		"Doloire",
+		"Fu",	/*chinese*/
+		"Hatchet",
+		"Labrys", /*Europe, Greek*/
+		"Masakari", /*Japanese, very rare strong fast*/
+		"Tomahawk"]},
+	TwohandedAxes: {Weapons:[ /*23k*/
+		"GreatBattleAxe",
 		"Greataxe"]},
-	Spears: {Weapons:[
-		"Spear"]},
-	Polearms: {Weapons:[
-		"Poleaxe"]},
-	Maces: {Weapons:[
+	Spears: {Weapons:[ /*24k*/
+		"Dangpa", /*Korean, middle*/
+		"Gichang", /*Korean, long and slow*/
+		"Kamayari", /*Jap*/
+		"Lance",
+		"Qiang", /*Chinese*/
+		"Spear",]},
+	Polearms: {Weapons:[ /*25k*/
+		"Fauchard",
+		"Halberd", /*German*/
+		"JiChinese", /*Chinese*/
+		"Partisan", /*French*/
+		"Pike",
+		"Poleaxe", /*EUrope, hache*/
+		"Ranseur", /*French*/
+		"Trident"]},
+	Maces: {Weapons:[ /*26k*/
+		"Club",	
+		"Flail", /*Europe*/
+		"Hammer",
+		"HorsemansPick", /*Europe, Polish*/
+		"Kanabo", /*Japanese*/
 		"Mace",
-		"Hammer"]},
-	TwohandedMaces: {Weapons:[
-		"BigMace"]},
-	Shields: {Weapons:[
-		"Buckler"]},
+		"Warhammer",
+		]},
+	TwohandedMaces: {Weapons:[ /*27k*/
+		"Bonegrinder",
+		"Demolisher",
+		"Greatmace",
+		"Greathammer",
+		"GreatWarhammer",
+		"Maul",
+		"MorningStar",
+		"Sledgehammer",
+		"Warmace",
+		]},
+	Staff: {Weapons:[ /*28k*/
+		"Bo", /*chinese */
+		"Hanbo", /*Japanese*/
+		"Sceptre", /*Europe*/
+		"Rod",
+		"GunChineseStick",	
+		"Quarterstaff" /*Europe*/
+		]},
 }
 
 const WIELDINGTYPES = {

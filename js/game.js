@@ -395,7 +395,7 @@ const gameClass = () => {
 				char_level++
 			}
 		}
-		return char_level + 1
+		return Math.min(char_level + 1, 101)
 	}
 	const getCharacterCurrentExpOfLevel = () => {
 		let char_current_level = getCharacterLevelByExp()
@@ -411,7 +411,7 @@ const gameClass = () => {
 	}
 
 	function awakenPlayer () {
-		if (getCharacterLevelByExp() === 101) {
+		if (getCharacterLevelByExp() >= 101) {
 			DATA.player.awaken_stage++
 			DATA.player.exp_char = 0
 		}
@@ -689,21 +689,62 @@ const gameClass = () => {
 				aspd_min: 			ITEMS[itemID][10] || null, 
 				aspd_max: 			ITEMS[itemID][11] || null, 
 				aspd: ITEMS[itemID][10] !== null && ITEMS[itemID][11] !== null ? toDecimal(rngmm(ITEMS[itemID][10], ITEMS[itemID][11]),3) : null, 
-
+				cancraft: ITEMS[itemID][12] || null,
+				bonus_dmg_min: 					ITEMS[itemID][13] || null,
+				bonus_dmg_max: 					ITEMS[itemID][14] || null,
+				bonus_dmg_p: 						ITEMS[itemID][13] !== null && ITEMS[itemID][14] !== null ? toDecimal(rngmm(ITEMS[itemID][13], ITEMS[itemID][14]),3) : null,
+				bonus_defpen_min: 			ITEMS[itemID][15] || null,
+				bonus_defpen_max: 			ITEMS[itemID][16] || null,
+				bonus_defpen_p: 				ITEMS[itemID][15] !== null && ITEMS[itemID][16] !== null ? toDecimal(rngmm(ITEMS[itemID][15], ITEMS[itemID][16]),3) : null,
+				bonus_stunrate_min: 		ITEMS[itemID][17] || null,
+				bonus_stunrate_max: 		ITEMS[itemID][18] || null,
+				bonus_stunrate_p: 			ITEMS[itemID][17] !== null && ITEMS[itemID][18] !== null ? toDecimal(rngmm(ITEMS[itemID][17], ITEMS[itemID][18]),3) : null,
+				bonus_stunduration_min: ITEMS[itemID][19] || null,
+				bonus_stunduration_max: ITEMS[itemID][20] || null,
+				bonus_stunduration_f: 	ITEMS[itemID][19] !== null && ITEMS[itemID][20] !== null ? toDecimal(rngmm(ITEMS[itemID][19], ITEMS[itemID][20]),3) : null,
 		}
 		return itemModel
 	}
 
-	const updateItemObject = (iObj, stage, quality, aspd) => {
+	const updateItemObject = (iObj, stage, quality, aspd, bonusObj) => {
 		iObj = iObj || null
 		stage = stage || 10
 		quality = quality || null
 		aspd = aspd || 1
+		bonusObj = bonusObj || {}
 
 		if (iObj === null) { return false }
 		let newIObject = JSON.parse(JSON.stringify(iObj))
 		if (iObj.type === "w") {
 			newIObject.dmg = iObj.base_dmg * (1 + stage/(10 + Math.log(stage)*3)) * (1 + quality/300)
+
+			if (bonusObj.hasOwnProperty("bonus_dmg_p") === true) {
+				newIObject.bonus_dmg_p = bonusObj.bonus_dmg_p
+			} else if (bonusObj.hasOwnProperty("bonus_dmg_p") === false
+				&& iObj.hasOwnProperty("bonus_dmg_p") === true) {
+				newIObject.bonus_dmg_p = iObj.bonus_dmg_p
+			}
+
+			if (bonusObj.hasOwnProperty("bonus_defpen_p") === true) {
+				newIObject.bonus_defpen_p = bonusObj.bonus_defpen_p
+			} else if (bonusObj.hasOwnProperty("bonus_defpen_p") === false
+				&& iObj.hasOwnProperty("bonus_defpen_p") === true) {
+				newIObject.bonus_defpen_p = iObj.bonus_defpen_p
+			}
+
+			if (bonusObj.hasOwnProperty("bonus_stunrate_p") === true) {
+				newIObject.bonus_stunrate_p = bonusObj.bonus_stunrate_p
+			} else if (bonusObj.hasOwnProperty("bonus_stunrate_p") === false
+				&& iObj.hasOwnProperty("bonus_stunrate_p") === true) {
+				newIObject.bonus_stunrate_p = iObj.bonus_stunrate_p
+			}
+
+			if (bonusObj.hasOwnProperty("bonus_stunduration_f") === true) {
+				newIObject.bonus_stunduration_f = bonusObj.bonus_stunduration_f
+			} else if (bonusObj.hasOwnProperty("bonus_stunduration_f") === false
+				&& iObj.hasOwnProperty("bonus_stunduration_f") === true) {
+				newIObject.bonus_stunduration_f = iObj.bonus_stunduration_f
+			}
 		}
 		if (quality === null) {
 			quality = toDecimal(rngmm(TABLES.ITEM_QUALITY_MIN[iObj.grade-1], TABLES.ITEM_QUALITY_MAX[iObj.grade-1]))
@@ -712,6 +753,8 @@ const gameClass = () => {
 		newIObject.quality = quality
 		newIObject.aspd = aspd
 		newIObject.sell =  toDecimal(iObj.cost * (1 + stage/(10 + Math.log(stage)*30)) * (1 + quality/500), 0)
+
+		/* set the id because new item */
 		if (newIObject.hasOwnProperty("id") === false) {
 			newIObject.id = DATA.player.lastitemid + 1
 			DATA.player.lastitemid = newIObject.id
@@ -783,9 +826,12 @@ const gameClass = () => {
 		return value
 	}
 
-	const getWeaponSkillCalculated = (weaponkind_id, weapon_dmg, weapon_aspd, skill_id) => {
+	const getWeaponSkillCalculated = (weaponkind_id, weapon_dmg, weapon_aspd, skill_id, weaponbonus_object) => {
 		let weapon_passive_id = getWeaponPassiveIDByClass(weaponkind_id != 0 ? getItemModelByID(getItemByID(weaponkind_id).item_id).class : TABLES.defaultWeapon.class)
 		let passive_bonus = PASSIVES[weapon_passive_id-1][5] * getSkillLevelByExp(DATA.player.passives[weapon_passive_id].exp) / 100
+		let weaponbonuses = weaponbonus_object || {}
+		weapon_dmg = weaponbonuses.hasOwnProperty("bonus_dmg_p") === true ? weapon_dmg * (1+weaponbonuses.bonus_dmg_p) : weapon_dmg
+
 		let dmg_f = getPassiveBonusValue("dmg_f")
 		let dmg_p = getPassiveBonusValue("dmg_p") + DATA.player.awaken_stage * 0.33
 		let skill_dmg_p = getActiveSkillBonusPerLevel(skill_id, "dmg_p")
@@ -878,9 +924,9 @@ const gameClass = () => {
 			dmg_bonus_per_hit: dmg_f,
 			dmg_bonus_percent: dmg_p,
 			skill_bonus_percent: skill_dmg_p,
-			skill_def_pen:       skill_def_pen,
-			skill_stun:          skill_stun,
-			skill_stun_duration: skill_stun_duration,
+			skill_def_pen:       weaponbonuses.hasOwnProperty("bonus_defpen_p") === true ? skill_def_pen + weaponbonuses.bonus_defpen_p : skill_def_pen,
+			skill_stun:          weaponbonuses.hasOwnProperty("bonus_stunrate_p") === true ? skill_stun + weaponbonuses.bonus_stunrate_p : skill_stun,
+			skill_stun_duration: weaponbonuses.hasOwnProperty("bonus_stunduration_f") === true ? skill_stun_duration + weaponbonuses.bonus_stunduration_f : skill_stun_duration,
 			skill: ca
 		}
 	}
@@ -1064,11 +1110,27 @@ const gameClass = () => {
 		/* get the model with correct attributes */
 		let tiModel = getItemModelByID(thisItem.item_id)
 		/* update the attributes of the item */
+		/* create bonus object first */
+		let tiBonusObj = {}
+		if (thisItem.hasOwnProperty("bonus_dmg_p") === true ) { 
+			tiBonusObj.bonus_dmg_p = thisItem.bonus_dmg_p
+		}
+		if (thisItem.hasOwnProperty("bonus_defpen_p") === true ) { 
+			tiBonusObj.bonus_defpen_p = thisItem.bonus_defpen_p
+		}
+		if (thisItem.hasOwnProperty("bonus_stunrate_p") === true ) { 
+			tiBonusObj.bonus_stunrate_p = thisItem.bonus_stunrate_p
+		}
+		if (thisItem.hasOwnProperty("bonus_stunduration_f") === true ) { 
+			tiBonusObj.bonus_stunduration_f = thisItem.bonus_stunduration_f
+		}
+
 		let updatedItem = updateItemObject(
 			tiModel, 
 			thisItem.hasOwnProperty("stage")? thisItem.stage : null, 
 			thisItem.hasOwnProperty("quality")? thisItem.quality : null,
-			tiModel.aspd)
+			tiModel.aspd,
+			tiBonusObj)
 
 		if (source === "loot" && updatedItem.grade === 6) {
 			DATA.player.lts.looted_legendary++
@@ -1158,7 +1220,7 @@ const gameClass = () => {
 			mobtimerduration = mobtimerduration || 1
 
 			//var computedDMG = Math.max(0, dmg - mData.def * (1 - defpen / (1 + mData.rank)))
-			var computedDMG = dmg * (100 / (80 + (Math.sqrt(mData.level) * (1 + mData.rank) * (1 + mData.defpct ))) * (1 - defpen))
+			var computedDMG = dmg * (100 / (80 + (Math.sqrt(mData.level) * (1 + mData.rank) * (1 + mData.defpct ))) * (1 + defpen))
 			computedDMG = computedDMG / (1 + Math.pow(mData.rank, 2))
 			mData.hp -= computedDMG
 			mData.hp = Math.max(0, mData.hp)
@@ -1446,11 +1508,18 @@ const gameClass = () => {
 				let weapon_item_id = DATA.player.wieldingsetups[setupname]["weapon"+rotation[i]] || 0
 				let weaponObj = getItemFromInventoryByID(weapon_item_id) || {}
 				
+				let weaponBonusObj = {}
+				if (weaponObj.bonus_dmg_p > 0) { weaponBonusObj.bonus_dmg_p = weaponObj.bonus_dmg_p }
+				if (weaponObj.bonus_defpen_p > 0) { weaponBonusObj.bonus_defpen_p = weaponObj.bonus_defpen_p }
+				if (weaponObj.bonus_stunrate_p > 0) { weaponBonusObj.bonus_stunrate_p = weaponObj.bonus_stunrate_p }
+				if (weaponObj.bonus_stunduration_f > 0) { weaponBonusObj.bonus_stunduration_f = weaponObj.bonus_stunduration_f }
+
 				thisCombo.push(cloneObj(getWeaponSkillCalculated(
 					weapon_item_id, 
 					weaponObj.dmg || TABLES.defaultWeapon.dmg, 
 					weaponObj.aspd || TABLES.defaultWeapon.aspd, 
-					ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.usedcombo][i]-1][0])))
+					ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.usedcombo][i]-1][0],
+					weaponBonusObj)))
 			}
 			if (DATA.player.currentPower <= thisCombo[0].skill.power) {
 				return
@@ -1531,7 +1600,7 @@ const gameClass = () => {
 				//console.log("rest in town")
 			}
 		}
-		if (getCharacterLevelByExp() === 101 && DATA.player.settings.autoawaken === true) {
+		if (getCharacterLevelByExp() >= 101 && DATA.player.settings.autoawaken === true) {
 			awakenPlayer()
 		}
 	}
@@ -1604,7 +1673,6 @@ const gameClass = () => {
 		if (DATA.player.focus < 0) {
 			DATA.player.focus = 0
 		}
-
 		DATA.player.currentPower = toDecimal((getPassiveBonusValue("combo_regen") + (DATA.player.awaken_stage * 0.05))/getPassiveBonusValue("combo_regen_sec") + DATA.player.currentPower, 2) 
 		DATA.player.currentPower = Math.min(DATA.player.currentPower, getPassiveBonusValue("combo_power"))
 
@@ -1647,11 +1715,28 @@ const gameClass = () => {
 			let thisitemmodelID 	= DATA.player.inventory[i].item_id
 			let thisitemModel = getItemModelByID(thisitemmodelID)
 			thisitemModel.id = thisitemID
+
+			/* create bonus object first */
+			let thisitemBonusObj = {}
+			if (DATA.player.inventory[i].hasOwnProperty("bonus_dmg_p") === true ) { 
+				thisitemBonusObj.bonus_dmg_p = DATA.player.inventory[i].bonus_dmg_p
+			}
+			if (DATA.player.inventory[i].hasOwnProperty("bonus_defpen_p") === true ) { 
+				thisitemBonusObj.bonus_defpen_p = DATA.player.inventory[i].bonus_defpen_p
+			}
+			if (DATA.player.inventory[i].hasOwnProperty("bonus_stunrate_p") === true ) { 
+				thisitemBonusObj.bonus_stunrate_p = DATA.player.inventory[i].bonus_stunrate_p
+			}
+			if (DATA.player.inventory[i].hasOwnProperty("bonus_stunduration_f") === true ) { 
+				thisitemBonusObj.bonus_stunduration_f = DATA.player.inventory[i].bonus_stunduration_f
+			}
+
 			let thisitemUpdated = updateItemObject(
 				thisitemModel, 
 				DATA.player.inventory[i].stage, 
 				DATA.player.inventory[i].quality, 
-				DATA.player.inventory[i].aspd)
+				DATA.player.inventory[i].aspd,
+				thisitemBonusObj)
 			if (JSON.stringify(DATA.player.inventory[i]) !== JSON.stringify(thisitemUpdated)) {
 				DATA.player.inventory[i] = thisitemUpdated
 			}
@@ -2737,6 +2822,15 @@ const gameClass = () => {
 		updateTextByID("dmgflatbonus-total", numberPrint(dmgflatbonus_passive))
 		updateTextByID("dmgflatbonus-pskill", numberPrint(dmgflatbonus_passive))
 
+		let power_combo_regen_pskill = getPassiveBonusValue("combo_regen")
+		let power_combo_regen_astage = DATA.player.awaken_stage * 0.05
+		let power_combo_regen_tick = getPassiveBonusValue("combo_regen_sec")
+		updateTextByID("stat-power-regen-per-sec", numberPrint(toDecimal((power_combo_regen_pskill + power_combo_regen_astage) / power_combo_regen_tick, 3 )))
+		updateTextByID("stat-power-regen-total", numberPrint(power_combo_regen_pskill + power_combo_regen_astage))
+		updateTextByID("stat-power-regen-pskill", numberPrint(power_combo_regen_pskill))
+		updateTextByID("stat-power-regen-astage", numberPrint(power_combo_regen_astage))
+		updateTextByID("stat-power-regen-tick", numberPrint(power_combo_regen_tick))
+
 		/* LIFETIME STATS */
 		updateTextByID("lts-timeplayed", toHHMMSS(DATA.player.lts.playtime))
 		updateTextByID("lts-killedenemies", numberPrint(DATA.player.lts.killedenemies))
@@ -3004,7 +3098,13 @@ const gameClass = () => {
 				let weapon_item_id = DATA.player.wieldingsetups[setupname]["weapon"+rotation[i]] || 0
 				let weaponObj = getItemFromInventoryByID(weapon_item_id) || {}
 				
-				let skilldata = getWeaponSkillCalculated(weapon_item_id, weaponObj.dmg || TABLES.defaultWeapon.dmg, weaponObj.aspd || TABLES.defaultWeapon.aspd, ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][0])
+				let weaponBonusObj = {}
+				if (weaponObj.bonus_dmg_p > 0) { weaponBonusObj.bonus_dmg_p = weaponObj.bonus_dmg_p }
+				if (weaponObj.bonus_defpen_p > 0) { weaponBonusObj.bonus_defpen_p = weaponObj.bonus_defpen_p }
+				if (weaponObj.bonus_stunrate_p > 0) { weaponBonusObj.bonus_stunrate_p = weaponObj.bonus_stunrate_p }
+				if (weaponObj.bonus_stunduration_f > 0) { weaponBonusObj.bonus_stunduration_f = weaponObj.bonus_stunduration_f }
+
+				let skilldata = getWeaponSkillCalculated(weapon_item_id, weaponObj.dmg || TABLES.defaultWeapon.dmg, weaponObj.aspd || TABLES.defaultWeapon.aspd, ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][0], weaponObj)
 
 				updateTextByID("comboskill-weapon-"+i, iText("comboskill_weapon",rotation[i],skilldata.item_dmg,skilldata.item_aspd))
 				updateTextByID("comboskill-name-"+i,ACTIVES[DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo][i]-1][5])
@@ -3119,8 +3219,13 @@ const gameClass = () => {
 				&& DATA.player.inventory[i].type === "w") {
 				updateTextByID("item-type-"+tiID, iText(getWeaponTypeByWeaponClass(DATA.player.inventory[i].class)))
 				updateTextByID("item-weapontype-"+tiID, DATA.player.inventory[i].class)
-				updateTextByID("item-dps-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd,1)))
-				updateTextByID("item-dmg-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg)))
+				if (DATA.player.inventory[i].bonus_dmg_p > 0) {
+					updateTextByID("item-dps-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd,1)) + iText("item_dps_bonus_f", toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd * DATA.player.inventory[i].bonus_dmg_p,1)))
+					updateTextByID("item-dmg-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg)) + iText("item_dmg_bonus_f", toDecimal(DATA.player.inventory[i].dmg * DATA.player.inventory[i].bonus_dmg_p)))
+				} else {
+					updateTextByID("item-dps-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd,1)))
+					updateTextByID("item-dmg-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].dmg)))
+				}
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
 			if (DATA.player.inventory[i].focus !== null) {
@@ -3131,6 +3236,17 @@ const gameClass = () => {
 				}
 				itemEffects += "<br>" + iText("item_food_notice") 
 				updateTextByID("item-effect-"+tiID, itemEffects)
+			} else if (DATA.player.inventory[i].bonus_dmg_p > 0
+				|| DATA.player.inventory[i].bonus_defpen_p > 0
+				|| DATA.player.inventory[i].bonus_stunrate_p > 0
+				|| DATA.player.inventory[i].bonus_stunduration_f > 0) {
+				let itemBonuses = ""
+				if (DATA.player.inventory[i].bonus_dmg_p > 0) { itemBonuses += iText("item_bonus_effect_damage_p", DATA.player.inventory[i].bonus_dmg_p) }
+				if (DATA.player.inventory[i].bonus_defpen_p > 0) { itemBonuses += iText("item_bonus_effect_defpen_p", DATA.player.inventory[i].bonus_defpen_p) }
+				if (DATA.player.inventory[i].bonus_stunrate_p > 0) { itemBonuses += iText("item_bonus_effect_stunrate_p", DATA.player.inventory[i].bonus_stunrate_p) }
+				if (DATA.player.inventory[i].bonus_stunduration_f > 0) { itemBonuses += iText("item_bonus_effect_stunduration_f", DATA.player.inventory[i].bonus_stunduration_f) }
+
+				updateTextByID("item-effect-"+tiID, itemBonuses)
 			}
 			updateTextByID("item-stage-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].stage)))
 			updateTextByID("item-grade-"+tiID, numberPrint(toDecimal(DATA.player.inventory[i].quality)))
