@@ -140,7 +140,7 @@ const isNumeric = (number) => {
 	return !isNaN(parseFloat(number)) && isFinite(number);
 }
 
-function numberPrint(x, separator) {
+const numberPrint = (x, separator) => {
 	separator = separator || ","
 	if (x > 1e15) {
 		return numberShort(x)
@@ -148,14 +148,14 @@ function numberPrint(x, separator) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 	}
 }
-function numberPrintWithDecimal(x, separator) {
+const numberPrintWithDecimal = (x, separator) => {
 	separator = separator || ","
 	var parts = x.toString().split(".");
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 	return parts.join(".");
 }
 
-function numberShort(x) {
+const numberShort = (x) => {
 	let order = [
 		"e-84", "e-81", "e-78", "e-75", "e-72", "e-69", "e-66", 
 		"e-63", "e-60", "e-57", "e-54", "e-51", "e-48", "e-45", 
@@ -196,7 +196,7 @@ const cloneObj = (obj) => {
 
 /* sorting */
 
-function wswsByDPS(a,b) {
+const wswsByDPS = (a,b) => {
 	if (a.getAttribute("data-dps") < b.getAttribute("data-dps"))
 		 return -1;
 	if (a.getAttribute("data-dps") > b.getAttribute("data-dps"))
@@ -204,7 +204,7 @@ function wswsByDPS(a,b) {
 	return 0;
 }
 
-function removeFromArray(array, indexes) {
+const removeFromArray = (array, indexes) => {
 	let newArray = array
 	for (var i = indexes.length -1; i >= 0; i--)
 		newArray.splice(indexes[i],1);
@@ -213,7 +213,7 @@ function removeFromArray(array, indexes) {
 
 /* temporary floating text */
 
-function damageMonster(number, duration, isEnabled) {
+const damageMonster = (number, duration, isEnabled) => {
 	duration = duration || 900
 	isEnabled = isEnabled || false
 	if (isEnabled === false) { return false }
@@ -230,7 +230,7 @@ function damageMonster(number, duration, isEnabled) {
 	setTimeout(function(){ newDamage.remove() }, duration);
 }
 
-function stunMonster(number, duration, isEnabled) {
+const stunMonster = (number, duration, isEnabled) => {
 	duration = duration || 900
 	isEnabled = isEnabled || false
 	if (isEnabled === false) { return false }
@@ -248,7 +248,7 @@ function stunMonster(number, duration, isEnabled) {
 	setTimeout(function(){ newDamage.remove() }, duration);
 }
 
-function charExpGained(number, duration, isEnabled) {
+const charExpGained = (number, duration, isEnabled) => {
 	isEnabled = isEnabled || false
 	if (isEnabled === false) { return false }
 
@@ -266,14 +266,13 @@ function charExpGained(number, duration, isEnabled) {
 	setTimeout(function(){ newDamage.remove() }, duration);
 }
 
-function shrink()
-{
-		var textSpan = elebyID("monsternameval");
-		var textDiv = elebyID("monstername");
-		let textDivWidth = 300
-		textSpan.style.fontSize = "20px"
-		let textSpanWidth = textSpan.offsetWidth
-		let newFontSize = Math.max(Math.floor((textDivWidth / textSpanWidth) * 20 * 0.7), 8)
-		newFontSize = Math.min(newFontSize, 25)
-		textSpan.style.fontSize = newFontSize.toString() + "px"
+const shrink = () => {
+	var textSpan = elebyID("monsternameval");
+	var textDiv = elebyID("monstername");
+	let textDivWidth = 300
+	textSpan.style.fontSize = "20px"
+	let textSpanWidth = textSpan.offsetWidth
+	let newFontSize = Math.max(Math.floor((textDivWidth / textSpanWidth) * 20 * 0.7), 8)
+	newFontSize = Math.min(newFontSize, 25)
+	textSpan.style.fontSize = newFontSize.toString() + "px"
 }
