@@ -1151,6 +1151,15 @@ const gameClass = () => {
 		
 	}
 
+	const getEffectiveWeaponDMG = (weaponObj) => {
+		weaponObj = weaponObj || {}
+		if (weaponObj.hasOwnProperty("bonus_dmg_p") === true && weaponObj.bonus_dmg_p > 0) {
+			return weaponObj.dmg * (1 + weaponObj.bonus_dmg_p)
+		} else {
+			return weaponObj.dmg
+		}
+	}
+
 	const updateItemInventory = (id, object) => {
 		
 	}
@@ -2297,7 +2306,7 @@ const gameClass = () => {
 					selectableItem.onclick = addToSlot
 					elebySelector("#ws-item-"+thisIDplusUniqueID+" .ws-item-name").id = "ws-item-name-"+thisIDplusUniqueID
 					elebySelector("#ws-item-"+thisIDplusUniqueID+" .ws-dps-value").id = "ws-item-dps-"+thisIDplusUniqueID
-					let thisDPS = toDecimal(DATA.player.inventory[i].dmg/DATA.player.inventory[i].aspd)
+					let thisDPS = toDecimal(getEffectiveWeaponDMG(DATA.player.inventory[i])/DATA.player.inventory[i].aspd)
 					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-wsid", wsid)
 					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-slot", slot)
 					updateAttributeByID("ws-item-"+thisIDplusUniqueID, "data-id", thisID)
@@ -2867,7 +2876,7 @@ const gameClass = () => {
 					//updateAttributeBySelector("#ws-slot1-"+wt+" .ws-wp-weapon", "src", DATA.player.wieldingsetups[wt].weapon1 || "")
 					var wp1item = getItemByID(DATA.player.wieldingsetups[wt].weapon1) || null
 					if (wp1item !== null) {
-						let itemname = wp1item.name+"<br>"+ numberPrint(toDecimal(wp1item.dmg/wp1item.aspd)) + "&nbsp;DPS"
+						let itemname = wp1item.name+"<br>"+ numberPrint(toDecimal(getEffectiveWeaponDMG(wp1item)/wp1item.aspd)) + "&nbsp;DPS"
 						updateAttributeByID("ws-slot1-"+wt, "data-grade", wp1item.grade)
 						updateTextBySelector("#ws-slot1-"+wt+" .slot-equipment", itemname)
 					} else {
@@ -2879,7 +2888,7 @@ const gameClass = () => {
 					//updateAttributeBySelector("#ws-slot2-"+wt+" .ws-wp-weapon", "src", DATA.player.wieldingsetups[wt].weapon2 || "")
 					var wp2item = getItemByID(DATA.player.wieldingsetups[wt].weapon2) || null
 					if (wp2item !== null) {
-						let itemname = wp2item.name+"<br>"+ numberPrint(toDecimal(wp2item.dmg/wp2item.aspd)) + "&nbsp;DPS"
+						let itemname = wp2item.name+"<br>"+ numberPrint(toDecimal(getEffectiveWeaponDMG(wp2item)/wp2item.aspd)) + "&nbsp;DPS"
 						updateAttributeByID("ws-slot2-"+wt, "data-grade", wp2item.grade)
 						updateTextBySelector("#ws-slot2-"+wt+" .slot-equipment", itemname)
 					} else {
@@ -2891,7 +2900,7 @@ const gameClass = () => {
 					//updateAttributeBySelector("#ws-slot3-"+wt+" .ws-wp-weapon", "src", DATA.player.wieldingsetups[wt].weapon3 || "")
 					var wp3item = getItemByID(DATA.player.wieldingsetups[wt].weapon3) || null
 					if (wp3item !== null) {
-						let itemname = wp3item.name+"<br>"+ numberPrint(toDecimal(wp3item.dmg/wp3item.aspd)) + "&nbsp;DPS"
+						let itemname = wp3item.name+"<br>"+ numberPrint(toDecimal(getEffectiveWeaponDMG(wp3item)/wp3item.aspd)) + "&nbsp;DPS"
 						updateAttributeByID("ws-slot3-"+wt, "data-grade", wp3item.grade)
 						updateTextBySelector("#ws-slot3-"+wt+" .slot-equipment", itemname)
 					} else {
