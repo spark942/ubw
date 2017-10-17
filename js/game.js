@@ -7,7 +7,7 @@
 	global: ACTIVES
 	global: WIELDINGTYPE
 */
-'use strict'
+"use strict";
 
 const gameClass = () => {
 	const GAMEVAR = {
@@ -15,8 +15,9 @@ const gameClass = () => {
 		renderInitialized:false,
 		inventoryspace: 20,
 		saveCooldown: 30000,
-		refreshingActiveskill: false,
+		refreshingActiveskill: false
 	}
+
 	const TABLES = {
 		EXP_CHAR:   [],
 		EXP_SKILL:  [],
@@ -42,7 +43,7 @@ const gameClass = () => {
 				base_bonus_per_level: 0.02,
 				curbonus : 0,
 				cost_type: "focus",
-				cost_per_sec: 3,
+				cost_per_sec: 3
 			},
 			FOCUS_POWER_REGEN: {
 				name: "Concentration",
@@ -50,7 +51,7 @@ const gameClass = () => {
 				base_bonus_per_level: 0.02,
 				curbonus : 0,
 				cost_type: "focus",
-				cost_per_sec: 2,
+				cost_per_sec: 2
 			},
 			FOCUS_COMBO_STREAK: {
 				name: "Wombo Combo",
@@ -58,7 +59,7 @@ const gameClass = () => {
 				base_bonus_per_level: 0.0005,
 				bonusperhit : 0.03,
 				cost_type: "focus",
-				cost_per_sec: 100,
+				cost_per_sec: 100
 			},
 		},
 		EXP_BONUS: {
@@ -266,19 +267,19 @@ const gameClass = () => {
 		for (var i = 0; i < 123; i++) {
 			let fib1 = fibonacci(i+1)
 			let fib8 = fibonacci(i+8)
-			TABLES['EXP_CHAR'].push( Math.floor( Math.sqrt( fib8 )*8 ) )
-			TABLES['EXP_SKILL'].push( Math.floor( Math.sqrt( fib1 )*10 ) )
-			TABLES['EXP_SKILL2'].push( Math.floor( Math.sqrt( fib1 )*15 ) )
-			TABLES['EXP_SKILL3'].push( Math.floor( Math.sqrt( fib1 )*25 ) )
-			TABLES['EXP_SKILL4'].push( Math.floor( Math.sqrt( fib1 )*80 ) )
-			TABLES['EXP_SKILL5'].push( Math.floor( Math.sqrt( fib1 )*5500 ) )
+			TABLES["EXP_CHAR"].push( Math.floor( Math.sqrt( fib8 )*8 ) )
+			TABLES["EXP_SKILL"].push( Math.floor( Math.sqrt( fib1 )*10 ) )
+			TABLES["EXP_SKILL2"].push( Math.floor( Math.sqrt( fib1 )*15 ) )
+			TABLES["EXP_SKILL3"].push( Math.floor( Math.sqrt( fib1 )*25 ) )
+			TABLES["EXP_SKILL4"].push( Math.floor( Math.sqrt( fib1 )*80 ) )
+			TABLES["EXP_SKILL5"].push( Math.floor( Math.sqrt( fib1 )*5500 ) )
 		}
 		for (var i = 0; i < 877; i++) {
-			TABLES['EXP_SKILL'].push(Math.floor(TABLES['EXP_SKILL'][TABLES['EXP_SKILL'].length - 1] * 1.1))
-			TABLES['EXP_SKILL2'].push(Math.floor(TABLES['EXP_SKILL2'][TABLES['EXP_SKILL2'].length - 1] * 1.1))
-			TABLES['EXP_SKILL3'].push(Math.floor(TABLES['EXP_SKILL3'][TABLES['EXP_SKILL3'].length - 1] * 1.1))
-			TABLES['EXP_SKILL4'].push(Math.floor(TABLES['EXP_SKILL4'][TABLES['EXP_SKILL4'].length - 1] * 1.1))
-			TABLES['EXP_SKILL5'].push(Math.floor(TABLES['EXP_SKILL5'][TABLES['EXP_SKILL5'].length - 1] * 1.1))
+			TABLES["EXP_SKILL"].push(Math.floor(TABLES["EXP_SKILL"][TABLES["EXP_SKILL"].length - 1] * 1.1))
+			TABLES["EXP_SKILL2"].push(Math.floor(TABLES["EXP_SKILL2"][TABLES["EXP_SKILL2"].length - 1] * 1.1))
+			TABLES["EXP_SKILL3"].push(Math.floor(TABLES["EXP_SKILL3"][TABLES["EXP_SKILL3"].length - 1] * 1.1))
+			TABLES["EXP_SKILL4"].push(Math.floor(TABLES["EXP_SKILL4"][TABLES["EXP_SKILL4"].length - 1] * 1.1))
+			TABLES["EXP_SKILL5"].push(Math.floor(TABLES["EXP_SKILL5"][TABLES["EXP_SKILL5"].length - 1] * 1.1))
 		}
 
 		/* load monsters id per region and elite_rank */
@@ -963,7 +964,6 @@ const gameClass = () => {
 	}
 
 	function addSkillToCombo() {
-		/* TO DO: check if enough power to add */
 		let skill_id = parseInt(this.getAttribute("data-skillid"))
 		if ((DATA.player.actives[skill_id].power + DATA.player.comboPowerUsed) <= getPassiveBonusValue("combo_power")) {
 			DATA.player.activescombo["combo"+DATA.player.activescombo.viewcombo].push(skill_id)
@@ -1061,7 +1061,6 @@ const gameClass = () => {
 				}
 
 			}
-			/* TODO : update type and curve in case the data is updated */
 			/*update active end*/
 		}
 	}
@@ -1846,7 +1845,7 @@ const gameClass = () => {
 		elebyID("town-market-action-crystal").onclick = showMarketCrystal
 
 		/* Blacksmith TAB*/
-		// TO DO
+		// SOON
 	}
 
 	const townRender = () => {
@@ -1992,9 +1991,9 @@ const gameClass = () => {
 					}
 				}
 			} else if (DATA.player.currentTownMarketTab === "food") {
-				// TO DO
+				// SOON
 			} else if (DATA.player.currentTownMarketTab === "crystal") {
-				// TO DO	
+				// sOON	
 			}
 		} else if (DATA.player.currentTownTab === "blacksmith") {
 			updateTextByID("epic-dust-count", numberPrint(DATA.player.weapondust.epic))
@@ -3070,7 +3069,6 @@ const gameClass = () => {
 	const comboInventoryRender = () => {
 		updateAttributeByID("combolist", "data-awakenstage", DATA.player.awaken_stage)
 		/* retrieve combo skills */
-		/* WARNING TO DO : need to empty the #comboskills when switching combos or change setup or delete skill */
 		let setupname = DATA.player.activescombo["combosetup"+DATA.player.activescombo.viewcombo]
 		let rotation = getWeaponComboRotation(setupname)
 
