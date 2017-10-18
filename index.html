@@ -692,6 +692,16 @@
 			</div>
 		</section>
 	</div>
+	<script> 
+		var $buoop = {notify:{i:-0.01,f:-0.01,o:-0.01,s:-0.01,c:-0.01},unsecure:true,api:5}; 
+		function $buo_f(){ 
+		 var e = document.createElement("script"); 
+		 e.src = "http://browser-update.org/update.min.js"; 
+		 document.body.appendChild(e);
+		};
+		try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+		catch(e){window.attachEvent("onload", $buo_f)}
+	</script>
 	<script type="text/javascript" src="js/data_actives.js"></script>
 	<script type="text/javascript" src="js/data_items.js"></script>
 	<script type="text/javascript" src="js/data_monsters.js"></script>
