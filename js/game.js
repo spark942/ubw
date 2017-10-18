@@ -2835,7 +2835,7 @@ const gameClass = () => {
 		updateTextByID("stat-power-regen-per-sec", numberPrint(toDecimal((power_combo_regen_pskill + power_combo_regen_astage) / power_combo_regen_tick, 3 )))
 		updateTextByID("stat-power-regen-total", numberPrint(power_combo_regen_pskill + power_combo_regen_astage))
 		updateTextByID("stat-power-regen-pskill", numberPrint(power_combo_regen_pskill))
-		updateTextByID("stat-power-regen-astage", numberPrint(power_combo_regen_astage))
+		updateTextByID("stat-power-regen-astage", numberPrint(toDecimal(power_combo_regen_astage,1)))
 		updateTextByID("stat-power-regen-tick", numberPrint(power_combo_regen_tick))
 
 		/* LIFETIME STATS */
@@ -3331,6 +3331,7 @@ const gameClass = () => {
 	return {
 		init:init,
 		run:runGame,
+		/* only for debug */
 		charlevel:getCharacterLevelByExp,
 		curexp:getCharacterCurrentExpOfLevel,
 		maxexp:getCharacterCurrentLevelTotalExp,
