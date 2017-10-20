@@ -143,7 +143,7 @@ const isNumeric = (number) => {
 const numberPrint = (x, separator) => {
 	separator = separator || ","
 	if (x > 1e15) {
-		return numberShort(x)
+		return numberShort(x,3)
 	} else {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 	}
@@ -155,7 +155,7 @@ const numberPrintWithDecimal = (x, separator) => {
 	return parts.join(".");
 }
 
-const numberShort = (x) => {
+const numberShort = (x , decimal=0) => {
 	let order = [
 		"e-84", "e-81", "e-78", "e-75", "e-72", "e-69", "e-66", 
 		"e-63", "e-60", "e-57", "e-54", "e-51", "e-48", "e-45", 
@@ -186,7 +186,7 @@ const numberShort = (x) => {
 	if (x < range[0]) { return x }
 	for (var i = 0; i < range.length; i++) {
 		if (x > range[i+1]) { continue }
-		return Math.floor(x/range[i]).toString() + order[i]
+		return (x/range[i]).toFixed(decimal).toString() + order[i]
 	};
 }
 
