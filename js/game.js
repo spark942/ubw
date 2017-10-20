@@ -1675,7 +1675,7 @@ const gameClass = () => {
 			}
 		} else if (DATA.player.currentStageIsTown === true) {
 			/* regen focus if in town */
-			DATA.player.focus += (2 + parseInt(getPassiveBonusValue("focus_idle_regen"))) * (1 + DATA.player.awaken_stage)
+			DATA.player.focus += (2 + parseInt(getPassiveBonusValue("focus_idle_regen"))) * (1 + DATA.player.awaken_stage) || 0
 		}
 		if (DATA.player.focus < 0) {
 			DATA.player.focus = 0
@@ -1764,7 +1764,7 @@ const gameClass = () => {
 				if (DATA.player.inventory[i].item_id > 10000) {
 					DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
 				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
-					DATA.player.focus += ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))
+					DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
 					/* grimoire*/
 					if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
 						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
@@ -1889,7 +1889,7 @@ const gameClass = () => {
 				DATA.player.currentRegion = region
 				DATA.player.ekk -= price
 				if (pfocus > 0) {
-					DATA.player.focus -= pfocus
+					DATA.player.focus -= parseInt(pfocus) || DATA.player.focus
 				}
 				updateStage(DATA.player.currentStage)
 				if (elebyID("game-container").getAttribute("class").toString().includes(DATA.player.currentRegion) === false) {
@@ -2617,7 +2617,7 @@ const gameClass = () => {
 			DATA.player.settings.townSell === false
 			&& DATA.player.settings.townSalvage === false	
 			&& item_id >= 1000 && item_id <= 10000) {
-			DATA.player.focus += ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))
+			DATA.player.focus += parseInt(ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))) || 0
 			/* grimoire*/
 			if (ITEMS[item_id][6] !== null
 				&& ITEMS[item_id][6].startsWith("grim") 
