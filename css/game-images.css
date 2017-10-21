@@ -279,41 +279,41 @@
 }
 /* dagger */
 .active-61, .active-62 {
-	background-color: rgb(234, 209, 220,0.9);
+	background-color: rgba(234, 209, 220,0.9);
 	background-image: url("../img/actives/knife-thrust.png");
 }
 .active-63 {
-	background-color: rgb(234, 209, 220,0.9);
+	background-color: rgba(234, 209, 220,0.9);
 	background-image: url("../img/actives/split-cross.png");
 }
 .active-64 {
-	background-color: rgb(234, 209, 220,1);
+	background-color: rgba(234, 209, 220,1);
 	background-image: url("../img/actives/knife-thrust.png");
 }
 .active-65 {
-	background-color: rgb(234, 209, 220,0.9);
+	background-color: rgba(234, 209, 220,0.9);
 	background-image: url("../img/actives/thrown-knife.png");
 }
 .active-66 {
-	background-color: rgb(234, 209, 220,0.9);
+	background-color: rgba(234, 209, 220,0.9);
 	background-image: url("../img/actives/thrown-daggers.png");
 }
 .active-67 {
-	background-color: rgb(224, 192, 206,0.9);
+	background-color: rgba(224, 192, 206,0.9);
 	background-image: url("../img/actives/thrown-knife.png");
 }
 .active-68 {
-	background-color: rgb(224, 192, 206,0.9);
+	background-color: rgba(224, 192, 206,0.9);
 	background-image: url("../img/actives/thrown-daggers.png");
 }
 .active-70 {
-	background-color: rgb(224, 175, 196,1);
+	background-color: rgba(224, 175, 196,1);
 	background-image: url("../img/actives/split-cross.png");
 }
 .active-69, .active-71, .active-72, .active-73,
 .active-74, .active-75, .active-76, .active-77, 
 .active-78, .active-79, .active-80 {
-	background-color: rgb(224, 175, 196,1);
+	background-color: rgba(224, 175, 196,1);
 } 
 
 /* 2h sword */
