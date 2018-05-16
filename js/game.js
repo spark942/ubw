@@ -144,6 +144,7 @@ const gameClass = () => {
 				autosell_3 : false,
 				autosell_4 : false,
 				autosell_5 : false,
+				autosell_6 : false,
 				aura_focus_dmg 				 : false,
 				aura_focus_power_regen : false,
 				aura_focus_combostreak : false,
