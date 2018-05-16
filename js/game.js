@@ -1784,7 +1784,7 @@ const gameClass = () => {
 			removeFromArray(DATA.player.inventory, toSell)
 		}
 		/* disable buttons if not unlocked yet*/
-		for (var i = 1; i <= 5; i++) {
+		for (var i = 1; i <= 6; i++) {
 			if (findPassiveBonusWithValue("autosell_grade", "grade_"+i) === false) {
 				if (DATA.player.settings["autosell_"+i] === true) { DATA.player.settings["autosell_"+i] = false }
 				elebyID("autosell-"+i).disabled = true
@@ -2073,7 +2073,7 @@ const gameClass = () => {
 		elebyID("curfocus").innerHTML = numberPrint(DATA.player.focus)
 
 		/* use this loop instead of aura because more fps */
-		updateTextByID("aura-focus-combostreak-streak", numberPrintWithDecimal(percent(getComboStreakBonus(),2)))
+		updateTextByID("aura-focus-combostreak-streak", percent(getComboStreakBonus(),2).toFixed(1))
 
 		updateAttributeByID("bsettings-player", "data-awakenstage", DATA.player.awaken_stage)
 		updateTextByID("awakenstage-value", DATA.player.awaken_stage)
@@ -2617,7 +2617,7 @@ const gameClass = () => {
 			DATA.player.settings.townSell === false
 			&& DATA.player.settings.townSalvage === false	
 			&& item_id >= 1000 && item_id <= 10000) {
-			DATA.player.focus += parseInt(ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val))) || 0
+			DATA.player.focus += parseInt(ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val) * 50)) || 0
 			/* grimoire*/
 			if (ITEMS[item_id][6] !== null
 				&& ITEMS[item_id][6].startsWith("grim") 
@@ -2780,6 +2780,7 @@ const gameClass = () => {
 		function autosell3Check () { DATA.player.settings.autosell_3 = this.checked }
 		function autosell4Check () { DATA.player.settings.autosell_4 = this.checked }
 		function autosell5Check () { DATA.player.settings.autosell_5 = this.checked }
+		function autosell6Check () { DATA.player.settings.autosell_6 = this.checked }
 		function autosellLevelCheck () { DATA.player.settings.autosell_level = parseInt(this.value) }
 
 		elebyID("autosell-1").checked = DATA.player.settings.autosell_1 || false
@@ -2787,6 +2788,7 @@ const gameClass = () => {
 		elebyID("autosell-3").checked = DATA.player.settings.autosell_3 || false
 		elebyID("autosell-4").checked = DATA.player.settings.autosell_4 || false
 		elebyID("autosell-5").checked = DATA.player.settings.autosell_5 || false
+		elebyID("autosell-6").checked = DATA.player.settings.autosell_6 || false
 		elebyID("autosell-level").value = DATA.player.settings.autosell_level || 100
 
 		elebyID("autosell-1").onchange = autosell1Check
@@ -2794,6 +2796,7 @@ const gameClass = () => {
 		elebyID("autosell-3").onchange = autosell3Check
 		elebyID("autosell-4").onchange = autosell4Check
 		elebyID("autosell-5").onchange = autosell5Check
+		elebyID("autosell-6").onchange = autosell6Check
 		elebyID("autosell-level").onchange = autosellLevelCheck
 	}
 
