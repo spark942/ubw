@@ -3239,7 +3239,7 @@ const gameClass = () => {
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
 			if (DATA.player.inventory[i].focus !== null) {
-				let itemEffects = iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage)))))
+				let itemEffects = iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage) * 50))))
 				if (ITEMS[DATA.player.inventory[i].item_id][6] !== null && ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim")) {
 					itemEffects += "<br>" + iText("item_food_"+ITEMS[DATA.player.inventory[i].item_id][6], ITEMS[DATA.player.inventory[i].item_id][8])
 					itemEffects += "<br>" + iText("item_food_grimoire_notice")
