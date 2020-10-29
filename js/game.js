@@ -375,7 +375,7 @@ const gameClass = () => {
 		addItemInventory(TABLES.weaponstarter)
 		addItemInventory({
 			type: "w",
-			item_id:11023,
+			item_id:11025,
 			stage: 40,
 			quality: 512
 		})
@@ -387,55 +387,61 @@ const gameClass = () => {
 		})
 		addItemInventory({
 			type: "w",
-			item_id:12023,
+			item_id:12024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:13023,
+			item_id:13024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:14023,
+			item_id:14024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:15023,
+			item_id:15024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:16023,
+			item_id:16024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:17023,
+			item_id:17024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:18023,
+			item_id:18024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:19023,
+			item_id:19024,
 			stage: 40,
 			quality: 512
 		})
 		addItemInventory({
 			type: "w",
-			item_id:20023,
+			item_id:20024,
+			stage: 40,
+			quality: 512
+		})
+		addItemInventory({
+			type: "w",
+			item_id:21024,
 			stage: 40,
 			quality: 512
 		})
