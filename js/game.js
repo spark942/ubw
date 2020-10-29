@@ -376,17 +376,57 @@ const gameClass = () => {
 		addItemInventory({
 			type: "w",
 			item_id:11023,
-			stage: 80
+			stage: 180
 		})
 		addItemInventory({
 			type: "w",
 			item_id:11024,
-			stage: 80
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:12023,
+			stage: 180
 		})
 		addItemInventory({
 			type: "w",
 			item_id:13023,
-			stage: 80
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:14023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:15023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:16023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:17023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:18023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:19023,
+			stage: 180
+		})
+		addItemInventory({
+			type: "w",
+			item_id:20023,
+			stage: 180
 		})
 	}
 
