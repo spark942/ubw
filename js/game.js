@@ -35,7 +35,7 @@ const gameClass = () => {
 			asgard: null,
 			special: null
 		},
-		MAXSTAGE: 250000,
+		MAXSTAGE: 20000000,
 		AURA: {
 			FOCUS_DMG: {
 				name: "Strengthen",
