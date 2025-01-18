@@ -71,14 +71,14 @@ const gameClass = () => {
 				world: "earth",
 				offset: 0,
 				multiplier: 0,
-				max_stage: 250000,
+				max_stage: 20000000,
 				price: 100000000,
 			},
 			europe : {
 				world: "earth",
 				offset: 0,
 				multiplier: 0,
-				max_stage: 250000,
+				max_stage: 20000000,
 				price: 100000000,
 			},
 			asgard : {
