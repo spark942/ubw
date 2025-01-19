@@ -1515,15 +1515,21 @@ const gameClass = () => {
 						finaldmg = finaldmg * (1 + getComboStreakBonus())
 					}
 					let canExp = DATA.player.currentMonster.takeDamage(finaldmg, defensePenetration, monsterTimerDelayChance, monsterTimerDelayDuration)
+					let asTotalHitCount = getActiveHitCount(DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id)
+					let dmgAsBonusExp = Math.sqrt(finaldmg) * (1 + DATA.player.awaken_stage * 0.8)
+					let expNumber = Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()) * 10
+					expNumber = expNumber / asTotalHitCount 
+
+
 					/* EXP SKILLS */
 					if (canExp === true) {
 						updateActive(
 							DATA.player.battle.combo[DATA.player.battle.current_combo-1].skill_id, 
-							toDecimal(Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+							toDecimal(expNumber + dmgAsBonusExp)
 							)
 						updatePassive(
 							DATA.player.battle.combo[DATA.player.battle.current_combo-1].weapon_passive,
-							toDecimal(10 * Math.sqrt(DATA.player.currentMonster.level()) * (1 + DATA.player.awaken_stage * 0.2) * (1 + DATA.player.currentMonster.rank() + 1) + Math.sqrt(DATA.player.currentMonster.exp()))
+							toDecimal(10 * (expNumber + dmgAsBonusExp))
 							)
 						/* TEMPORARY BONUS */
 					}
