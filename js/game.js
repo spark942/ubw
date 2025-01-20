@@ -89,7 +89,7 @@ const gameClass = () => {
 				offset: 200000,
 				starttown: 1,
 				multiplier: 50,
-				max_stage: 50002,
+				max_stage: 50001,
 				price: 1000000000,
 			},
 			valhalla : {
@@ -97,7 +97,7 @@ const gameClass = () => {
 				offset: 5000000,
 				starttown: 1,
 				multiplier: 800,
-				max_stage: 1002,
+				max_stage: 1001,
 				price: 10000000000,
 			},
 		},
@@ -1954,22 +1954,25 @@ const gameClass = () => {
 			if (DATA.player.currentTownPortalTab === "route") {
 				let portalDestionationsHTML = ""
 				let regionMaxStage = Math.min(DATA.player.max_stage[DATA.player.currentRegion], TABLES.regions_data[DATA.player.currentRegion].max_stage)
+				let offset = TABLES.regions_data[DATA.player.currentRegion].offset
 
 				for (var i = TABLES.towns.length - 1; i >= 0; i--) {
-					if (regionMaxStage < TABLES.towns[i][0]) { continue }
+					let actualStage = TABLES.towns[i][0] - offset
+					if (regionMaxStage < actualStage) { continue }
 					let button = iText(
 						"destination_route", 
-						TABLES.towns[i][0], numberPrint(toDecimal(Math.abs(TABLES.towns[i][0] - DATA.player.currentStage)*500)), 
-						TABLES.towns[i][0]+"-button")
-					portalDestionationsHTML += button.replace("data-route=\"\"", "data-route=\""+TABLES.towns[i][0]+"\"")
+						actualStage, numberPrint(toDecimal(Math.abs(actualStage - DATA.player.currentStage)*500)), 
+						actualStage+"-button")
+					portalDestionationsHTML += button.replace("data-route=\"\"", "data-route=\""+actualStage+"\"")
 					
 				}
 				if (elebyID("region-destinations").innerHTML !== portalDestionationsHTML) {
 					updateTextByID("region-destinations", portalDestionationsHTML)
 					/* add the onclick function */
 					for (var i = TABLES.towns.length - 1; i >= 0; i--) {
-						if (regionMaxStage < TABLES.towns[i][0]) { continue }
-						let destElement = elebyID("gotoroute-"+TABLES.towns[i][0]+"-button")
+						let actualStage = TABLES.towns[i][0] - offset
+						if (regionMaxStage < actualStage) { continue }
+						let destElement = elebyID("gotoroute-"+actualStage+"-button")
 						destElement.onclick = goToRoute
 					}
 				}
