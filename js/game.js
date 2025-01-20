@@ -145,6 +145,7 @@ const gameClass = () => {
 				autosell_4 : false,
 				autosell_5 : false,
 				autosell_6 : false,
+				autosell_7 : false,
 				aura_focus_dmg 				 : false,
 				aura_focus_power_regen : false,
 				aura_focus_combostreak : false,
@@ -1848,7 +1849,7 @@ const gameClass = () => {
 			removeFromArray(DATA.player.inventory, toSell)
 		}
 		/* disable buttons if not unlocked yet*/
-		for (var i = 1; i <= 6; i++) {
+		for (var i = 1; i <= 7; i++) {
 			if (findPassiveBonusWithValue("autosell_grade", "grade_"+i) === false) {
 				if (DATA.player.settings["autosell_"+i] === true) { DATA.player.settings["autosell_"+i] = false }
 				elebyID("autosell-"+i).disabled = true
@@ -2845,6 +2846,7 @@ const gameClass = () => {
 		function autosell4Check () { DATA.player.settings.autosell_4 = this.checked }
 		function autosell5Check () { DATA.player.settings.autosell_5 = this.checked }
 		function autosell6Check () { DATA.player.settings.autosell_6 = this.checked }
+		function autosell7Check () { DATA.player.settings.autosell_7 = this.checked }
 		function autosellLevelCheck () { DATA.player.settings.autosell_level = parseInt(this.value) }
 
 		elebyID("autosell-1").checked = DATA.player.settings.autosell_1 || false
@@ -2853,6 +2855,7 @@ const gameClass = () => {
 		elebyID("autosell-4").checked = DATA.player.settings.autosell_4 || false
 		elebyID("autosell-5").checked = DATA.player.settings.autosell_5 || false
 		elebyID("autosell-6").checked = DATA.player.settings.autosell_6 || false
+		elebyID("autosell-7").checked = DATA.player.settings.autosell_7 || false
 		elebyID("autosell-level").value = DATA.player.settings.autosell_level || 100
 
 		elebyID("autosell-1").onchange = autosell1Check
@@ -2861,6 +2864,7 @@ const gameClass = () => {
 		elebyID("autosell-4").onchange = autosell4Check
 		elebyID("autosell-5").onchange = autosell5Check
 		elebyID("autosell-6").onchange = autosell6Check
+		elebyID("autosell-7").onchange = autosell7Check
 		elebyID("autosell-level").onchange = autosellLevelCheck
 	}
 
