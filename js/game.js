@@ -71,6 +71,7 @@ const gameClass = () => {
 			asia : {
 				world: "earth",
 				offset: 0,
+				starttown: 15,
 				multiplier: 0,
 				max_stage: 20000000,
 				price: 100000000,
@@ -78,6 +79,7 @@ const gameClass = () => {
 			europe : {
 				world: "earth",
 				offset: 0,
+				starttown: 15,
 				multiplier: 0,
 				max_stage: 20000000,
 				price: 100000000,
@@ -85,6 +87,7 @@ const gameClass = () => {
 			asgard : {
 				world: "ninerealms",
 				offset: 200000,
+				starttown: 1,
 				multiplier: 50,
 				max_stage: 50002,
 				price: 1000000000,
@@ -92,6 +95,7 @@ const gameClass = () => {
 			valhalla : {
 				world: "ninerealms",
 				offset: 5000000,
+				starttown: 1,
 				multiplier: 800,
 				max_stage: 1002,
 				price: 10000000000,
@@ -1191,10 +1195,11 @@ const gameClass = () => {
 		return false
 	}
 
-	const getStageModelByStage = (stage) => {
+	const getStageModelByStage = (stage, region) => {
 		let stagemodel = []
+		let offset = TABLES.regions_data[region].offset
 		for (var i = 0; i < STAGES.length; i++) {
-			if (stage >= STAGES[i][0]) {
+			if (stage+offset >= STAGES[i][0]) {
 				stagemodel = STAGES[i]
 			}
 		}
@@ -1288,7 +1293,7 @@ const gameClass = () => {
 	const updateStage = (stage) => {
 
 		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE) || 1
-		let sdata = getStageModelByStage(stage)
+		let sdata = getStageModelByStage(stage, DATA.player.currentRegion)
 
 		DATA.player.currentStage = stage
 		if (sdata[1] === 0) {/*battle*/
@@ -1903,7 +1908,7 @@ const gameClass = () => {
 			if (region === DATA.player.currentRegion) { return false }
 			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
 				if (pfocus > 0 && DATA.player.focus < pfocus) { return false }
-				DATA.player.currentStage = 15
+				DATA.player.currentStage = DATA.regions_data[region].starttown
 				DATA.player.currentRegion = region
 				DATA.player.ekk -= price
 				if (pfocus > 0) {
