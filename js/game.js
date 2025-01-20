@@ -97,7 +97,7 @@ const gameClass = () => {
 				offset: 5000000,
 				starttown: 1,
 				multiplier: 1,
-				max_stage: 1001,
+				max_stage: 5000001,
 				price: 10000000000,
 			},
 		},
