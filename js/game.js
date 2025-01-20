@@ -1293,7 +1293,7 @@ const gameClass = () => {
 
 	const updateStage = (stage) => {
 
-		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.MAXSTAGE) || 1
+		stage = Math.min(Math.max(parseInt(stage), 1), TABLES.regions_data[DATA.player.currentRegion].max_stage) || 1
 		let sdata = getStageModelByStage(stage, DATA.player.currentRegion)
 
 		DATA.player.currentStage = stage
@@ -1306,6 +1306,7 @@ const gameClass = () => {
 			if (sdata[3] === null) {
 				let mob_list = TABLES.MONSTERS_ID[DATA.player.currentRegion][sdata[2]]
 				mob_id = mob_list[Math.floor(Math.random() * mob_list.length)]
+				console.log(DATA.player.currentRegion,mob_list, mob_id)
 			} else { /*special monster*/
 				mob_id = sdata[3]
 			}
@@ -1336,14 +1337,24 @@ const gameClass = () => {
 		//console.log(DATA)
 	}
 
-	/* TOWN */
+	/* TOWN, ALWAYS CALLED WHEN SWITCHING REGION */
 	const getTowns = () => {
 		let towns = []
+		let offset = TABLES.regions_data[DATA.player.currentRegion].offset
 		for (var i = 0; i < STAGES.length; i++) {
-			if (STAGES[i][1] === 1) {
+			if (STAGES[i][1] === 1 && STAGES[i][0] > offset) {
 				towns.push(STAGES[i])
 			}
 		}
+
+
+		let offset = TABLES.regions_data[region].offset
+		for (var i = 0; i < STAGES.length; i++) {
+			if (stage+offset >= STAGES[i][0]) {
+				stagemodel = STAGES[i]
+			}
+		}
+
 		return towns
 	}
 
@@ -1916,6 +1927,10 @@ const gameClass = () => {
 					DATA.player.focus -= parseInt(pfocus) || DATA.player.focus
 				}
 				updateStage(DATA.player.currentStage)
+
+				// refresh town list because its different depending on offset
+				TABLES.towns = getTowns()
+
 				if (elebyID("game-container").getAttribute("class").toString().includes(DATA.player.currentRegion) === false) {
 					if (elebyID("game-container").getAttribute("class").toString().includes("intown")) {
 						updateAttributeByID("game-container", "class", "intown "+DATA.player.currentRegion)
@@ -1946,8 +1961,10 @@ const gameClass = () => {
 			elebyID("town-portal").classList.add(DATA.player.currentTownPortalTab)
 			if (DATA.player.currentTownPortalTab === "route") {
 				let portalDestionationsHTML = ""
+				let regionMaxStage = Math.min(DATA.player.max_stage[DATA.player.currentRegion], TABLES.regions_data[DATA.player.currentRegion].max_stage)
+
 				for (var i = TABLES.towns.length - 1; i >= 0; i--) {
-					if (DATA.player.max_stage[DATA.player.currentRegion] < TABLES.towns[i][0]) { continue }
+					if (regionMaxStage < TABLES.towns[i][0]) { continue }
 					let button = iText(
 						"destination_route", 
 						TABLES.towns[i][0], numberPrint(toDecimal(Math.abs(TABLES.towns[i][0] - DATA.player.currentStage)*500)), 
@@ -1959,7 +1976,7 @@ const gameClass = () => {
 					updateTextByID("region-destinations", portalDestionationsHTML)
 					/* add the onclick function */
 					for (var i = TABLES.towns.length - 1; i >= 0; i--) {
-						if (DATA.player.max_stage[DATA.player.currentRegion] < TABLES.towns[i][0]) { continue }
+						if (regionMaxStage < TABLES.towns[i][0]) { continue }
 						let destElement = elebyID("gotoroute-"+TABLES.towns[i][0]+"-button")
 						destElement.onclick = goToRoute
 					}
