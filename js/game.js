@@ -33,6 +33,7 @@ const gameClass = () => {
 			asia: null,
 			europe: null,
 			asgard: null,
+			valhalla: null,
 			special: null
 		},
 		MAXSTAGE: 20000000,
@@ -85,7 +86,7 @@ const gameClass = () => {
 				world: "ninerealms",
 				offset: 200000,
 				multiplier: 50,
-				max_stage: 100002,
+				max_stage: 50002,
 				price: 1000000000,
 			},
 			valhalla : {
@@ -97,15 +98,16 @@ const gameClass = () => {
 			},
 		},
 		regions_world_cost : { /* if teleport to different world */
-			earth  : { ekk: 		1000000000, focus:    5000000},
-			ninerealms : { ekk:  1000000000000, focus: 	200000000000000},
+			earth  : { ekk: 		1000000000, focus:     5000000},
+			ninerealms : { ekk: 10000000000000, focus: 20000000000},
 		},
-		regions: ["asia","europe","asgard"],
+		regions: ["asia","europe","asgard","valhalla"],
 		towns: [],
 		townsGrimoirePerRegion: {
 			asia: 	[1021,1022,1024,1025,1027,1028,1030, 1041,1042,1044,1045,1047,1048,1050, 1061,1062,1064,1065,1067,1068,1070],
 			europe: [1021,1023,1024,1026,1027,1029,1030, 1041,1043,1044,1046,1047,1049,1050, 1061,1063,1064,1066,1067,1069,1070],
-			asgard: [1024,1027,1030,1031, 1044,1047,1050,1051, 1064,1067,1070,1071],
+			asgard: [1031,1032,1033,1034, 1051,1052,1053,1054, 1071,1072,1073,1074],
+			valhalla: [1035,1036,1037,1038,1039, 1055,1056,1057,1058,1059, 1075,1076,1077,1078,1079],
 		},
 		passivesPerClass: {},
 		activesPerClass: {},
@@ -123,9 +125,9 @@ const gameClass = () => {
 		},
 		weaponstarter : {
 			type: "w",
-			item_id:11006,
+			item_id:15144,
 			stage: 40,
-			quality:512
+			quality:128
 		}
 	} 
 
@@ -287,6 +289,8 @@ const gameClass = () => {
 		/* load monsters id per region and elite_rank */
 		let asia 		= [[],[],[],[],[],[],[]]
 		let europe 	= [[],[],[],[],[],[],[]]
+		let asgard 	= [[],[],[],[],[],[],[]]
+		let valhalla 	= [[],[],[],[],[],[],[]]
 		let special = [[],[],[],[],[],[],[]]
 		for (var i = 0; i < MONSTERS.length; i++) {
 			var mobrank = MONSTERS[i][6] ? MONSTERS[i][6] : 0
@@ -294,6 +298,10 @@ const gameClass = () => {
 				asia[mobrank].push(MONSTERS[i][0])
 			} else if (MONSTERS[i][1] == "europe") {
 				europe[mobrank].push(MONSTERS[i][0])
+			} else if (MONSTERS[i][1] == "asgard") {
+				asgard[mobrank].push(MONSTERS[i][0])
+			} else if (MONSTERS[i][1] == "valhalla") {
+				valhalla[mobrank].push(MONSTERS[i][0])
 			} else if (MONSTERS[i][1] == "special") {
 				special[mobrank].push(MONSTERS[i][0])
 			}
@@ -301,6 +309,8 @@ const gameClass = () => {
 
 		TABLES.MONSTERS_ID.asia 	= asia
 		TABLES.MONSTERS_ID.europe = europe
+		TABLES.MONSTERS_ID.asgard = asgard
+		TABLES.MONSTERS_ID.valhalla = valhalla
 		TABLES.MONSTERS_ID.special = special
 
 		TABLES.towns = getTowns()
@@ -376,75 +386,18 @@ const gameClass = () => {
 		addItemInventory(TABLES.weaponstarter)
 		addItemInventory({
 			type: "w",
-			item_id:11025,
-			stage: 40,
-			quality: 512
+			item_id:11023,
+			stage: 80
 		})
 		addItemInventory({
 			type: "w",
 			item_id:11024,
-			stage: 40,
-			quality: 512
+			stage: 80
 		})
 		addItemInventory({
 			type: "w",
-			item_id:12024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:13024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:14024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:15024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:16024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:17024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:18024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:19024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:20024,
-			stage: 40,
-			quality: 512
-		})
-		addItemInventory({
-			type: "w",
-			item_id:21024,
-			stage: 40,
-			quality: 512
+			item_id:13023,
+			stage: 80
 		})
 	}
 
@@ -591,7 +544,7 @@ const gameClass = () => {
 
 		let route_asgard_effective_max_stage = DATA.player.max_stage.asgard * (1 + TABLES.regions_data.asgard.multiplier) + (DATA.player.max_stage.asgard > 0 ? TABLES.regions_data.asgard.offset : 0)
 		let route_valhalla_effective_max_stage = DATA.player.max_stage.valhalla * (1 + TABLES.regions_data.valhalla.multiplier) + (DATA.player.max_stage.valhalla > 0 ? TABLES.regions_data.valhalla.offset : 0)
-		let route_ninerealms = Math.sqrt(route_asgard_effective_max_stage + route_valhalla_effective_max_stage) / 30
+		let route_ninerealms = Math.sqrt(route_asgard_effective_max_stage + route_valhalla_effective_max_stage) / 5
 
 		let killcount_bonus = Math.sqrt(DATA.player.lts.killedenemies) / 20
 
@@ -2919,8 +2872,9 @@ const gameClass = () => {
 		updateTextByID("maxstage-earth", numberPrint(Math.max(DATA.player.max_stage.asia, DATA.player.max_stage.europe)))
 		updateTextByID("maxstage-asia", numberPrint(DATA.player.max_stage.asia))
 		updateTextByID("maxstage-europe", numberPrint(DATA.player.max_stage.europe))
-		updateTextByID("maxstage-ninerealms", numberPrint(Math.max(DATA.player.max_stage.asgard, DATA.player.max_stage.asgard)))
+		updateTextByID("maxstage-ninerealms", numberPrint(Math.max(DATA.player.max_stage.asgard, DATA.player.max_stage.valhalla)))
 		updateTextByID("maxstage-asgard", numberPrint(DATA.player.max_stage.asgard))
+		updateTextByID("maxstage-valhalla", numberPrint(DATA.player.max_stage.valhalla))
 	}
 
 	const wieldingSetupRender = () => {
