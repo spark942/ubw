@@ -96,7 +96,7 @@ const gameClass = () => {
 				world: "ninerealms",
 				offset: 5000000,
 				starttown: 1,
-				multiplier: 1,
+				multiplier: 4,
 				max_stage: 1001,
 				price: 10000000000,
 			},
