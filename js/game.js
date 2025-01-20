@@ -1347,14 +1347,6 @@ const gameClass = () => {
 			}
 		}
 
-
-		let offset = TABLES.regions_data[region].offset
-		for (var i = 0; i < STAGES.length; i++) {
-			if (stage+offset >= STAGES[i][0]) {
-				stagemodel = STAGES[i]
-			}
-		}
-
 		return towns
 	}
 
