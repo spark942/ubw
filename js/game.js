@@ -1346,7 +1346,7 @@ const gameClass = () => {
 				towns.push(STAGES[i])
 			}
 		}
-
+		console.log(towns, offset)
 		return towns
 	}
 
