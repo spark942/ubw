@@ -1908,7 +1908,7 @@ const gameClass = () => {
 			if (region === DATA.player.currentRegion) { return false }
 			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
 				if (pfocus > 0 && DATA.player.focus < pfocus) { return false }
-				DATA.player.currentStage = DATA.regions_data[region].starttown
+				DATA.player.currentStage = TABLES.regions_data[region].starttown
 				DATA.player.currentRegion = region
 				DATA.player.ekk -= price
 				if (pfocus > 0) {
