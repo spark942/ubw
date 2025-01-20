@@ -1197,9 +1197,10 @@ const gameClass = () => {
 
 	const getStageModelByStage = (stage, region) => {
 		let stagemodel = []
-		//let offset = TABLES.regions_data[region].offset
+		//let offset = 0
+		let offset = TABLES.regions_data[region].offset
 		for (var i = 0; i < STAGES.length; i++) {
-			if (stage >= STAGES[i][0]) {
+			if (stage+offset >= STAGES[i][0]) {
 				stagemodel = STAGES[i]
 			}
 		}
