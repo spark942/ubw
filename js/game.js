@@ -1334,6 +1334,10 @@ const gameClass = () => {
 		if (DATA.player.currentStage > DATA.player.max_stage[DATA.player.currentRegion]) {
 			DATA.player.max_stage[DATA.player.currentRegion] = DATA.player.currentStage
 		}
+
+		if (DATA.player.max_stage[DATA.player.currentRegion] > TABLES.regions_data[DATA.player.currentRegion].max_stage) {
+			DATA.player.max_stage[DATA.player.currentRegion] = TABLES.regions_data[DATA.player.currentRegion].max_stage
+		}
 		//console.log(DATA)
 	}
 
@@ -1908,7 +1912,7 @@ const gameClass = () => {
 			if (this.getAttribute("data-focus")) {
 				pfocus = parseInt(this.getAttribute("data-focus"))
 			}
-			console.log(region)
+			//console.log(region)
 			if (region === DATA.player.currentRegion) { return false }
 			if (DATA.player.ekk - price >= 0 && TABLES.regions.indexOf(region) !== -1) {
 				if (pfocus > 0 && DATA.player.focus < pfocus) { return false }
