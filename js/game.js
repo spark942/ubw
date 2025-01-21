@@ -282,7 +282,7 @@ const gameClass = () => {
 			TABLES["EXP_SKILL4"].push( Math.floor( Math.sqrt( fib1 )*80 ) )
 			TABLES["EXP_SKILL5"].push( Math.floor( Math.sqrt( fib1 )*5500 ) )
 		}
-		for (var i = 0; i < 877; i++) {
+		for (var i = 0; i < 9877; i++) {
 			TABLES["EXP_SKILL"].push(Math.floor(TABLES["EXP_SKILL"][TABLES["EXP_SKILL"].length - 1] * 1.1))
 			TABLES["EXP_SKILL2"].push(Math.floor(TABLES["EXP_SKILL2"][TABLES["EXP_SKILL2"].length - 1] * 1.1))
 			TABLES["EXP_SKILL3"].push(Math.floor(TABLES["EXP_SKILL3"][TABLES["EXP_SKILL3"].length - 1] * 1.1))
