@@ -96,8 +96,8 @@ const gameClass = () => {
 				world: "ninerealms",
 				offset: 5000000,
 				starttown: 1,
-				multiplier: 3,
-				max_stage: 5000001,
+				multiplier: 4,
+				max_stage: 1001,
 				price: 10000000000,
 			},
 		},
@@ -2657,7 +2657,7 @@ const gameClass = () => {
 			DATA.player.settings.townSell === false
 			&& DATA.player.settings.townSalvage === false	
 			&& item_id >= 1000 && item_id <= 10000) {
-			DATA.player.focus += parseInt(ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val) * 50)) || 0
+			DATA.player.focus += parseInt(ITEMS[item_id][5] + Math.floor(Math.sqrt(stage_val) * 50 * thisItemObject.grade * thisItemObject.grade)) || 0
 			/* grimoire*/
 			if (ITEMS[item_id][6] !== null
 				&& ITEMS[item_id][6].startsWith("grim") 
@@ -3282,7 +3282,7 @@ const gameClass = () => {
 				updateTextByID("item-aspd-"+tiID, DATA.player.inventory[i].aspd)
 			}
 			if (DATA.player.inventory[i].focus !== null) {
-				let itemEffects = iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage) * 50))))
+				let itemEffects = iText("item_food_focus", numberPrint(toDecimal(DATA.player.inventory[i].focus + Math.floor(Math.sqrt(DATA.player.inventory[i].stage) * 50 * DATA.player.inventory[i].grade * DATA.player.inventory[i].grade))))
 				if (ITEMS[DATA.player.inventory[i].item_id][6] !== null && ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim")) {
 					itemEffects += "<br>" + iText("item_food_"+ITEMS[DATA.player.inventory[i].item_id][6], ITEMS[DATA.player.inventory[i].item_id][8])
 					itemEffects += "<br>" + iText("item_food_grimoire_notice")
