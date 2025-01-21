@@ -1810,8 +1810,7 @@ const gameClass = () => {
 						}
 					}
 				}
-			}
-			if (DATA.player.settings["autosell_c"] === true && DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
+			} else if (DATA.player.settings.autosell_c === true && DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
 				// eat all apples and use all grimoires
 				toSell.push(i)
 				
