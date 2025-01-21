@@ -152,6 +152,7 @@ const gameClass = () => {
 				autosell_5 : false,
 				autosell_6 : false,
 				autosell_7 : false,
+				autosell_c : false,
 				aura_focus_dmg 				 : false,
 				aura_focus_power_regen : false,
 				aura_focus_combostreak : false,
@@ -1809,6 +1810,26 @@ const gameClass = () => {
 						}
 					}
 				}
+			} else if ((DATA.player.inventory[i].type === "c" || DATA.player.inventory[i].type === "f") 
+				&& DATA.player.settings["autosell_c"] === true
+				) {
+				// eat all apples and use all grimoires
+				toSell.push(i)
+				if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
+					DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
+					/* grimoire*/
+					if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
+						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
+						&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
+						if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
+							DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
+						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
+							DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
+						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
+							DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
+						}
+					}
+				}
 			}
 		};
 		if (toSell.length) {
@@ -2822,6 +2843,7 @@ const gameClass = () => {
 		function autosell5Check () { DATA.player.settings.autosell_5 = this.checked }
 		function autosell6Check () { DATA.player.settings.autosell_6 = this.checked }
 		function autosell7Check () { DATA.player.settings.autosell_7 = this.checked }
+		function autosellCCheck () { DATA.player.settings.autosell_c = this.checked }
 		function autosellLevelCheck () { DATA.player.settings.autosell_level = parseInt(this.value) }
 
 		elebyID("autosell-1").checked = DATA.player.settings.autosell_1 || false
@@ -2831,6 +2853,7 @@ const gameClass = () => {
 		elebyID("autosell-5").checked = DATA.player.settings.autosell_5 || false
 		elebyID("autosell-6").checked = DATA.player.settings.autosell_6 || false
 		elebyID("autosell-7").checked = DATA.player.settings.autosell_7 || false
+		elebyID("autosell-c").checked = DATA.player.settings.autosell_c || false
 		elebyID("autosell-level").value = DATA.player.settings.autosell_level || 100
 
 		elebyID("autosell-1").onchange = autosell1Check
@@ -2840,6 +2863,7 @@ const gameClass = () => {
 		elebyID("autosell-5").onchange = autosell5Check
 		elebyID("autosell-6").onchange = autosell6Check
 		elebyID("autosell-7").onchange = autosell7Check
+		elebyID("autosell-c").onchange = autosellCCheck
 		elebyID("autosell-level").onchange = autosellLevelCheck
 	}
 
