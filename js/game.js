@@ -1796,7 +1796,7 @@ const gameClass = () => {
 				if (DATA.player.inventory[i].item_id > 10000) {
 					DATA.player.ekk += toDecimal(DATA.player.inventory[i].sell)
 				} else if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
-					DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
+					DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage) * 50 * (1+(DATA.player.inventory[i].quality / 100)) * DATA.player.inventory[i].grade * DATA.player.inventory[i].grade)) || 0
 					/* grimoire*/
 					if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
 						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
@@ -1814,7 +1814,7 @@ const gameClass = () => {
 				// eat all apples and use all grimoires
 				toSell.push(i)
 				
-				DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
+				DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage) * 50 * (1+(DATA.player.inventory[i].quality / 100)) * DATA.player.inventory[i].grade * DATA.player.inventory[i].grade)) || 0
 				/* grimoire*/
 				if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
 					&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
