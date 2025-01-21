@@ -1802,11 +1802,11 @@ const gameClass = () => {
 						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
 						&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
 						if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
-							DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
+							DATA.player.aura_exp.focus_dmg = Math.min(1e300,  DATA.player.aura_exp.focus_dmg + ITEMS[DATA.player.inventory[i].item_id][8])
 						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
-							DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
+							DATA.player.aura_exp.focus_power_regen =  Math.min(1e300,  DATA.player.aura_exp.focus_power_regen + ITEMS[DATA.player.inventory[i].item_id][8])
 						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
-							DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
+							DATA.player.aura_exp.focus_combostreak = Math.min(1e300,  DATA.player.aura_exp.focus_combostreak + ITEMS[DATA.player.inventory[i].item_id][8])
 						}
 					}
 				}
@@ -1822,11 +1822,11 @@ const gameClass = () => {
 					&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
 					&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
 					if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
-						DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
+						DATA.player.aura_exp.focus_dmg = Math.min(1e300,  DATA.player.aura_exp.focus_dmg + ITEMS[DATA.player.inventory[i].item_id][8])
 					} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
-						DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
+						DATA.player.aura_exp.focus_power_regen =  Math.min(1e300,  DATA.player.aura_exp.focus_power_regen + ITEMS[DATA.player.inventory[i].item_id][8])
 					} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
-						DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
+						DATA.player.aura_exp.focus_combostreak = Math.min(1e300,  DATA.player.aura_exp.focus_combostreak + ITEMS[DATA.player.inventory[i].item_id][8])
 					}
 				}
 			}
@@ -2683,11 +2683,11 @@ const gameClass = () => {
 				&& ITEMS[item_id][6].startsWith("grim") 
 				&& ITEMS[item_id][8] !== null) {
 				if (ITEMS[item_id][6] === "grim_aura_strengthen") {
-					DATA.player.aura_exp.focus_dmg += ITEMS[item_id][8]
+					DATA.player.aura_exp.focus_dmg = Math.min(1e300, DATA.player.aura_exp.focus_dmg + ITEMS[item_id][8])
 				} else if (ITEMS[item_id][6] === "grim_aura_concentration") {
-					DATA.player.aura_exp.focus_power_regen += ITEMS[item_id][8]
+					DATA.player.aura_exp.focus_power_regen = Math.min(1e300, DATA.player.aura_exp.focus_power_regen + ITEMS[item_id][8])
 				} else if (ITEMS[item_id][6] === "grim_aura_battletrance") {
-					DATA.player.aura_exp.focus_combostreak += ITEMS[item_id][8]
+					DATA.player.aura_exp.focus_combostreak = Math.min(1e300, DATA.player.aura_exp.focus_combostreak + ITEMS[item_id][8])
 				}
 			}
 			consumed = true
