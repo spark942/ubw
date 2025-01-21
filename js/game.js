@@ -1810,24 +1810,22 @@ const gameClass = () => {
 						}
 					}
 				}
-			} else if ((DATA.player.inventory[i].type === "c" || DATA.player.inventory[i].type === "f") 
-				&& DATA.player.settings["autosell_c"] === true
-				) {
+			}
+			if (DATA.player.settings["autosell_c"] === true && DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
 				// eat all apples and use all grimoires
 				toSell.push(i)
-				if (DATA.player.inventory[i].item_id >= 1000 && DATA.player.inventory[i].item_id <= 10000) {
-					DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
-					/* grimoire*/
-					if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
-						&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
-						&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
-						if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
-							DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
-						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
-							DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
-						} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
-							DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
-						}
+				
+				DATA.player.focus += parseInt(ITEMS[DATA.player.inventory[i].item_id][5] + Math.floor(Math.sqrt(DATA.player.inventory[i].stage))) || 0
+				/* grimoire*/
+				if (ITEMS[DATA.player.inventory[i].item_id][6] !== null
+					&& ITEMS[DATA.player.inventory[i].item_id][6].startsWith("grim") 
+					&& ITEMS[DATA.player.inventory[i].item_id][8] !== null) {
+					if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_strengthen") {
+						DATA.player.aura_exp.focus_dmg += ITEMS[DATA.player.inventory[i].item_id][8]
+					} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_concentration") {
+						DATA.player.aura_exp.focus_power_regen += ITEMS[DATA.player.inventory[i].item_id][8]
+					} else if (ITEMS[DATA.player.inventory[i].item_id][6] === "grim_aura_battletrance") {
+						DATA.player.aura_exp.focus_combostreak += ITEMS[DATA.player.inventory[i].item_id][8]
 					}
 				}
 			}
